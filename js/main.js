@@ -10,7 +10,7 @@ document.addEventListener('click', e => {
 
 // Lista de projetos (placeholders até os textos e imagens existirem)
 const projetos = [
-  'Identidade própria', 'Super Mulheres ONG', 'Revista TLGD',
+  'Super Mulheres ONG', 'Revista TLGD',
   'Identidade DSG LAB', '13° Mostra Estudantil', 'Reglette',
   'Embalagem KitKat Sublime', 'Mimoz', 'Radar'
 ];
