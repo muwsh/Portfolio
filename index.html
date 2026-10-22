@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Tomás — Portfólio</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- TELA INICIAL: mesa + lousa de cortiça -->
+  <main id="mesa" class="tela ativa" data-tela>
+    <div class="cortica">
+      <p class="post-it" data-hint>Clique nos objetos para explorar. Cada um guarda uma parte do meu trabalho.</p>
+      <button class="objeto" data-ir="sobre">Documento pessoal (sobre mim)</button>
+      <button class="objeto" data-ir="cartas">Cartas (projetos)</button>
+      <button class="objeto" data-ir="carimbo">Carimbo (identidade)</button>
+      <button class="objeto" data-ir="polaroids">Álbum de polaroids</button>
+      <button class="objeto" data-ir="postais">Binder de postais</button>
+    </div>
+  </main>
+
+  <!-- SOBRE MIM: pasta de arquivo -->
+  <main id="sobre" class="tela" data-tela>
+    <nav class="voltar"><button data-ir="mesa">← Voltar à mesa</button></nav>
+    <article class="pasta">
+      <h2>Sobre mim</h2>
+      <p>[Texto sobre você: placeholder]</p>
+      <div class="links">
+        <a href="#">Currículo (PDF)</a>
+        <a href="#">Behance</a>
+        <a href="#">LinkedIn</a>
+        <a href="#">Instagram</a>
+      </div>
+    </article>
+  </main>
+
+  <!-- CARTAS: lista lateral + cartas de projeto -->
+  <main id="cartas" class="tela" data-tela>
+    <nav class="voltar"><button data-ir="mesa">← Voltar à mesa</button></nav>
+    <div class="arquivo">
+      <aside class="lista-projetos">
+        <h2>Projetos</h2>
+        <ul>
+          <li>Identidade própria</li>
+          <li>Super Mulheres ONG</li>
+          <li>Revista TLGD</li>
+          <li>Identidade DSG LAB</li>
+          <li>13° Mostra Estudantil / Emilie Chamie</li>
+          <li>Reglette</li>
+          <li>Embalagem KitKat Sublime</li>
+          <li>Mimoz</li>
+          <li>Radar</li>
+        </ul>
+        <p class="pastas-titulo">Pastas (filtros)</p>
+        <!-- naipes: ♣ ♠ ♦ ♥ entram como ícones quando estiverem prontos -->
+      </aside>
+      <section class="cartas-grid">
+        <!-- cartas geradas em js/main.js a partir da lista -->
+      </section>
+    </div>
+  </main>
+
+  <!-- CARIMBO: identidade visual -->
+  <main id="carimbo" class="tela" data-tela>
+    <nav class="voltar"><button data-ir="mesa">← Voltar à mesa</button></nav>
+    <article class="caderno">
+      <h2>Carimbo e carimbeira</h2>
+      <p>[Texto sobre identidade pessoal: placeholder]</p>
+    </article>
+  </main>
+
+  <!-- POLAROIDS: 16 fotos, 4 por página -->
+  <main id="polaroids" class="tela" data-tela>
+    <nav class="voltar"><button data-ir="mesa">← Voltar à mesa</button></nav>
+    <div class="album" data-album></div>
+  </main>
+
+  <!-- POSTAIS: 12 cartões, sempre vertical -->
+  <main id="postais" class="tela" data-tela>
+    <nav class="voltar"><button data-ir="mesa">← Voltar à mesa</button></nav>
+    <div class="binder" data-binder></div>
+  </main>
+
+  <!-- Visualização ampliada (polaroids e postais) -->
+  <div class="ampliada" data-ampliada hidden>
+    <button class="fechar" data-fechar aria-label="Fechar">×</button>
+    <img alt="" data-ampliada-img>
+  </div>
+
+  <script src="js/main.js"></script>
+</body>
+</html>
