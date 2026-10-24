@@ -64,15 +64,110 @@ body {
 .objeto:nth-of-type(4) { top: 62%; left: 55%; }
 .objeto:nth-of-type(5) { top: 20%; left: 70%; }
 
-/* Sobre mim: pasta de arquivo */
-.pasta {
-  background: #c8a06a url("../img/kraft.webp") center / cover;
+/* Sobre mim: dossiê sobre base de corte verde */
+#sobre { padding: 0; }
+.base-corte {
+  min-height: 100%;
   padding: 24px;
-  max-width: 720px;
-  margin: 0 auto;
-  box-shadow: var(--sombra);
+  background-color: #2f7a4f;
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.12) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.12) 1px, transparent 1px);
+  background-size: 18px 18px;
 }
-.links a { margin-right: 12px; }
+.pasta-kraft {
+  position: relative;
+  max-width: 980px;
+  margin: 0 auto;
+  min-height: 600px;
+  padding: 36px;
+  background: #c8995e;
+  box-shadow: var(--sombra);
+  display: grid;
+  grid-template-columns: 1.1fr 1fr;
+  gap: 18px 22px;
+  align-items: start;
+}
+.aba-arquivo {
+  position: absolute;
+  top: -22px;
+  left: 40px;
+  background: #e9d8b4;
+  padding: 4px 16px;
+  font-family: monospace;
+  font-weight: bold;
+  letter-spacing: 1px;
+}
+.cartao-id {
+  display: flex;
+  gap: 12px;
+  background: #efe9dc;
+  padding: 12px;
+  box-shadow: var(--sombra);
+  transform: rotate(-1deg);
+}
+.foto-id {
+  width: 110px;
+  height: 130px;
+  background: #d8d2c4;
+  display: grid;
+  place-items: center;
+  font-size: 12px;
+}
+.titulo-id {
+  background: #222;
+  color: #fff;
+  padding: 4px 6px;
+  font-weight: bold;
+  margin: 0 0 8px;
+}
+.rotulo { font-size: 10px; margin: 6px 0 0; color: #555; }
+.dados-id p { margin: 2px 0; font-size: 13px; }
+.contatos { margin-top: 8px; display: flex; gap: 6px; }
+.contatos a { width: 26px; height: 26px; border-radius: 50%; border: 1px solid #333; display: grid; place-items: center; text-decoration: none; color: #222; font-size: 11px; }
+
+.nota-texto {
+  background: #fbfaf6;
+  padding: 18px;
+  font-family: Georgia, serif;
+  font-size: 14px;
+  line-height: 1.5;
+  box-shadow: var(--sombra);
+  transform: rotate(0.6deg);
+}
+.nota-texto p { margin: 0 0 10px; }
+
+.quadro-idiomas {
+  background: #fff;
+  padding: 14px;
+  background-image: linear-gradient(#cfe0ea 1px, transparent 1px);
+  background-size: 100% 22px;
+  box-shadow: var(--sombra);
+  transform: rotate(-0.4deg);
+}
+.quadro-idiomas ul { list-style: none; padding: 0; margin: 8px 0 0; }
+.quadro-idiomas li { display: flex; justify-content: space-between; align-items: center; padding: 6px 0; font-family: cursive; font-size: 16px; }
+.nivel { display: inline-block; width: 160px; height: 14px; background: radial-gradient(circle, #e0b93a 6px, transparent 7px) 0 0 / 16px 14px repeat-x; -webkit-mask: linear-gradient(90deg, #000 calc(var(--n) * 20%), transparent 0); mask: linear-gradient(90deg, #000 calc(var(--n) * 20%), transparent 0); }
+.etiqueta {
+  display: inline-block;
+  background: #ffe36b;
+  padding: 2px 8px;
+  font-size: 12px;
+  margin: 0;
+  transform: rotate(-2deg);
+}
+
+.adesivos { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; background: #d9342b; padding: 14px; box-shadow: var(--sombra); transform: rotate(1deg); }
+.adesivos .etiqueta { width: 100%; }
+.sticker { background: #fff; color: #222; padding: 6px 10px; font-weight: bold; font-size: 13px; box-shadow: 0 2px 4px rgba(0,0,0,0.3); }
+
+.softwares { display: flex; flex-wrap: wrap; gap: 8px; grid-column: 1 / -1; }
+.ferramenta { border: 2px solid #2b2620; border-radius: 6px; padding: 8px 12px; font-weight: bold; background: #fff; }
+.ferramenta small { display: block; font-weight: normal; font-size: 10px; color: #b33; }
+
+@media (max-width: 720px) {
+  .pasta-kraft { grid-template-columns: 1fr; }
+}
 
 /* Cartas */
 .arquivo { display: grid; grid-template-columns: 240px 1fr; gap: 24px; }
