@@ -180,14 +180,14 @@ body {
 .caderno { max-width: 720px; margin: 0 auto; }
 
 /* Polaroids: álbum aberto, duas folhas de 4 lado a lado (cada espelho = 8 fotos) */
-#polaroids { scroll-snap-type: y mandatory; }
 .album { max-width: 980px; margin: 0 auto; }
+.album .espelho, .binder .espelho-postal { display: none; }
+.album .espelho.atual, .binder .espelho-postal.atual { display: grid; }
 .espelho {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 0;
-  height: calc(100vh - 80px);
-  scroll-snap-align: start;
+  height: calc(100vh - 150px);
   background: var(--capa);
   padding: 18px;
   border-radius: 10px;
@@ -223,12 +223,35 @@ body {
   display: block;
 }
 
-/* Binder de postais: sempre na vertical. Horizontais são giradas dentro da moldura. */
-.binder { display: flex; flex-direction: column; gap: 24px; align-items: center; }
+/* Binder de postais: sempre na vertical, dois por folha */
+.binder { max-width: 760px; margin: 0 auto; }
+.espelho-postal {
+  display: none;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  justify-items: center;
+  align-items: center;
+  height: calc(100vh - 150px);
+  padding: 24px;
+  background: var(--bolso);
+  border-radius: 10px;
+  box-shadow: var(--sombra);
+  position: relative;
+}
+.espelho-postal.atual { display: grid; animation: virar 400ms ease; }
+.espelho-postal::after {
+  content: "";
+  position: absolute;
+  top: 0; bottom: 0; left: 50%;
+  width: 14px;
+  transform: translateX(-50%);
+  background: linear-gradient(90deg, rgba(0,0,0,0.12), rgba(0,0,0,0.02), rgba(0,0,0,0.12));
+  pointer-events: none;
+}
 .postal {
   background: #fff;
   padding: 10px;
-  width: 260px;
+  width: min(240px, 100%);
   box-shadow: var(--sombra);
   cursor: zoom-in;
 }
@@ -250,6 +273,33 @@ body {
   height: auto;
   transform: translate(-50%, -50%) rotate(90deg);
 }
+
+/* Virar página */
+.espelho.atual, .espelho-postal.atual { animation: virar 400ms ease; }
+@keyframes virar {
+  from { opacity: 0; transform: perspective(1200px) rotateY(-14deg) translateX(12px); }
+  to   { opacity: 1; transform: none; }
+}
+
+/* Controles do livro */
+.controles {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 16px;
+  margin-top: 8px;
+}
+.controles button {
+  font-size: 28px;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  border: 1px solid var(--tinta);
+  background: #fff;
+  cursor: pointer;
+}
+.controles button:disabled { opacity: 0.35; cursor: default; }
+.controles span { font-family: monospace; min-width: 64px; text-align: center; }
 
 /* Visualização ampliada */
 .ampliada {

@@ -71,13 +71,57 @@ for (let i = 0; i < polaroids.length; i += POR_ESPELHO) {
 }
 
 const binder = document.querySelector('[data-binder]');
-postais.forEach(p => {
-  const div = document.createElement('div');
-  div.className = `postal ${p.orientacao}`;
-  div.dataset.src = p.src;
-  div.innerHTML = `<div class="moldura"><img src="${p.src}" alt="" loading="lazy"></div>`;
-  binder.appendChild(div);
-});
+for (let i = 0; i < postais.length; i += 2) {
+  const espelho = document.createElement('div');
+  espelho.className = 'espelho-postal';
+  postais.slice(i, i + 2).forEach(p => {
+    const div = document.createElement('div');
+    div.className = `postal ${p.orientacao}`;
+    div.dataset.src = p.src;
+    div.innerHTML = `<div class="moldura"><img src="${p.src}" alt="" loading="lazy"></div>`;
+    espelho.appendChild(div);
+  });
+  binder.appendChild(espelho);
+}
+
+// Livro com páginas que viram: setas, teclado e contador
+function montarLivro(container, nomeTela) {
+  const folhas = [...container.children];
+  let atual = 0;
+  const controles = document.createElement('nav');
+  controles.className = 'controles';
+  controles.innerHTML = `
+    <button type="button" data-ant aria-label="Virar para a página anterior">‹</button>
+    <span data-contador aria-live="polite"></span>
+    <button type="button" data-prox aria-label="Virar para a próxima página">›</button>`;
+  container.after(controles);
+
+  const ant = controles.querySelector('[data-ant]');
+  const prox = controles.querySelector('[data-prox]');
+  const contador = controles.querySelector('[data-contador]');
+
+  function virar(i) {
+    const novo = Math.max(0, Math.min(folhas.length - 1, i));
+    if (novo === atual && folhas[atual].classList.contains('atual')) return;
+    atual = novo;
+    folhas.forEach((f, k) => f.classList.toggle('atual', k === atual));
+    contador.textContent = `${atual + 1} / ${folhas.length}`;
+    ant.disabled = atual === 0;
+    prox.disabled = atual === folhas.length - 1;
+  }
+
+  ant.addEventListener('click', () => virar(atual - 1));
+  prox.addEventListener('click', () => virar(atual + 1));
+  document.addEventListener('keydown', e => {
+    if (!container.closest('[data-tela]').classList.contains('ativa')) return;
+    if (e.key === 'ArrowRight') virar(atual + 1);
+    if (e.key === 'ArrowLeft') virar(atual - 1);
+  });
+  virar(0);
+}
+
+montarLivro(album, 'polaroids');
+montarLivro(binder, 'postais');
 
 // Visualização ampliada: a foto aparece no sentido em que foi feita (sem girar)
 const ampliada = document.querySelector('[data-ampliada]');
