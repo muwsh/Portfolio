@@ -6,6 +6,8 @@
   --destaque: #d8473a;
   --sombra: 0 6px 14px rgba(0, 0, 0, 0.25);
   --transicao: 350ms ease;
+  --capa: #9fd6dc;   /* capa do álbum (azul-claro) */
+  --bolso: #f7f7f4;  /* folha de bolsos */
 }
 
 * { box-sizing: border-box; }
@@ -82,27 +84,42 @@ body {
 /* Carimbo */
 .caderno { max-width: 720px; margin: 0 auto; }
 
-/* Polaroids: 4 por página (2x2), a rolagem encaixa uma página por vez */
+/* Polaroids: álbum aberto, duas folhas de 4 lado a lado (cada espelho = 8 fotos) */
 #polaroids { scroll-snap-type: y mandatory; }
-.album { max-width: 760px; margin: 0 auto; }
+.album { max-width: 980px; margin: 0 auto; }
+.espelho {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0;
+  height: calc(100vh - 80px);
+  scroll-snap-align: start;
+  background: var(--capa);
+  padding: 18px;
+  border-radius: 10px;
+  box-shadow: var(--sombra);
+}
 .pagina {
   display: grid;
   grid-template-columns: 1fr 1fr;
   grid-template-rows: 1fr 1fr;
-  gap: 16px;
-  height: calc(100vh - 80px);
-  scroll-snap-align: start;
-  padding: 8px;
+  gap: 14px;
+  padding: 14px;
+  background: var(--bolso);
+  min-height: 0;
 }
+.pagina:first-child { border-right: 1px solid rgba(0, 0, 0, 0.08); }
 .polaroid {
   display: flex;
   flex-direction: column;
   background: #fff;
-  padding: 10px 10px 36px;
-  box-shadow: var(--sombra);
+  padding: 8px 8px 30px;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.25);
   cursor: zoom-in;
   min-height: 0;
+  transform: rotate(var(--giro, 0deg));
+  transition: transform var(--transicao);
 }
+.polaroid:hover, .polaroid:focus-visible { transform: rotate(0deg) scale(1.03); }
 .polaroid img {
   flex: 1;
   min-height: 0;

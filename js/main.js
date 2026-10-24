@@ -49,18 +49,25 @@ const postais = Array.from({ length: 12 }, (_, i) => ({
   orientacao: i % 3 === 0 ? 'horizontal' : 'vertical' // placeholder
 }));
 
-const POR_PAGINA = 4;
+const POR_PAGINA = 4;   // fotos por folha
+const POR_ESPELHO = 8; // duas folhas abertas lado a lado
 const album = document.querySelector('[data-album]');
-for (let i = 0; i < polaroids.length; i += POR_PAGINA) {
-  const pagina = document.createElement('div');
-  pagina.className = 'pagina';
-  polaroids.slice(i, i + POR_PAGINA).forEach(src => {
-    const div = document.createElement('div');
-    div.className = 'polaroid';
-    div.innerHTML = `<img src="${src}" alt="" loading="lazy">`;
-    pagina.appendChild(div);
-  });
-  album.appendChild(pagina);
+for (let i = 0; i < polaroids.length; i += POR_ESPELHO) {
+  const espelho = document.createElement('div');
+  espelho.className = 'espelho';
+  for (let j = i; j < Math.min(i + POR_ESPELHO, polaroids.length); j += POR_PAGINA) {
+    const pagina = document.createElement('div');
+    pagina.className = 'pagina';
+    polaroids.slice(j, j + POR_PAGINA).forEach((src, k) => {
+      const div = document.createElement('div');
+      div.className = 'polaroid';
+      div.style.setProperty('--giro', ((j + k) % 3 - 1) * 1.5 + 'deg'); // leve inclinação, como em álbum real
+      div.innerHTML = `<img src="${src}" alt="" loading="lazy">`;
+      pagina.appendChild(div);
+    });
+    espelho.appendChild(pagina);
+  }
+  album.appendChild(espelho);
 }
 
 const binder = document.querySelector('[data-binder]');
