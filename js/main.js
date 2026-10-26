@@ -41,9 +41,9 @@ projetos.forEach(nome => {
   grid.appendChild(carta);
 });
 
-// Polaroids: 16 fotos, 4 por página
+// Polaroids: 17 fotos, 4 por folha
 // Postais: 24 cartões, sempre exibidos na vertical (horizontais giram dentro da moldura)
-const polaroids = Array.from({ length: 16 }, (_, i) => `img/polaroid-${String(i + 1).padStart(2, '0')}.webp`);
+const polaroids = Array.from({ length: 17 }, (_, i) => `img/polaroid-${String(i + 1).padStart(2, '0')}.webp`);
 const postais = Array.from({ length: 24 }, (_, i) => ({
   src: `img/postal-${String(i + 1).padStart(2, '0')}.webp`,
   orientacao: [3, 8, 19, 21].includes(i + 1) ? 'horizontal' : 'vertical' // fotos 3, 8, 19 e 21 são horizontais
