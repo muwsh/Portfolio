@@ -42,11 +42,11 @@ projetos.forEach(nome => {
 });
 
 // Polaroids: 16 fotos, 4 por página
-// Postais: 12 cartões. Orientação: 'horizontal' ou 'vertical' (ajustar quando as fotos chegarem)
+// Postais: 12 cartões, sempre exibidos na vertical (horizontais giram dentro da moldura)
 const polaroids = Array.from({ length: 16 }, (_, i) => `img/polaroid-${String(i + 1).padStart(2, '0')}.webp`);
 const postais = Array.from({ length: 12 }, (_, i) => ({
   src: `img/postal-${String(i + 1).padStart(2, '0')}.webp`,
-  orientacao: i % 3 === 0 ? 'horizontal' : 'vertical' // placeholder
+  orientacao: [3, 8].includes(i + 1) ? 'horizontal' : 'vertical' // fotos 3 e 8 são horizontais
 }));
 
 const POR_PAGINA = 4;   // fotos por folha
