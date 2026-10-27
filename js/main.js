@@ -11,11 +11,30 @@ function telaValida(id) {
 // Sair da lousa e voltar faz as peças retornarem à posição original
 function resetarPecas() {
   document.querySelectorAll('[data-peca]').forEach(el => {
+    clearTimeout(el._timerQueda);
+    el.hidden = false;
+    el.style.transition = '';
+    el.style.opacity = '';
     el.style.translate = '';
     el.style.zIndex = '';
     el.dataset.arrastou = '';
     el._ox = 0; el._oy = 0;
   });
+}
+
+// Objetos soltos fora da cortiça caem da lousa e saem da tela
+const cortica = document.querySelector('.cortica-peca');
+function estaFora(el) {
+  const r = el.getBoundingClientRect();
+  const c = cortica.getBoundingClientRect();
+  const cx = r.left + r.width / 2, cy = r.top + r.height / 2;
+  return cx < c.left || cx > c.right || cy < c.top || cy > c.bottom;
+}
+function cair(el) {
+  el.style.transition = 'translate 0.9s ease-in, opacity 0.9s ease-in';
+  el.style.translate = `${el._ox}px ${el._oy + window.innerHeight + 200}px`;
+  el.style.opacity = '0';
+  el._timerQueda = setTimeout(() => { el.hidden = true; }, 900);
 }
 
 // Seção da sequência inicial (lousa, destaques ou mesa) que está visível agora
@@ -214,34 +233,42 @@ document.querySelectorAll('[data-destaque]').forEach(b => {
 function fecharDetalhe() { detalhe.hidden = true; }
 document.querySelector('[data-fechar-detalhe]').addEventListener('click', fecharDetalhe);
 
-// Peças da lousa: arrastar move; o QR code continua sendo o único link
+// Peças da lousa: arrastar move; ao soltar fora da cortiça, a peça cai e sai da tela
 document.querySelectorAll('[data-peca]').forEach(el => {
   let ptr = null, x0 = 0, y0 = 0, dx = 0, dy = 0, arrastou = false;
   el._ox = 0; el._oy = 0;
 
-  el.addEventListener('pointerdown', e => {
-    ptr = e.pointerId; x0 = e.clientX; y0 = e.clientY; dx = dy = 0; arrastou = false;
-  });
-  el.addEventListener('pointermove', e => {
+  // Movimento e soltura são ouvidos no documento: o arrasto não se perde se o ponteiro for rápido
+  const mover = e => {
     if (ptr !== e.pointerId) return;
     dx = e.clientX - x0; dy = e.clientY - y0;
     if (!arrastou && Math.hypot(dx, dy) > 6) {
       arrastou = true;
       el.classList.add('arrastando');
-      el.setPointerCapture(ptr);
-      if (!el.classList.contains('cortica-peca')) el.style.zIndex = ++zPeca; // a cortiça fica sempre no fundo
+      el.style.zIndex = ++zPeca;
     }
     if (arrastou) el.style.translate = `${el._ox + dx}px ${el._oy + dy}px`;
-  });
+  };
   const soltar = e => {
     if (ptr !== e.pointerId) return;
-    if (arrastou) { el._ox += dx; el._oy += dy; el.dataset.arrastou = '1'; }
+    document.removeEventListener('pointermove', mover);
+    document.removeEventListener('pointerup', soltar);
+    document.removeEventListener('pointercancel', soltar);
+    if (arrastou) {
+      el._ox += dx; el._oy += dy; el.dataset.arrastou = '1';
+      if (estaFora(el)) cair(el);
+    }
     el.classList.remove('arrastando');
     ptr = null;
   };
+
+  el.addEventListener('pointerdown', e => {
+    ptr = e.pointerId; x0 = e.clientX; y0 = e.clientY; dx = dy = 0; arrastou = false;
+    document.addEventListener('pointermove', mover);
+    document.addEventListener('pointerup', soltar);
+    document.addEventListener('pointercancel', soltar);
+  });
   el.addEventListener('dragstart', e => e.preventDefault()); // impede arrastar a imagem do QR
-  el.addEventListener('pointerup', soltar);
-  el.addEventListener('pointercancel', soltar);
 
   // Um arrastar não deve disparar o link do QR code
   el.addEventListener('click', e => {
