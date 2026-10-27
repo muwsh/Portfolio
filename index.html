@@ -11,31 +11,33 @@
   <!-- INÍCIO: três telas em sequência de scroll (lousa, destaques, mesa) -->
   <main id="inicio" class="tela ativa" data-tela>
 
-    <section id="lousa" class="secao" aria-label="Lousa de cortiça">
-      <div class="quadro">
-        <div class="peca postit" data-peca aria-hidden="true"></div>
+    <section id="lousa" class="secao lousa" aria-label="Lousa de cortiça">
+      <div class="peca cortica-peca" data-peca aria-hidden="true"></div>
 
-        <div class="peca papel" data-peca aria-hidden="true">
-          <span class="fita fita-1"></span>
-          <span class="fita fita-2"></span>
-        </div>
+      <div class="papel-central">
+        <span class="fita fita-1" aria-hidden="true"></span>
+        <span class="fita fita-2" aria-hidden="true"></span>
+        <p class="assinatura">MUWSH</p>
+        <h1 class="titulo">PORTFOLIO</h1>
+      </div>
 
-        <div class="peca polaroid-peca" data-peca aria-hidden="true">
-          <span class="foto-vazia"></span>
-        </div>
-
-        <div class="peca qr-peca" data-peca>
-          <a href="https://www.behance.net/" target="_blank" rel="noopener" aria-label="Behance (abre em nova aba)">
-            <img src="img/qr-behance.svg" alt="QR code para o Behance">
+      <div class="peca post-it post-it-1" data-peca aria-hidden="true"></div>
+      <div class="peca post-it post-it-2" data-peca>
+        <div class="qr-peca">
+          <a href="https://linktr.ee/tk.takabayashi" target="_blank" rel="noopener" aria-label="Linktree (abre em nova aba)">
+            <img src="img/qr-linktree.svg" alt="QR code para o Linktree">
           </a>
         </div>
-
-        <div class="peca postal-peca" data-peca aria-hidden="true">
-          <span class="postal-mini"></span>
-        </div>
-
-        <div class="peca carimbo-peca" data-peca aria-hidden="true"></div>
       </div>
+
+      <div class="peca polaroid-peca" data-peca>
+        <span class="foto-vazia" aria-hidden="true"></span>
+        <span class="legenda">tomás</span>
+      </div>
+
+      <div class="peca adesivo adesivo-1" data-peca aria-hidden="true"></div>
+      <div class="peca adesivo adesivo-2" data-peca aria-hidden="true"></div>
+      <div class="peca adesivo adesivo-3" data-peca aria-hidden="true"></div>
     </section>
 
     <section id="destaques" class="secao destaques" aria-label="Projetos em destaque">

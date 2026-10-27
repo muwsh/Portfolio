@@ -18,11 +18,23 @@ function resetarPecas() {
   });
 }
 
+// Seção da sequência inicial (lousa, destaques ou mesa) que está visível agora
+function secaoAtual() {
+  const ids = ['lousa', 'destaques', 'mesa'];
+  return ids.reduce((melhor, id) =>
+    Math.abs(document.getElementById(id).offsetTop - inicio.scrollTop) <
+    Math.abs(document.getElementById(melhor).offsetTop - inicio.scrollTop) ? id : melhor, 'lousa');
+}
+
 function mostrarTela(id, registrarHistorico = true) {
   const secao = SECOES_INICIO[id];
   const destino = secao ? 'inicio' : telaValida(id);
   const anterior = document.querySelector('[data-tela].ativa');
-  if (anterior && anterior.id === 'inicio' && destino !== 'inicio') resetarPecas();
+  if (anterior && anterior.id === 'inicio' && destino !== 'inicio') {
+    resetarPecas();
+    // Guarda em qual seção da sequência a pessoa estava, para o botão voltar retornar a ela
+    if (registrarHistorico) history.replaceState(null, '', '#' + secaoAtual());
+  }
 
   telas.forEach(t => {
     const ativa = t.id === destino;
@@ -217,7 +229,7 @@ document.querySelectorAll('[data-peca]').forEach(el => {
       arrastou = true;
       el.classList.add('arrastando');
       el.setPointerCapture(ptr);
-      el.style.zIndex = ++zPeca;
+      if (!el.classList.contains('cortica-peca')) el.style.zIndex = ++zPeca; // a cortiça fica sempre no fundo
     }
     if (arrastou) el.style.translate = `${el._ox + dx}px ${el._oy + dy}px`;
   });
@@ -227,6 +239,7 @@ document.querySelectorAll('[data-peca]').forEach(el => {
     el.classList.remove('arrastando');
     ptr = null;
   };
+  el.addEventListener('dragstart', e => e.preventDefault()); // impede arrastar a imagem do QR
   el.addEventListener('pointerup', soltar);
   el.addEventListener('pointercancel', soltar);
 
