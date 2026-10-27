@@ -8,14 +8,36 @@
 </head>
 <body>
 
-  <!-- TELA INICIAL: mesa + lousa de cortiça -->
+  <!-- TELA INICIAL: quadro de cortiça com peças móveis -->
   <main id="mesa" class="tela ativa" data-tela>
-    <div class="cortica">
-      <button class="objeto" data-ir="sobre">Documento pessoal (sobre mim)</button>
-      <button class="objeto" data-ir="cartas">Cartas (projetos)</button>
-      <button class="objeto" data-ir="carimbo">Carimbo (identidade)</button>
-      <button class="objeto" data-ir="polaroids">Álbum de polaroids</button>
-      <button class="objeto" data-ir="postais">Binder de postais</button>
+    <div class="quadro" role="region" aria-label="Quadro de referências. Arraste as peças ou clique para abrir cada seção.">
+      <div class="peca postit" data-peca>
+        <button type="button" data-ir="sobre">Sobre mim</button>
+      </div>
+
+      <div class="peca papel" data-peca>
+        <span class="fita fita-1" aria-hidden="true"></span>
+        <span class="fita fita-2" aria-hidden="true"></span>
+        <button type="button" data-ir="cartas">Projetos</button>
+      </div>
+
+      <div class="peca polaroid-peca" data-peca>
+        <button type="button" data-ir="polaroids" aria-label="Álbum de polaroids"><span class="foto-vazia" aria-hidden="true"></span></button>
+      </div>
+
+      <div class="peca qr-peca" data-peca>
+        <a href="https://www.behance.net/" target="_blank" rel="noopener" aria-label="Behance (abre em nova aba)">
+          <img src="img/qr-behance.svg" alt="QR code para o Behance">
+        </a>
+      </div>
+
+      <div class="peca postal-peca" data-peca>
+        <button type="button" data-ir="postais" aria-label="Binder de postais"><span class="postal-mini" aria-hidden="true"></span></button>
+      </div>
+
+      <div class="peca carimbo-peca" data-peca>
+        <button type="button" data-ir="carimbo">Carimbo</button>
+      </div>
     </div>
   </main>
 

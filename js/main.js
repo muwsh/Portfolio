@@ -149,3 +149,41 @@ document.addEventListener('keydown', e => { if (e.key === 'Escape') fechar(); })
 
 // Inicia na tela indicada pela URL (ex.: #cartas) ou na mesa
 mostrarTela(location.hash.slice(1) || 'mesa', false);
+
+// Peças do quadro: arrastar para mover; clique sem arrastar abre a seção
+let zPeca = 10;
+document.querySelectorAll('[data-peca]').forEach(el => {
+  let ptr = null, x0 = 0, y0 = 0, dx = 0, dy = 0, ox = 0, oy = 0, arrastou = false;
+
+  el.addEventListener('pointerdown', e => {
+    ptr = e.pointerId; x0 = e.clientX; y0 = e.clientY; dx = dy = 0; arrastou = false;
+  });
+  el.addEventListener('pointermove', e => {
+    if (ptr !== e.pointerId) return;
+    dx = e.clientX - x0; dy = e.clientY - y0;
+    if (!arrastou && Math.hypot(dx, dy) > 6) {
+      arrastou = true;
+      el.classList.add('arrastando');
+      el.setPointerCapture(ptr);
+      el.style.zIndex = ++zPeca;
+    }
+    if (arrastou) el.style.translate = `${ox + dx}px ${oy + dy}px`;
+  });
+  const soltar = e => {
+    if (ptr !== e.pointerId) return;
+    if (arrastou) { ox += dx; oy += dy; el.dataset.arrastou = '1'; }
+    el.classList.remove('arrastando');
+    ptr = null;
+  };
+  el.addEventListener('pointerup', soltar);
+  el.addEventListener('pointercancel', soltar);
+
+  // Bloqueia o clique que segue um arrastar (inclusive o link do QR code)
+  el.addEventListener('click', e => {
+    if (el.dataset.arrastou === '1') {
+      el.dataset.arrastou = '';
+      e.preventDefault();
+      e.stopImmediatePropagation();
+    }
+  }, true);
+});

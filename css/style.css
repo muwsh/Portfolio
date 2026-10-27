@@ -41,28 +41,56 @@ body {
   padding: 8px 0;
 }
 
-/* Mesa e lousa (fundo final será uma foto WebP em img/) */
-#mesa .cortica {
-  position: relative;
-  height: 100%;
-  background: var(--cortica) url("../img/cortica.webp") center / cover;
-}
-.objeto {
+/* Tela inicial: quadro de cortiça com peças móveis */
+#mesa { padding: 0; background: #7d7d7b url("../img/parede.webp") center / cover; }
+.quadro {
   position: absolute;
-  background: #fff;
-  border: 0;
-  box-shadow: var(--sombra);
-  padding: 12px 16px;
-  font: inherit;
-  cursor: pointer;
-  transition: transform var(--transicao);
+  inset: 6% 7%;
+  background: #b98457 url("../img/cortica.webp") center / cover;
+  border: 14px solid #c9a06e;
+  box-shadow: inset 0 0 0 2px rgba(0,0,0,0.15), 0 14px 30px rgba(0,0,0,0.35);
+  overflow: hidden;
 }
-.objeto:hover, .objeto:focus-visible { transform: translateY(-4px) rotate(-1deg); }
-.objeto:nth-of-type(1) { top: 12%; left: 10%; }
-.objeto:nth-of-type(2) { top: 30%; left: 40%; }
-.objeto:nth-of-type(3) { top: 50%; left: 15%; }
-.objeto:nth-of-type(4) { top: 62%; left: 55%; }
-.objeto:nth-of-type(5) { top: 20%; left: 70%; }
+.peca {
+  position: absolute;
+  cursor: grab;
+  touch-action: none;
+  user-select: none;
+  transform: rotate(var(--giro, 0deg));
+  transition: box-shadow var(--transicao);
+  box-shadow: 0 8px 14px rgba(0,0,0,0.3);
+}
+.peca.arrastando { cursor: grabbing; box-shadow: 0 16px 26px rgba(0,0,0,0.4); }
+.peca button, .peca a { display: block; width: 100%; height: 100%; background: none; border: 0; padding: 0; font: inherit; cursor: inherit; color: inherit; }
+.peca button:focus-visible, .peca a:focus-visible { outline: 3px solid var(--destaque); outline-offset: 4px; }
+
+/* Post-it amarelo */
+.postit { left: 18%; top: 14%; width: 14%; aspect-ratio: 1; --giro: -3deg; background: #f9e25b; }
+.postit button { padding: 10px; font-family: "Caveat", cursive, sans-serif; font-size: 22px; text-align: left; }
+.postit::before { content: ""; position: absolute; top: 6px; left: 50%; width: 14px; height: 14px; margin-left: -7px; border-radius: 50%; background: #d8473a; box-shadow: 0 2px 3px rgba(0,0,0,0.4); }
+
+/* Papel pautado */
+.papel { left: 29%; top: 21%; width: 43%; aspect-ratio: 1.45; --giro: 0.6deg; background: #fbfbf7 linear-gradient(#c9d6e6 1px, transparent 1px) 0 28px / 100% 28px; }
+.papel button { padding: 18px 28px; font-size: 26px; text-align: center; }
+.fita { position: absolute; width: 90px; height: 26px; background: rgba(230, 220, 190, 0.75); }
+.fita-1 { top: -12px; left: -18px; transform: rotate(-18deg); }
+.fita-2 { top: -10px; right: -20px; transform: rotate(22deg); }
+
+/* Polaroid */
+.polaroid-peca { left: 36%; top: 58%; width: 9.5%; aspect-ratio: 0.8; --giro: -1deg; background: #fff; padding: 6px 6px 18px; }
+.polaroid-peca button { height: 100%; }
+.foto-vazia { display: block; width: 100%; height: 100%; background: #e3e0da; border: 1px dashed #c9c5bc; }
+
+/* QR code em post-it */
+.qr-peca { left: 66%; top: 54%; width: 15%; aspect-ratio: 1; --giro: 2deg; background: #f9e25b; padding: 12px; }
+.qr-peca a { height: 100%; }
+.qr-peca img { width: 100%; height: 100%; display: block; background: #fff; }
+
+/* Postal e carimbo: peças menores */
+.postal-peca { left: 74%; top: 16%; width: 11%; aspect-ratio: 1.5; --giro: 4deg; background: #fff; padding: 5px; }
+.postal-mini { display: block; width: 100%; height: 100%; background: #6f9bb3 url("../img/postal-01.webp") center / cover; }
+.carimbo-peca { left: 9%; top: 62%; width: 15%; aspect-ratio: 1.6; --giro: -5deg; background: #e8dfd0; border: 2px solid #3d4f8a; }
+.carimbo-peca button { color: #3d4f8a; font-weight: bold; letter-spacing: 2px; text-transform: uppercase; font-size: 14px; }
 
 /* Sobre mim: dossiê sobre base de corte verde */
 #sobre { padding: 0; }
