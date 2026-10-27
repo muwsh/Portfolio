@@ -46,18 +46,12 @@
       </button>
       <h2 class="visualmente-oculto">Projetos em destaque</h2>
       <div class="cartas-destaque">
-        <button type="button" class="carta-destaque" data-destaque="0"><span class="capa" aria-hidden="true"></span><span class="rodape"><span class="selo" aria-hidden="true">♣</span><span class="nome">Super Mulheres ONG</span></span></button>
-        <button type="button" class="carta-destaque" data-destaque="1"><span class="capa" aria-hidden="true"></span><span class="rodape"><span class="selo" aria-hidden="true">♦</span><span class="nome">Revista TLGD</span></span></button>
-        <button type="button" class="carta-destaque" data-destaque="2"><span class="capa" aria-hidden="true"></span><span class="rodape"><span class="selo" aria-hidden="true">♣</span><span class="nome">Identidade DSG LAB</span></span></button>
-        <button type="button" class="carta-destaque" data-destaque="3"><span class="capa" aria-hidden="true"></span><span class="rodape"><span class="selo" aria-hidden="true">♦</span><span class="nome">Embalagem KitKat Sublime</span></span></button>
+        <button type="button" class="carta-destaque" data-projeto="super-mulheres-ong"><span class="capa" aria-hidden="true"></span><span class="rodape"><span class="selo" aria-hidden="true">♣</span><span class="nome">Super Mulheres ONG</span></span></button>
+        <button type="button" class="carta-destaque" data-projeto="revista-tlgd"><span class="capa" aria-hidden="true"></span><span class="rodape"><span class="selo" aria-hidden="true">♦</span><span class="nome">Revista TLGD</span></span></button>
+        <button type="button" class="carta-destaque" data-projeto="identidade-dsg-lab"><span class="capa" aria-hidden="true"></span><span class="rodape"><span class="selo" aria-hidden="true">♣</span><span class="nome">Identidade DSG LAB</span></span></button>
+        <button type="button" class="carta-destaque" data-projeto="embalagem-kitkat-sublime"><span class="capa" aria-hidden="true"></span><span class="rodape"><span class="selo" aria-hidden="true">♦</span><span class="nome">Embalagem KitKat Sublime</span></span></button>
       </div>
       <button type="button" class="ver-todos" data-ir="cartas">Ver todos</button>
-      <div class="detalhe" data-detalhe hidden role="dialog" aria-modal="true" aria-labelledby="detalhe-titulo">
-        <button type="button" class="fechar-detalhe" data-fechar-detalhe aria-label="Fechar">×</button>
-        <h3 id="detalhe-titulo" data-detalhe-titulo></h3>
-        <p data-detalhe-texto></p>
-        <button type="button" data-ir="cartas">Ver todos os projetos</button>
-      </div>
     </section>
 
     <section id="mesa" class="secao mesa-secao" aria-label="Mesa de navegação">
@@ -188,7 +182,13 @@
     <img alt="" data-ampliada-img>
   </div>
 
-  <nav id="gaveta" class="gaveta" aria-label="Objetos da mesa">
+  <main id="projeto" class="tela" data-tela aria-labelledby="projeto-titulo">
+  <nav class="voltar"><button type="button" data-voltar>‹ Voltar</button></nav>
+  <h1 id="projeto-titulo" data-projeto-titulo></h1>
+  <div class="projeto-corpo" data-projeto-corpo><!-- conteúdo do projeto: em branco por enquanto --></div>
+</main>
+
+<nav id="gaveta" class="gaveta" aria-label="Objetos da mesa">
   <div class="gaveta-topo">
     <strong>Mesa</strong>
     <button type="button" data-fechar-gaveta aria-label="Fechar menu">×</button>

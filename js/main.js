@@ -13,8 +13,8 @@ function resetarPecas() {
   document.querySelectorAll('[data-peca]').forEach(el => {
     clearTimeout(el._timerQueda);
     el.hidden = false;
+    el.classList.remove('caindo');
     el.style.transition = '';
-    el.style.opacity = '';
     el.style.translate = '';
     el.style.zIndex = '';
     el.dataset.arrastou = '';
@@ -31,10 +31,22 @@ function estaFora(el) {
   return cx < c.left || cx > c.right || cy < c.top || cy > c.bottom;
 }
 function cair(el) {
-  el.style.transition = 'translate 0.9s ease-in, opacity 0.9s ease-in';
+  el.classList.add('caindo');
+  el.style.transition = 'translate 3s linear';
   el.style.translate = `${el._ox}px ${el._oy + window.innerHeight + 200}px`;
-  el.style.opacity = '0';
-  el._timerQueda = setTimeout(() => { el.hidden = true; }, 900);
+  el._timerQueda = setTimeout(() => {
+    el.hidden = true;
+    el.classList.remove('caindo');
+  }, 3000);
+}
+// Pega um objeto no meio da queda: ele para onde está e volta a ser arrastável
+function congelar(el) {
+  clearTimeout(el._timerQueda);
+  const [x, y] = getComputedStyle(el).translate.split(' ').map(parseFloat);
+  el.style.transition = '';
+  el.style.translate = `${x}px ${y}px`;
+  el._ox = x; el._oy = y;
+  el.classList.remove('caindo');
 }
 
 // Seção da sequência inicial (lousa, destaques ou mesa) que está visível agora
@@ -46,8 +58,10 @@ function secaoAtual() {
 }
 
 function mostrarTela(id, registrarHistorico = true) {
-  const secao = SECOES_INICIO[id];
-  const destino = secao ? 'inicio' : telaValida(id);
+  const projeto = id.startsWith('projeto/') ? PROJETOS.find(p => p.slug === id.slice(8)) : null;
+  const secao = projeto ? undefined : SECOES_INICIO[id];
+  const destino = projeto ? 'projeto' : (secao ? 'inicio' : telaValida(id));
+  if (projeto) document.querySelector('[data-projeto-titulo]').textContent = projeto.nome;
   const anterior = document.querySelector('[data-tela].ativa');
   if (anterior && anterior.id === 'inicio' && destino !== 'inicio') {
     resetarPecas();
@@ -67,7 +81,7 @@ function mostrarTela(id, registrarHistorico = true) {
     inicio.scrollTop = alvo.offsetTop;
   }
 
-  const hash = secao ? (secao === 'inicio' ? 'lousa' : id) : destino;
+  const hash = projeto ? id : (secao ? (secao === 'inicio' ? 'lousa' : id) : destino);
   if (registrarHistorico && location.hash !== '#' + hash) {
     history.pushState(null, '', '#' + hash);
   }
@@ -75,19 +89,25 @@ function mostrarTela(id, registrarHistorico = true) {
 
 document.addEventListener('click', e => {
   const ir = e.target.closest('[data-ir]');
-  if (ir) { fecharDetalhe(); fecharGaveta(); mostrarTela(ir.dataset.ir); }
+  if (ir) { fecharGaveta(); mostrarTela(ir.dataset.ir); return; }
+  const pj = e.target.closest('[data-projeto]');
+  if (pj) { fecharGaveta(); mostrarTela('projeto/' + pj.dataset.projeto); return; }
+  if (e.target.closest('[data-voltar]')) {
+    if (history.length > 1) history.back(); else mostrarTela('cartas');
+  }
 });
 
 // Ao rolar a sequência inicial, a URL acompanha a seção visível
-let timerScroll;
+let timerScroll, ultimaSecao = 'lousa';
 inicio.addEventListener('scroll', () => {
   clearTimeout(timerScroll);
   timerScroll = setTimeout(() => {
-    const secoes = ['lousa', 'destaques', 'mesa'].map(id => document.getElementById(id));
-    const atual = secoes.reduce((melhor, s) =>
-      Math.abs(s.offsetTop - inicio.scrollTop) < Math.abs(melhor.offsetTop - inicio.scrollTop) ? s : melhor);
-    if (inicio.classList.contains('ativa') && location.hash !== '#' + atual.id) {
-      history.replaceState(null, '', '#' + atual.id);
+    const atual = secaoAtual();
+    // Voltar à lousa pela rolagem devolve as peças à posição original
+    if (atual === 'lousa' && ultimaSecao !== 'lousa') resetarPecas();
+    ultimaSecao = atual;
+    if (inicio.classList.contains('ativa') && location.hash !== '#' + atual) {
+      history.replaceState(null, '', '#' + atual);
     }
   }, 150);
 });
@@ -102,11 +122,17 @@ const projetos = [
   'Embalagem KitKat Sublime', 'Mimoz', 'Radar'
 ];
 
+// Cada projeto tem endereço próprio: #projeto/<slug>
+function slugify(t) {
+  return t.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+}
+const PROJETOS = projetos.map(nome => ({ nome, slug: slugify(nome) }));
+
 const grid = document.querySelector('.cartas-grid');
-projetos.forEach(nome => {
+PROJETOS.forEach(({ nome, slug }) => {
   const carta = document.createElement('article');
   carta.className = 'carta';
-  carta.innerHTML = `<h3>${nome}</h3><p>[Resumo: placeholder]</p><p class="selos">[selos]</p>`;
+  carta.innerHTML = `<h3><button type="button" class="link-projeto" data-projeto="${slug}">${nome}</button></h3><p>[Resumo: placeholder]</p><p class="selos">[selos]</p>`;
   grid.appendChild(carta);
 });
 
@@ -216,22 +242,6 @@ document.querySelector('[data-fechar]').addEventListener('click', fechar);
 ampliada.addEventListener('click', e => { if (e.target === ampliada) fechar(); });
 document.addEventListener('keydown', e => { if (e.key === 'Escape') fechar(); });
 
-// Detalhe dos projetos em destaque (conteúdo placeholder)
-const destaques = [
-  'Super Mulheres ONG', 'Revista TLGD', 'Identidade DSG LAB', 'Embalagem KitKat Sublime'
-];
-const detalhe = document.querySelector('[data-detalhe]');
-document.querySelectorAll('[data-destaque]').forEach(b => {
-  b.addEventListener('click', () => {
-    const nome = destaques[Number(b.dataset.destaque)];
-    document.querySelector('[data-detalhe-titulo]').textContent = nome;
-    document.querySelector('[data-detalhe-texto]').textContent = '[Texto do projeto: placeholder]';
-    detalhe.hidden = false;
-    detalhe.querySelector('[data-fechar-detalhe]').focus();
-  });
-});
-function fecharDetalhe() { detalhe.hidden = true; }
-document.querySelector('[data-fechar-detalhe]').addEventListener('click', fecharDetalhe);
 
 // Peças da lousa: arrastar move; ao soltar fora da cortiça, a peça cai e sai da tela
 document.querySelectorAll('[data-peca]').forEach(el => {
@@ -263,6 +273,7 @@ document.querySelectorAll('[data-peca]').forEach(el => {
   };
 
   el.addEventListener('pointerdown', e => {
+    if (el.classList.contains('caindo')) congelar(el);
     ptr = e.pointerId; x0 = e.clientX; y0 = e.clientY; dx = dy = 0; arrastou = false;
     document.addEventListener('pointermove', mover);
     document.addEventListener('pointerup', soltar);
@@ -298,5 +309,5 @@ function fecharGaveta() {
 botaoMenu.addEventListener('click', abrirGaveta);
 document.querySelector('[data-fechar-gaveta]').addEventListener('click', fecharGaveta);
 document.addEventListener('keydown', e => {
-  if (e.key === 'Escape') { fecharGaveta(); fecharDetalhe(); }
+  if (e.key === 'Escape') fecharGaveta();
 });

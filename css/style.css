@@ -391,19 +391,6 @@ body {
 .carta-destaque:hover, .carta-destaque:focus-visible { transform: translateY(-6px) rotate(0deg); }
 .carta-destaque .selo { font-size: 24px; color: var(--destaque); }
 .carta-destaque .nome { font-weight: bold; font-size: 16px; }
-.detalhe {
-  position: absolute;
-  inset: 50% auto auto 50%;
-  transform: translate(-50%, -50%);
-  background: #fff;
-  border: 2px solid var(--tinta);
-  box-shadow: var(--sombra);
-  padding: 28px;
-  width: min(480px, 90%);
-  z-index: 5;
-}
-.detalhe[hidden] { display: none; }
-.fechar-detalhe { position: absolute; top: 6px; right: 10px; background: none; border: 0; font-size: 26px; cursor: pointer; }
 
 /* Mesa: 5 botões */
 .mesa-objetos { display: grid; grid-template-columns: repeat(3, minmax(160px, 1fr)); gap: 24px; width: min(760px, 100%); }
@@ -443,3 +430,9 @@ body {
 .gaveta ul { list-style: none; margin: 0; padding: 0; }
 .gaveta li button { width: 100%; text-align: left; background: none; border: 0; border-bottom: 1px solid var(--tinta); font: inherit; font-size: 18px; padding: 14px 4px; cursor: pointer; }
 .gaveta li button:hover, .gaveta li button:focus-visible { background: #fff; }
+
+/* Página de cada projeto (conteúdo em branco por enquanto) */
+#projeto { background: var(--papel); }
+.projeto-corpo { min-height: 60vh; }
+.link-projeto { background: none; border: 0; padding: 0; font: inherit; font-weight: bold; cursor: pointer; text-align: left; }
+.link-projeto:hover, .link-projeto:focus-visible { text-decoration: underline; }
