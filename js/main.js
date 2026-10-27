@@ -1,30 +1,68 @@
-// Telas: uma visível por vez. Telas ocultas ficam inertes (teclado e leitor de tela não as alcançam).
+let zPeca = 10;
+// Seções que vivem dentro de #inicio (sequência de scroll)
+const SECOES_INICIO = { lousa: 'lousa', destaques: 'destaques', mesa: 'mesa', inicio: 'lousa' };
+const inicio = document.getElementById('inicio');
 const telas = [...document.querySelectorAll('[data-tela]')];
 
 function telaValida(id) {
-  return telas.some(t => t.id === id) ? id : 'mesa';
+  return telas.some(t => t.id === id) ? id : 'inicio';
+}
+
+// Sair da lousa e voltar faz as peças retornarem à posição original
+function resetarPecas() {
+  document.querySelectorAll('[data-peca]').forEach(el => {
+    el.style.translate = '';
+    el.style.zIndex = '';
+    el.dataset.arrastou = '';
+    el._ox = 0; el._oy = 0;
+  });
 }
 
 function mostrarTela(id, registrarHistorico = true) {
-  const destino = telaValida(id);
+  const secao = SECOES_INICIO[id];
+  const destino = secao ? 'inicio' : telaValida(id);
+  const anterior = document.querySelector('[data-tela].ativa');
+  if (anterior && anterior.id === 'inicio' && destino !== 'inicio') resetarPecas();
+
   telas.forEach(t => {
     const ativa = t.id === destino;
     t.classList.toggle('ativa', ativa);
     t.inert = !ativa;
     t.setAttribute('aria-hidden', String(!ativa));
   });
-  if (registrarHistorico && location.hash !== '#' + destino) {
-    history.pushState(null, '', '#' + destino);
+
+  if (destino === 'inicio') {
+    const alvo = document.getElementById(secao || 'lousa');
+    inicio.scrollTop = alvo.offsetTop;
+  }
+
+  const hash = secao ? (secao === 'inicio' ? 'lousa' : id) : destino;
+  if (registrarHistorico && location.hash !== '#' + hash) {
+    history.pushState(null, '', '#' + hash);
   }
 }
 
 document.addEventListener('click', e => {
   const ir = e.target.closest('[data-ir]');
-  if (ir) mostrarTela(ir.dataset.ir);
+  if (ir) { fecharDetalhe(); fecharGaveta(); mostrarTela(ir.dataset.ir); }
 });
 
-// Botão voltar do navegador e links com #
-window.addEventListener('popstate', () => mostrarTela(location.hash.slice(1), false));
+// Ao rolar a sequência inicial, a URL acompanha a seção visível
+let timerScroll;
+inicio.addEventListener('scroll', () => {
+  clearTimeout(timerScroll);
+  timerScroll = setTimeout(() => {
+    const secoes = ['lousa', 'destaques', 'mesa'].map(id => document.getElementById(id));
+    const atual = secoes.reduce((melhor, s) =>
+      Math.abs(s.offsetTop - inicio.scrollTop) < Math.abs(melhor.offsetTop - inicio.scrollTop) ? s : melhor);
+    if (inicio.classList.contains('ativa') && location.hash !== '#' + atual.id) {
+      history.replaceState(null, '', '#' + atual.id);
+    }
+  }, 150);
+});
+
+// Botão voltar do navegador
+window.addEventListener('popstate', () => mostrarTela(location.hash.slice(1) || 'lousa', false));
 
 // Lista de projetos (placeholders até os textos e imagens existirem)
 const projetos = [
@@ -147,13 +185,27 @@ document.querySelector('[data-fechar]').addEventListener('click', fechar);
 ampliada.addEventListener('click', e => { if (e.target === ampliada) fechar(); });
 document.addEventListener('keydown', e => { if (e.key === 'Escape') fechar(); });
 
-// Inicia na tela indicada pela URL (ex.: #cartas) ou na mesa
-mostrarTela(location.hash.slice(1) || 'mesa', false);
+// Detalhe dos projetos em destaque (conteúdo placeholder)
+const destaques = [
+  'Super Mulheres ONG', 'Revista TLGD', 'Identidade DSG LAB', 'Embalagem KitKat Sublime'
+];
+const detalhe = document.querySelector('[data-detalhe]');
+document.querySelectorAll('[data-destaque]').forEach(b => {
+  b.addEventListener('click', () => {
+    const nome = destaques[Number(b.dataset.destaque)];
+    document.querySelector('[data-detalhe-titulo]').textContent = nome;
+    document.querySelector('[data-detalhe-texto]').textContent = '[Texto do projeto: placeholder]';
+    detalhe.hidden = false;
+    detalhe.querySelector('[data-fechar-detalhe]').focus();
+  });
+});
+function fecharDetalhe() { detalhe.hidden = true; }
+document.querySelector('[data-fechar-detalhe]').addEventListener('click', fecharDetalhe);
 
-// Peças do quadro: arrastar para mover; clique sem arrastar abre a seção
-let zPeca = 10;
+// Peças da lousa: arrastar move; o QR code continua sendo o único link
 document.querySelectorAll('[data-peca]').forEach(el => {
-  let ptr = null, x0 = 0, y0 = 0, dx = 0, dy = 0, ox = 0, oy = 0, arrastou = false;
+  let ptr = null, x0 = 0, y0 = 0, dx = 0, dy = 0, arrastou = false;
+  el._ox = 0; el._oy = 0;
 
   el.addEventListener('pointerdown', e => {
     ptr = e.pointerId; x0 = e.clientX; y0 = e.clientY; dx = dy = 0; arrastou = false;
@@ -167,18 +219,18 @@ document.querySelectorAll('[data-peca]').forEach(el => {
       el.setPointerCapture(ptr);
       el.style.zIndex = ++zPeca;
     }
-    if (arrastou) el.style.translate = `${ox + dx}px ${oy + dy}px`;
+    if (arrastou) el.style.translate = `${el._ox + dx}px ${el._oy + dy}px`;
   });
   const soltar = e => {
     if (ptr !== e.pointerId) return;
-    if (arrastou) { ox += dx; oy += dy; el.dataset.arrastou = '1'; }
+    if (arrastou) { el._ox += dx; el._oy += dy; el.dataset.arrastou = '1'; }
     el.classList.remove('arrastando');
     ptr = null;
   };
   el.addEventListener('pointerup', soltar);
   el.addEventListener('pointercancel', soltar);
 
-  // Bloqueia o clique que segue um arrastar (inclusive o link do QR code)
+  // Um arrastar não deve disparar o link do QR code
   el.addEventListener('click', e => {
     if (el.dataset.arrastou === '1') {
       el.dataset.arrastou = '';
@@ -186,4 +238,25 @@ document.querySelectorAll('[data-peca]').forEach(el => {
       e.stopImmediatePropagation();
     }
   }, true);
+});
+
+// Inicia na tela indicada pela URL ou na lousa
+mostrarTela(location.hash.slice(1) || 'lousa', false);
+
+// Aba lateral com os objetos da mesa
+const gaveta = document.getElementById('gaveta');
+const botaoMenu = document.querySelector('[data-abrir-gaveta]');
+function abrirGaveta() {
+  gaveta.classList.add('aberta');
+  botaoMenu.setAttribute('aria-expanded', 'true');
+  gaveta.querySelector('li button').focus();
+}
+function fecharGaveta() {
+  gaveta.classList.remove('aberta');
+  botaoMenu.setAttribute('aria-expanded', 'false');
+}
+botaoMenu.addEventListener('click', abrirGaveta);
+document.querySelector('[data-fechar-gaveta]').addEventListener('click', fecharGaveta);
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') { fecharGaveta(); fecharDetalhe(); }
 });
