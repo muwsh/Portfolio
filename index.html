@@ -68,7 +68,7 @@
 
   <!-- SOBRE MIM: dossiê sobre base de corte -->
   <main id="sobre" class="tela" data-tela>
-    <nav class="voltar"><button data-ir="mesa">← Voltar à mesa</button></nav>
+    <nav class="voltar"><button type="button" data-voltar>← Voltar</button></nav>
     <div class="base-corte">
       <div class="pasta-kraft">
         <div class="aba-arquivo">FILE [número]</div>
@@ -132,23 +132,9 @@
 
   <!-- CARTAS: lista lateral + cartas de projeto -->
   <main id="cartas" class="tela" data-tela>
-    <nav class="voltar"><button data-ir="mesa">← Voltar à mesa</button></nav>
+    <nav class="voltar"><button type="button" data-voltar>← Voltar</button></nav>
     <div class="arquivo">
-      <aside class="lista-projetos">
-        <h2>Projetos</h2>
-        <ul>
-          <li>Super Mulheres ONG</li>
-          <li>Revista TLGD</li>
-          <li>Identidade DSG LAB</li>
-          <li>13° Mostra Estudantil / Emilie Chamie</li>
-          <li>Reglette</li>
-          <li>Embalagem KitKat Sublime</li>
-          <li>Mimoz</li>
-          <li>Radar</li>
-        </ul>
-        <p class="pastas-titulo">Pastas (filtros)</p>
-        <!-- naipes: ♣ ♠ ♦ ♥ entram como ícones quando estiverem prontos -->
-      </aside>
+      <h2 class="visualmente-oculto">Projetos</h2>
       <section class="cartas-grid">
         <!-- cartas geradas em js/main.js a partir da lista -->
       </section>
@@ -157,7 +143,7 @@
 
   <!-- CARIMBO: identidade visual -->
   <main id="carimbo" class="tela" data-tela>
-    <nav class="voltar"><button data-ir="mesa">← Voltar à mesa</button></nav>
+    <nav class="voltar"><button type="button" data-voltar>← Voltar</button></nav>
     <article class="caderno">
       <h2>Carimbo e carimbeira</h2>
       <p>[Texto sobre identidade pessoal: placeholder]</p>
@@ -166,13 +152,13 @@
 
   <!-- POLAROIDS: 16 fotos, 4 por página -->
   <main id="polaroids" class="tela" data-tela>
-    <nav class="voltar"><button data-ir="mesa">← Voltar à mesa</button></nav>
+    <nav class="voltar"><button type="button" data-voltar>← Voltar</button></nav>
     <div class="album" data-album></div>
   </main>
 
   <!-- POSTAIS: 12 cartões, sempre vertical -->
   <main id="postais" class="tela" data-tela>
-    <nav class="voltar"><button data-ir="mesa">← Voltar à mesa</button></nav>
+    <nav class="voltar"><button type="button" data-voltar>← Voltar</button></nav>
     <div class="binder" data-binder></div>
   </main>
 

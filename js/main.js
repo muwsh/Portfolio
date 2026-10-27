@@ -32,12 +32,12 @@ function estaFora(el) {
 }
 function cair(el) {
   el.classList.add('caindo');
-  el.style.transition = 'translate 3s linear';
+  el.style.transition = 'translate 1.1s ease-in';
   el.style.translate = `${el._ox}px ${el._oy + window.innerHeight + 200}px`;
   el._timerQueda = setTimeout(() => {
     el.hidden = true;
     el.classList.remove('caindo');
-  }, 3000);
+  }, 1100);
 }
 // Pega um objeto no meio da queda: ele para onde está e volta a ser arrastável
 function congelar(el) {
@@ -66,7 +66,7 @@ function mostrarTela(id, registrarHistorico = true) {
   if (anterior && anterior.id === 'inicio' && destino !== 'inicio') {
     resetarPecas();
     // Guarda em qual seção da sequência a pessoa estava, para o botão voltar retornar a ela
-    if (registrarHistorico) history.replaceState(null, '', '#' + secaoAtual());
+    if (registrarHistorico) history.replaceState(history.state, '', '#' + secaoAtual());
   }
 
   telas.forEach(t => {
@@ -83,7 +83,7 @@ function mostrarTela(id, registrarHistorico = true) {
 
   const hash = projeto ? id : (secao ? (secao === 'inicio' ? 'lousa' : id) : destino);
   if (registrarHistorico && location.hash !== '#' + hash) {
-    history.pushState(null, '', '#' + hash);
+    history.pushState({ interno: true }, '', '#' + hash);
   }
 }
 
@@ -93,7 +93,8 @@ document.addEventListener('click', e => {
   const pj = e.target.closest('[data-projeto]');
   if (pj) { fecharGaveta(); mostrarTela('projeto/' + pj.dataset.projeto); return; }
   if (e.target.closest('[data-voltar]')) {
-    if (history.length > 1) history.back(); else mostrarTela('cartas');
+    // Volta para a seção de onde a pessoa veio (mesa, destaques, projeto...); sem origem interna (link direto), vai à lousa
+    if (history.state && history.state.interno) history.back(); else mostrarTela('lousa');
   }
 });
 
@@ -107,7 +108,7 @@ inicio.addEventListener('scroll', () => {
     if (atual === 'lousa' && ultimaSecao !== 'lousa') resetarPecas();
     ultimaSecao = atual;
     if (inicio.classList.contains('ativa') && location.hash !== '#' + atual) {
-      history.replaceState(null, '', '#' + atual);
+      history.replaceState(history.state, '', '#' + atual);
     }
   }, 150);
 });
@@ -264,10 +265,9 @@ document.querySelectorAll('[data-peca]').forEach(el => {
     document.removeEventListener('pointermove', mover);
     document.removeEventListener('pointerup', soltar);
     document.removeEventListener('pointercancel', soltar);
-    if (arrastou) {
-      el._ox += dx; el._oy += dy; el.dataset.arrastou = '1';
-      if (estaFora(el)) cair(el);
-    }
+    if (arrastou) { el._ox += dx; el._oy += dy; el.dataset.arrastou = '1'; }
+    // Qualquer objeto solto fora da cortiça continua caindo (inclusive um que foi pego no ar)
+    if (estaFora(el)) cair(el);
     el.classList.remove('arrastando');
     ptr = null;
   };

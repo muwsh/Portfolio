@@ -216,9 +216,7 @@ body {
 }
 
 /* Cartas */
-.arquivo { display: grid; grid-template-columns: 240px 1fr; gap: 24px; }
-.lista-projetos ul { list-style: none; padding: 0; }
-.lista-projetos li { padding: 6px 0; cursor: pointer; }
+.arquivo { display: block; }
 .cartas-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 16px; }
 .carta { background: #fff; padding: 16px; box-shadow: var(--sombra); }
 
