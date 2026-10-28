@@ -42,11 +42,11 @@ body {
 }
 
 /* Tela inicial: lousa de cortiça com peças móveis (exceto o papel central) */
-#inicio { padding: 0; overflow-y: auto; scroll-snap-type: y proximity; scroll-behavior: smooth; }
+#inicio { padding: 0; overflow: hidden; }
 .secao { position: relative; height: 100%; scroll-snap-align: start; overflow: hidden; }
 #lousa { background: #ffffff; }
 .destaques { background: var(--papel); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 28px; padding: 24px; }
-.mesa-secao { background: #6b4a33 url("../img/madeira.webp") center / cover; display: flex; align-items: center; justify-content: center; }
+.mesa-secao { background: radial-gradient(ellipse at 30% 20%, #c79a62, #a9753f 70%); }
 .visualmente-oculto { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
 .titulo-secao { font-size: 28px; margin: 0; }
 .peca {
@@ -390,21 +390,25 @@ body {
 .carta-destaque .selo { font-size: 24px; color: var(--destaque); }
 .carta-destaque .nome { font-weight: bold; font-size: 16px; }
 
-/* Mesa: 5 botões */
-.mesa-objetos { display: grid; grid-template-columns: repeat(3, minmax(160px, 1fr)); gap: 24px; width: min(760px, 100%); }
+/* Mesa: 5 objetos nas posições da foto (placeholders em cor sólida até as imagens reais) */
+.mesa-objetos { position: absolute; inset: 0; }
 .objeto {
-  background: #fbf7ee;
+  position: absolute;
+  display: flex; align-items: center; justify-content: center;
+  padding: 8px;
   border: 0;
-  box-shadow: var(--sombra);
-  padding: 28px 16px;
-  font: inherit;
-  font-size: 18px;
+  font: inherit; font-size: clamp(12px, 1.3vw, 17px); font-weight: bold; text-align: center;
+  color: #fff; text-shadow: 0 1px 2px rgba(0,0,0,0.5);
+  box-shadow: 0 10px 18px rgba(0,0,0,0.35);
   cursor: pointer;
   transition: transform var(--transicao);
 }
 .objeto:hover, .objeto:focus-visible { transform: translateY(-5px) rotate(-1deg); }
-
-/* Lousa: só o QR code é clicável; as demais peças só arrastam */
+.objeto-sobre { left: 11.3%; top: 3.9%; width: 21.7%; aspect-ratio: 0.78; background: #d9bf8c; color: #3a2a14; text-shadow: none; }
+.objeto-projetos { left: 40.8%; top: 26.3%; width: 21%; aspect-ratio: 0.875; background: #e0692b; }
+.objeto-carimbo { left: 22.8%; top: 60.4%; width: 15.7%; aspect-ratio: 0.75; background: #1f1f1f; }
+.objeto-postais { left: 69.8%; top: 54.5%; width: 16.1%; aspect-ratio: 0.84; background: #d4652a; }
+.objeto-polaroids { left: 68.8%; top: 17.1%; width: 11.2%; aspect-ratio: 1.67; background: #5a2b2b; }
 
 /* Botão de menu, "Ver todos" e aba lateral com os objetos da mesa */
 .menu-botao { position: absolute; top: 20px; left: 20px; z-index: 3; background: none; border: 0; padding: 8px; cursor: pointer; display: flex; flex-direction: column; gap: 7px; }
@@ -430,7 +434,47 @@ body {
 .gaveta li button:hover, .gaveta li button:focus-visible { background: #fff; }
 
 /* Página de cada projeto (conteúdo em branco por enquanto) */
-#projeto { background: var(--papel); }
-.projeto-corpo { min-height: 60vh; }
+#projeto { background: #2d2d2d; color: #2b2620; padding: 0; overflow: hidden; }
+#projeto .voltar { position: absolute; top: 14px; left: 16px; z-index: 5; }
+#projeto .voltar button { color: #fff; }
+.projeto-folhas { height: 100vh; overflow: hidden; }
+.folha { position: relative; height: 100vh; display: flex; align-items: center; justify-content: center; }
+.folha:not(:last-child)::after { content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 4px; background: var(--destaque); }
+.folha .papel { position: relative; width: min(820px, 92vw); height: min(86vh, 760px); background: #f7f4ec; box-shadow: var(--sombra); padding: 40px; overflow: hidden; }
+.folha .papel h2 { margin: 0 0 16px; font-size: 26px; }
+.cabecalho { display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; }
+.cabecalho h1 { margin: 0; font-size: clamp(26px, 4vw, 44px); }
+.cabecalho time { font-size: 18px; white-space: nowrap; }
+.capa-foto { position: absolute; left: 8%; right: 8%; top: 24%; bottom: 14%; background: var(--capa, #3142ff); transform: rotate(-1.5deg); box-shadow: 0 10px 18px rgba(0,0,0,0.25); }
 .link-projeto { background: none; border: 0; padding: 0; font: inherit; font-weight: bold; cursor: pointer; text-align: left; }
 .link-projeto:hover, .link-projeto:focus-visible { text-decoration: underline; }
+
+/* Página de projetos: nomes à esquerda, pilha de cartas à direita */
+#cartas { background: #2d2d2d; color: #fff; }
+#cartas .voltar button { color: #fff; }
+.projetos-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; align-items: center; min-height: calc(100vh - 80px); }
+.nomes h2 { font-size: 22px; margin: 0 0 24px; }
+.nomes ul { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 6px; }
+.nome-projeto {
+  background: none; border: 0; padding: 4px 0; color: #fff; font: inherit; font-size: 20px;
+  text-align: left; cursor: pointer; transform-origin: left center;
+  transition: transform var(--transicao);
+}
+/* Efeito dock na vertical: o nome sob o mouse cresce e os vizinhos crescem menos */
+.nomes li { position: relative; transform-origin: left center; transition: transform 500ms cubic-bezier(0.175, 0.885, 0.32, 1.1); }
+.nomes li:hover, .nomes li:focus-within { transform: scale(1.5); z-index: 99; }
+.nomes li:hover + li, .nomes li:focus-within + li { transform: scale(1.3); }
+.nomes li:hover + li + li, .nomes li:focus-within + li + li { transform: scale(1.15); }
+.nomes li:has(+ li:hover), .nomes li:has(+ li:focus-within) { transform: scale(1.3); }
+.nomes li:has(+ li + li:hover), .nomes li:has(+ li + li:focus-within) { transform: scale(1.15); }
+.pilha { position: relative; width: min(420px, 90%); aspect-ratio: 0.72; justify-self: center; }
+.carta-projeto {
+  position: absolute; inset: 0;
+  display: flex; flex-direction: column; gap: 10px;
+  padding: 14px; border: 0; text-align: left; font: inherit; color: #2d2d2d;
+  background: #fff; box-shadow: var(--sombra); cursor: pointer;
+  transition: transform 450ms ease, opacity 450ms ease;
+}
+.carta-projeto .capa { flex: 1; background: var(--capa, #3142ff); }
+.carta-projeto .info { display: flex; justify-content: space-between; align-items: center; font-weight: bold; }
+.carta-projeto .selos i { display: inline-block; width: 14px; height: 14px; margin-left: 4px; background: var(--destaque); }

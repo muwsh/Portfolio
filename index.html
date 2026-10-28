@@ -56,11 +56,11 @@
 
     <section id="mesa" class="secao mesa-secao" aria-label="Mesa de navegação">
       <div class="mesa-objetos">
-        <button type="button" class="objeto" data-ir="sobre">Sobre mim</button>
-        <button type="button" class="objeto" data-ir="cartas">Projetos</button>
-        <button type="button" class="objeto" data-ir="carimbo">Carimbo</button>
-        <button type="button" class="objeto" data-ir="polaroids">Polaroids</button>
-        <button type="button" class="objeto" data-ir="postais">Postais</button>
+        <button type="button" class="objeto objeto-sobre" data-ir="sobre">Sobre mim</button>
+        <button type="button" class="objeto objeto-projetos" data-ir="cartas">Projetos</button>
+        <button type="button" class="objeto objeto-carimbo" data-ir="carimbo">Carimbo</button>
+        <button type="button" class="objeto objeto-postais" data-ir="postais">Postais</button>
+        <button type="button" class="objeto objeto-polaroids" data-ir="polaroids">Polaroids</button>
       </div>
     </section>
 
@@ -131,13 +131,14 @@
   </main>
 
   <!-- CARTAS: lista lateral + cartas de projeto -->
-  <main id="cartas" class="tela" data-tela>
+  <main id="cartas" class="tela" data-tela aria-label="Projetos">
     <nav class="voltar"><button type="button" data-voltar>← Voltar</button></nav>
-    <div class="arquivo">
-      <h2 class="visualmente-oculto">Projetos</h2>
-      <section class="cartas-grid">
-        <!-- cartas geradas em js/main.js a partir da lista -->
-      </section>
+    <div class="projetos-layout">
+      <aside class="nomes">
+        <h2>Projetos</h2>
+        <ul></ul>
+      </aside>
+      <div class="pilha"></div>
     </div>
   </main>
 
@@ -168,10 +169,39 @@
     <img alt="" data-ampliada-img>
   </div>
 
-  <main id="projeto" class="tela" data-tela aria-labelledby="projeto-titulo">
+  <main id="projeto" class="tela" data-tela aria-label="Projeto">
   <nav class="voltar"><button type="button" data-voltar>‹ Voltar</button></nav>
-  <h1 id="projeto-titulo" data-projeto-titulo></h1>
-  <div class="projeto-corpo" data-projeto-corpo><!-- conteúdo do projeto: em branco por enquanto --></div>
+  <div class="projeto-folhas">
+    <section class="folha folha-capa">
+      <div class="papel">
+        <header class="cabecalho">
+          <h1 data-projeto-titulo></h1>
+          <time>xx/xx/xxxx</time>
+        </header>
+        <div class="capa-foto" aria-hidden="true"></div>
+      </div>
+    </section>
+    <section class="folha">
+      <div class="papel">
+        <h2>Resultados e variações</h2>
+        <p>[Resultados e variações: placeholder]</p>
+      </div>
+    </section>
+    <section class="folha">
+      <div class="papel">
+        <h2>Mockups e aplicações</h2>
+        <p>[Mockups: placeholder]</p>
+      </div>
+    </section>
+    <section class="folha">
+      <div class="papel">
+        <h2>Parte técnica</h2>
+        <p>[Fonte e cores: placeholder]</p>
+        <h2>Sobre o projeto</h2>
+        <p>[Texto sobre o projeto: placeholder]</p>
+      </div>
+    </section>
+  </div>
 </main>
 
 <nav id="gaveta" class="gaveta" aria-label="Objetos da mesa">

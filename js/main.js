@@ -61,7 +61,11 @@ function mostrarTela(id, registrarHistorico = true) {
   const projeto = id.startsWith('projeto/') ? PROJETOS.find(p => p.slug === id.slice(8)) : null;
   const secao = projeto ? undefined : SECOES_INICIO[id];
   const destino = projeto ? 'projeto' : (secao ? 'inicio' : telaValida(id));
-  if (projeto) document.querySelector('[data-projeto-titulo]').textContent = projeto.nome;
+  if (projeto) {
+    document.querySelector('[data-projeto-titulo]').textContent = projeto.nome;
+    document.querySelector('.capa-foto').style.setProperty('--capa', CORES[PROJETOS.indexOf(projeto) % CORES.length]);
+    document.querySelector('.projeto-folhas').scrollTop = 0;
+  }
   const anterior = document.querySelector('[data-tela].ativa');
   if (anterior && anterior.id === 'inicio' && destino !== 'inicio') {
     resetarPecas();
@@ -91,12 +95,39 @@ document.addEventListener('click', e => {
   const ir = e.target.closest('[data-ir]');
   if (ir) { fecharGaveta(); mostrarTela(ir.dataset.ir); return; }
   const pj = e.target.closest('[data-projeto]');
-  if (pj) { fecharGaveta(); mostrarTela('projeto/' + pj.dataset.projeto); return; }
+  if (pj) {
+    if (pj.classList.contains('carta-projeto') && !pj.classList.contains('ativa')) { ativarCarta(pj.dataset.indice); return; }
+    fecharGaveta(); mostrarTela('projeto/' + pj.dataset.projeto); return;
+  }
   if (e.target.closest('[data-voltar]')) {
     // Volta para a seção de onde a pessoa veio (mesa, destaques, projeto...); sem origem interna (link direto), vai à lousa
     if (history.state && history.state.interno) history.back(); else mostrarTela('lousa');
   }
 });
+
+// Transição suave entre lousa, destaques e mesa (animação vertical com desaceleração)
+let animandoScroll = false;
+function animarPara(y, duracao = 800) {
+  const origem = inicio.scrollTop, delta = y - origem, t0 = performance.now();
+  animandoScroll = true;
+  function passo(t) {
+    const p = Math.min(1, (t - t0) / duracao);
+    const e = p < 0.5 ? 4 * p * p * p : 1 - Math.pow(-2 * p + 2, 3) / 2; // ease-in-out cúbico
+    inicio.scrollTop = origem + delta * e;
+    if (p < 1) requestAnimationFrame(passo);
+    else setTimeout(() => { animandoScroll = false; }, 300); // espera a inércia da roda passar
+  }
+  requestAnimationFrame(passo);
+}
+const ordemSecoes = ['lousa', 'destaques', 'mesa'];
+inicio.addEventListener('wheel', e => {
+  e.preventDefault();
+  if (animandoScroll || e.deltaY === 0) return;
+  const atualIdx = ordemSecoes.indexOf(secaoAtual());
+  const proxIdx = Math.max(0, Math.min(ordemSecoes.length - 1, atualIdx + Math.sign(e.deltaY)));
+  if (proxIdx === atualIdx) return;
+  animarPara(document.getElementById(ordemSecoes[proxIdx]).offsetTop);
+}, { passive: false });
 
 // Ao rolar a sequência inicial, a URL acompanha a seção visível
 let timerScroll, ultimaSecao = 'lousa';
@@ -129,13 +160,49 @@ function slugify(t) {
 }
 const PROJETOS = projetos.map(nome => ({ nome, slug: slugify(nome) }));
 
-const grid = document.querySelector('.cartas-grid');
-PROJETOS.forEach(({ nome, slug }) => {
-  const carta = document.createElement('article');
-  carta.className = 'carta';
-  carta.innerHTML = `<h3><button type="button" class="link-projeto" data-projeto="${slug}">${nome}</button></h3><p>[Resumo: placeholder]</p><p class="selos">[selos]</p>`;
-  grid.appendChild(carta);
+const nomesEl = document.querySelector('.nomes ul');
+const pilhaEl = document.querySelector('.pilha');
+const CORES = ['#3142ff', '#e0692b', '#8dc640', '#1f1f1f', '#d9bf8c', '#5a2b2b', '#2e8b57', '#c2185b'];
+PROJETOS.forEach((p, i) => {
+  const li = document.createElement('li');
+  li.innerHTML = `<button type="button" class="nome-projeto" data-projeto="${p.slug}" data-indice="${i}">${p.nome}</button>`;
+  nomesEl.appendChild(li);
+
+  // Cartas empilhadas com leve desalinhamento; a do nome sob o mouse vai para a frente
+  const carta = document.createElement('button');
+  carta.type = 'button';
+  carta.className = 'carta-projeto';
+  carta.dataset.projeto = p.slug;
+  carta.dataset.indice = i;
+  carta.style.setProperty('--capa', CORES[i % CORES.length]);
+  carta.innerHTML = `<span class="capa" aria-hidden="true"></span><span class="info"><span>${p.nome}</span><span class="selos" aria-hidden="true"><i></i><i></i></span></span>`;
+  pilhaEl.appendChild(carta);
 });
+
+// Pilha: a carta da frente é a atual; as anteriores aparecem em cima e as seguintes embaixo.
+// Sem dar a volta: a primeira não mostra nada em cima e a última não mostra nada embaixo.
+const cartasEl = [...pilhaEl.querySelectorAll('.carta-projeto')];
+let cartaAtual = 0;
+function ativarCarta(indice) {
+  cartaAtual = Math.max(0, Math.min(cartasEl.length - 1, Number(indice)));
+  cartasEl.forEach((c, k) => {
+    const off = k - cartaAtual, dist = Math.abs(off);
+    c.classList.toggle('ativa', off === 0);
+    c.style.transform = `translateY(${off * 18}px) scale(${1 - dist * 0.05}) rotate(${off * 1.5}deg)`;
+    c.style.zIndex = 100 - dist;
+    c.style.opacity = dist > 2 ? '0' : '1';
+    c.style.pointerEvents = dist > 2 ? 'none' : '';
+  });
+}
+let ultimoGiro = 0;
+pilhaEl.addEventListener('wheel', e => {
+  e.preventDefault(); // a roda troca a carta, sem rolar a página
+  const agora = Date.now();
+  if (agora - ultimoGiro < 280 || e.deltaY === 0) return; // um passo por vez
+  ultimoGiro = agora;
+  ativarCarta(cartaAtual + Math.sign(e.deltaY));
+}, { passive: false });
+ativarCarta(0);
 
 // Polaroids: 17 fotos, 4 por folha
 // Postais: 24 cartões, sempre exibidos na vertical (horizontais giram dentro da moldura)
@@ -311,3 +378,28 @@ document.querySelector('[data-fechar-gaveta]').addEventListener('click', fecharG
 document.addEventListener('keydown', e => {
   if (e.key === 'Escape') fecharGaveta();
 });
+
+// Página do projeto: uma folha por vez, com a roda do mouse (animada, como na mesa)
+const folhasProjeto = document.querySelector('.projeto-folhas');
+let animandoFolhas = false;
+function animarFolhas(y, duracao = 800) {
+  const origem = folhasProjeto.scrollTop, delta = y - origem, t0 = performance.now();
+  animandoFolhas = true;
+  function passo(t) {
+    const p = Math.min(1, (t - t0) / duracao);
+    const e = p < 0.5 ? 4 * p * p * p : 1 - Math.pow(-2 * p + 2, 3) / 2;
+    folhasProjeto.scrollTop = origem + delta * e;
+    if (p < 1) requestAnimationFrame(passo);
+    else setTimeout(() => { animandoFolhas = false; }, 300);
+  }
+  requestAnimationFrame(passo);
+}
+folhasProjeto.addEventListener('wheel', e => {
+  e.preventDefault();
+  if (animandoFolhas || e.deltaY === 0) return;
+  const total = folhasProjeto.querySelectorAll('.folha').length;
+  const atual = Math.round(folhasProjeto.scrollTop / folhasProjeto.clientHeight);
+  const prox = Math.max(0, Math.min(total - 1, atual + Math.sign(e.deltaY)));
+  if (prox === atual) return;
+  animarFolhas(prox * folhasProjeto.clientHeight);
+}, { passive: false });
