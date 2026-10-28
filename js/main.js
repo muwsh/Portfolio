@@ -311,7 +311,14 @@ binder.addEventListener('click', e => {
 function fechar() { ampliada.hidden = true; }
 document.querySelector('[data-fechar]').addEventListener('click', fechar);
 ampliada.addEventListener('click', e => { if (e.target === ampliada) fechar(); });
-document.addEventListener('keydown', e => { if (e.key === 'Escape') fechar(); });
+// Esc: fecha a ampliação; depois a aba lateral; depois volta da tela atual (igual ao botão Voltar)
+document.addEventListener('keydown', e => {
+  if (e.key !== 'Escape') return;
+  if (!ampliada.hidden) { fechar(); return; }
+  if (document.querySelector('.gaveta.aberta')) { fecharGaveta(); return; }
+  const voltar = document.querySelector('[data-tela].ativa [data-voltar]');
+  if (voltar) voltar.click();
+});
 
 
 // Peças da lousa: arrastar move; ao soltar fora da cortiça, a peça cai e sai da tela
@@ -379,7 +386,6 @@ function fecharGaveta() {
 botaoMenu.addEventListener('click', abrirGaveta);
 document.querySelector('[data-fechar-gaveta]').addEventListener('click', fecharGaveta);
 document.addEventListener('keydown', e => {
-  if (e.key === 'Escape') fecharGaveta();
 });
 
 

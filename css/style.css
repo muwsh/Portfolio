@@ -341,12 +341,12 @@ body {
   transition: transform var(--transicao);
 }
 .objeto:hover, .objeto:focus-visible { transform: translate(-50%, calc(-50% - 5px)) rotate(0deg); }
-.objeto-sobre { left: 22.6%; top: 29.6%; width: 22%; aspect-ratio: 0.81; background: #d9bf8c; color: #3a2a14; text-shadow: none; transform: translate(-50%, -50%) rotate(-10deg); }
+.objeto-sobre { left: 22.6%; top: 30%; width: 18%; aspect-ratio: 0.81; background: #d9bf8c; color: #3a2a14; text-shadow: none; transform: translate(-50%, -50%) rotate(-10deg); }
 .objeto-projetos { left: 50.4%; top: 53.9%; width: 17.1%; aspect-ratio: 1.34; background: #7fc23b; isolation: isolate; transform: translate(-50%, -50%) rotate(22deg); }
 .objeto-projetos::before, .objeto-projetos::after { content: ""; position: absolute; inset: 0; z-index: -1; }
 .objeto-projetos::before { background: #e0692b; transform: translate(-6%, -58%) rotate(-6deg); }
 .objeto-projetos::after { background: #f1efe6; transform: translate(-2%, -30%) rotate(-12deg); }
-.objeto-carimbo { left: 30.9%; top: 79.5%; width: 12%; aspect-ratio: 0.67; background: #1f1f1f; transform: translate(-50%, -50%) rotate(13deg); }
+.objeto-carimbo { left: 30.9%; top: 72%; width: 12%; aspect-ratio: 0.67; background: #1f1f1f; transform: translate(-50%, -50%) rotate(13deg); }
 .objeto-postais { left: 77.7%; top: 71.8%; width: 15%; aspect-ratio: 0.83; background: #d4652a; transform: translate(-50%, -50%) rotate(-3.5deg); }
 .objeto-polaroids { left: 73.8%; top: 22.9%; width: 11.4%; aspect-ratio: 1.43; background: #5a2b2b; transform: translate(-50%, -50%) rotate(15deg); }
 
