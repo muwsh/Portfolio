@@ -66,66 +66,51 @@
 
   </main>
 
-  <!-- SOBRE MIM: dossiê sobre base de corte -->
-  <main id="sobre" class="tela" data-tela>
+  <!-- SOBRE MIM: pasta com texto, cartão com QR, ficha, aparência e digitais -->
+  <main id="sobre" class="tela" data-tela aria-label="Sobre mim">
     <nav class="voltar"><button type="button" data-voltar>← Voltar</button></nav>
-    <div class="base-corte">
-      <div class="pasta-kraft">
-        <div class="aba-arquivo">FILE [número]</div>
+    <div class="sobre-cena">
+      <div class="sobre-pasta" aria-hidden="true"></div>
+      <div class="sobre-aba" aria-hidden="true"><span>Sobre mim</span></div>
 
-        <section class="identidade">
-          <div class="cartao-id">
-            <div class="foto-id"><span>[foto]</span></div>
-            <div class="dados-id">
-              <p class="titulo-id">CREATIVE<br>IDENTITY CARD</p>
-              <p>Tomás [sobrenome]</p>
-              <p class="rotulo">Local de nascimento</p>
-              <p>[cidade, estado]</p>
-              <p class="rotulo">Data de nascimento</p>
-              <p>[dd/mm/aaaa]</p>
-              <div class="contatos">
-                <a href="#" aria-label="E-mail">✉</a>
-                <a href="#" aria-label="LinkedIn">in</a>
-                <a href="#" aria-label="Behance">Bē</a>
-                <a href="#" aria-label="Instagram">◎</a>
-              </div>
-            </div>
-          </div>
-        </section>
+      <div class="sobre-papel sobre-texto">
+        <p data-ola></p>
+      </div>
 
-        <section class="nota-texto">
-          <p>[Texto sobre você: placeholder]</p>
-          <p>[Segundo parágrafo: placeholder]</p>
-          <p class="links">
-            <a href="#">Currículo (PDF)</a>
-            <a href="#">Behance</a>
-          </p>
-        </section>
+      <div class="sobre-papel sobre-cartao">
+        <h2>Formação acadêmica</h2>
+        <p>[Formação: placeholder]</p>
+        <h2>Interesses e áreas</h2>
+        <p>[Interesses: placeholder]</p>
+        <p class="sobre-chamado">Veja mais sobre mim</p>
+        <a class="sobre-qr" href="https://linktr.ee/tk.takabayashi" target="_blank" rel="noopener" aria-label="Veja mais sobre mim (abre em nova aba)">
+          <img src="img/qr-linktree.svg" alt="">
+        </a>
+      </div>
 
-        <section class="quadro-idiomas">
-          <p class="etiqueta">Language Level</p>
-          <ul>
-            <li><span>Português</span><i class="nivel" style="--n:5" aria-label="Nível 5 de 5"></i></li>
-            <li><span>Inglês</span><i class="nivel" style="--n:3" aria-label="Nível 3 de 5"></i></li>
-            <li><span>Espanhol</span><i class="nivel" style="--n:2" aria-label="Nível 2 de 5"></i></li>
-          </ul>
-        </section>
+      <div class="sobre-papel sobre-dossie">
+        <h2 class="faixa faixa-info">Informações</h2>
+        <ul class="lista-info">
+          <li><span>Nome</span></li>
+          <li><span>Aniversário</span></li>
+          <li><span>Nacionalidade</span></li>
+          <li><span>MBTI</span></li>
+        </ul>
+        <button type="button" class="foto-campo" data-trocar-cor aria-label="Trocar a cor do quadrado de foto"></button>
 
-        <section class="adesivos">
-          <p class="etiqueta">Personal skills</p>
-          <span class="sticker">[habilidade]</span>
-          <span class="sticker">[habilidade]</span>
-          <span class="sticker">[habilidade]</span>
-          <span class="sticker">[habilidade]</span>
-        </section>
+        <h2 class="faixa faixa-aparencia">Aparência</h2>
+        <ul class="grade-aparencia">
+          <li><span>Altura</span></li>
+          <li><span>Peso</span></li>
+          <li><span>Cor dos olhos</span></li>
+          <li><span>Cor do cabelo</span></li>
+        </ul>
 
-        <section class="softwares">
-          <span class="ferramenta">Ps<small>[nível]</small></span>
-          <span class="ferramenta">Ai<small>[nível]</small></span>
-          <span class="ferramenta">Ae<small>[nível]</small></span>
-          <span class="ferramenta">Pr<small>[nível]</small></span>
-          <span class="ferramenta">?<small>Soon…</small></span>
-        </section>
+        <h2 class="faixa faixa-digitais">Digitais</h2>
+        <div class="digitais">
+          <div class="mao"><span><b>D</b></span><span><b>D</b></span><span><b>D</b></span><span><b>D</b></span><span><b>D</b></span></div>
+          <div class="mao"><span><b>E</b></span><span><b>E</b></span><span><b>E</b></span><span><b>E</b></span><span><b>E</b></span></div>
+        </div>
       </div>
     </div>
   </main>
@@ -151,10 +136,10 @@
     </article>
   </main>
 
-  <!-- POLAROIDS: 16 fotos, 4 por página -->
+  <!-- POLAROIDS: 17 fotos em tira horizontal -->
   <main id="polaroids" class="tela" data-tela>
     <nav class="voltar"><button type="button" data-voltar>← Voltar</button></nav>
-    <div class="album" data-album></div>
+    <div class="tira-polaroids" data-tira aria-label="Polaroids"></div>
   </main>
 
   <!-- POSTAIS: 12 cartões, sempre vertical -->
@@ -172,35 +157,29 @@
   <main id="projeto" class="tela" data-tela aria-label="Projeto">
   <nav class="voltar"><button type="button" data-voltar>‹ Voltar</button></nav>
   <div class="projeto-folhas">
-    <section class="folha folha-capa">
-      <div class="papel">
+    <div class="papel-continuo">
+      <section class="folha folha-capa">
         <header class="cabecalho">
           <h1 data-projeto-titulo></h1>
           <time>xx/xx/xxxx</time>
         </header>
         <div class="capa-foto" aria-hidden="true"></div>
-      </div>
-    </section>
-    <section class="folha">
-      <div class="papel">
+      </section>
+      <section class="folha">
         <h2>Resultados e variações</h2>
         <p>[Resultados e variações: placeholder]</p>
-      </div>
-    </section>
-    <section class="folha">
-      <div class="papel">
+      </section>
+      <section class="folha">
         <h2>Mockups e aplicações</h2>
         <p>[Mockups: placeholder]</p>
-      </div>
-    </section>
-    <section class="folha">
-      <div class="papel">
+      </section>
+      <section class="folha">
         <h2>Parte técnica</h2>
         <p>[Fonte e cores: placeholder]</p>
         <h2>Sobre o projeto</h2>
         <p>[Texto sobre o projeto: placeholder]</p>
-      </div>
-    </section>
+      </section>
+    </div>
   </div>
 </main>
 
