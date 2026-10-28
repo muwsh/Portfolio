@@ -45,7 +45,7 @@ body {
 #inicio { padding: 0; overflow-x: hidden; overflow-y: auto; scrollbar-width: none; }
 #inicio::-webkit-scrollbar { display: none; }
 .secao { position: relative; height: 100%; overflow: hidden; }
-#lousa { background: #ffffff; }
+#lousa { background: #ffffff; user-select: none; -webkit-user-select: none; -webkit-user-drag: none; }
 .destaques { background: var(--papel); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 28px; padding: 24px; }
 .mesa-secao { background: radial-gradient(ellipse at 30% 20%, #c79a62, #a9753f 70%); }
 .visualmente-oculto { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }

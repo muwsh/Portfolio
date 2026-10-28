@@ -341,6 +341,10 @@ document.addEventListener('keydown', e => {
 });
 
 
+// Lousa: nada é selecionado ao arrastar (texto, QR code ou fundo)
+document.getElementById('lousa').addEventListener('selectstart', e => e.preventDefault());
+document.getElementById('lousa').addEventListener('dragstart', e => e.preventDefault());
+
 // Peças da lousa: arrastar move; ao soltar fora da cortiça, a peça cai e sai da tela
 document.querySelectorAll('[data-peca]').forEach(el => {
   let ptr = null, x0 = 0, y0 = 0, dx = 0, dy = 0, arrastou = false;
