@@ -121,9 +121,8 @@ body {
 .sobre-aba span { writing-mode: vertical-rl; background: #fff; border: 1px solid #2b2620; padding: 8px 4px; font-size: 13px; }
 
 .sobre-papel { position: absolute; background: #fdfcf8; box-shadow: var(--sombra); color: #000; }
-.sobre-duas { left: 3%; top: 5.1%; width: 42.7%; height: 47.2%; transform: rotate(-2.5deg); display: flex; }
-.sobre-metade { flex: 1; min-width: 0; padding: 4%; overflow: hidden; color: var(--tinta); }
-.sobre-trabalhos { border-left: 1px solid rgba(0, 0, 0, 0.12); box-shadow: inset 8px 0 8px -8px rgba(0, 0, 0, 0.12); }
+.sobre-duas { left: 3%; top: 5.1%; width: 42.7%; height: 47.2%; transform: rotate(-2.5deg); display: flex; gap: 2.2%; background: none; box-shadow: none; }
+.sobre-metade { flex: 1; min-width: 0; padding: 4%; overflow: hidden; color: var(--tinta); background: #fdfcf8; box-shadow: var(--sombra); }
 .sobre-metade p, .sobre-metade li { margin: 0; font-size: clamp(11px, 1.05vw, 14px); line-height: 1.6; overflow-wrap: anywhere; }
 .sobre-trabalhos h2 { margin: 0 0 8px; font-size: clamp(13px, 1.25vw, 17px); }
 .sobre-trabalhos ul { margin: 0; padding: 0; list-style: none; columns: 2; column-gap: 12px; }
@@ -146,7 +145,7 @@ body {
 .faixa-aparencia { top: 47.6%; height: 5.5%; }
 .faixa-digitais { top: 67.4%; height: 5.7%; }
 
-.lista-info { position: absolute; left: 7.9%; top: 14.5%; width: 50%; height: 22%; margin: 0; padding: 0; list-style: none; display: grid; grid-template-rows: repeat(5, 1fr); }
+.lista-info { position: absolute; left: 7.9%; top: 14.5%; width: 50%; height: 27%; margin: 0; padding: 0; list-style: none; display: grid; grid-template-rows: repeat(6, 1fr); }
 .grade-aparencia { position: absolute; left: 7.2%; top: 54.5%; width: 74%; height: 11.5%; margin: 0; padding: 0; list-style: none; display: grid; grid-template-columns: 30% 1fr; grid-template-rows: 1fr 1fr; column-gap: 30.4%; }
 .lista-info li, .grade-aparencia li { position: relative; display: flex; justify-content: space-between; align-items: flex-end; gap: 6px; border-bottom: 1px solid #000; font-size: clamp(10px, 1vw, 13px); padding-bottom: 2px; }
 .lista-info li em { font-style: normal; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
@@ -208,7 +207,8 @@ body {
   gap: 24px;
   justify-items: center;
   align-items: center;
-  height: calc(100vh - 150px);
+  width: max-content;
+  margin: 0 auto;
   padding: 24px;
   background: var(--bolso);
   border-radius: 10px;
@@ -228,7 +228,7 @@ body {
 .postal {
   background: #fff;
   padding: 10px;
-  height: min(calc(100vh - 230px), 70vw);
+  height: min(calc(100vh - 210px), 60vw);
   aspect-ratio: 2 / 3;
   width: auto;
   box-shadow: var(--sombra);
@@ -351,7 +351,7 @@ body {
 .objeto-polaroids { left: 73.8%; top: 22.9%; width: 11.4%; aspect-ratio: 1.43; background: #5a2b2b; transform: translate(-50%, -50%) rotate(15deg); }
 
 /* Botão de menu, "Ver todos" e aba lateral com os objetos da mesa */
-.menu-botao { position: absolute; top: 20px; left: 20px; z-index: 3; background: none; border: 0; padding: 8px; cursor: pointer; display: flex; flex-direction: column; gap: 7px; }
+.menu-botao { position: fixed; top: 20px; left: 20px; z-index: 3; background: none; border: 0; padding: 8px; cursor: pointer; display: flex; flex-direction: column; gap: 7px; }
 .menu-botao span { display: block; width: 50px; height: 8px; background: var(--tinta); border-radius: 6px; }
 .ver-todos { position: absolute; bottom: 18px; left: 50%; transform: translateX(-50%); background: none; border: 0; font: inherit; font-size: 18px; text-decoration: underline; cursor: pointer; padding: 8px 16px; }
 .gaveta {

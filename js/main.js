@@ -413,12 +413,18 @@ document.addEventListener('keydown', e => {
 });
 
 
-// Sobre mim: quadrado de foto (placeholder) troca de cor a cada clique
+// Sobre mim: o quadrado de foto (placeholder) troca de cor sozinho a cada 3 s e também ao clicar
 const cores = ['#1c2fd1', '#d7312b', '#f2b632', '#2e9e5b', '#7a3fb0'];
 const botaoFoto = document.querySelector('[data-trocar-cor]');
-let corAtual = 0;
-botaoFoto.style.setProperty('--cor', cores[corAtual]);
-botaoFoto.addEventListener('click', () => {
+let corAtual = 0, temporizadorFoto;
+function trocarCor() {
   corAtual = (corAtual + 1) % cores.length;
   botaoFoto.style.setProperty('--cor', cores[corAtual]);
-});
+}
+function iniciarTrocaAutomatica() {
+  clearInterval(temporizadorFoto);
+  temporizadorFoto = setInterval(trocarCor, 3000);
+}
+botaoFoto.style.setProperty('--cor', cores[corAtual]);
+iniciarTrocaAutomatica();
+botaoFoto.addEventListener('click', () => { trocarCor(); iniciarTrocaAutomatica(); });
