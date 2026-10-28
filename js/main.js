@@ -60,9 +60,9 @@ function secaoAtual() {
 // Dados de cada projeto para a carta (projetos sem dados mostram placeholder)
 const FICHAS = {
   'reglette-typeface': {
-    cliente: 'Faculdade/ESPM',
+    cliente: 'Escola Superior de Propaganda e Marketing',
     integrantes: 'Tomás Takabayashi e Antônio Stein',
-    ano: '2025 · 2º semestre',
+    ano: '2025-2',
     texto: [
       'Inspirada no esporte de escalada, a Reglette tem sua forma baseada em vias reais de <em>bouldering</em>, rejeitando formas suaves.',
       'Tive como objetivo criar uma fonte escalável, que trouxesse os ângulos e superfícies de pedras para cada letra.'
