@@ -132,7 +132,10 @@ body {
 .sobre-cartao { left: 8.5%; top: 58%; width: 32.8%; height: 34.6%; background: #fff; transform: rotate(2.3deg); padding: 4% 5%; color: var(--tinta); }
 .sobre-cartao h2 { margin: 0 0 2px; font-size: clamp(12px, 1.2vw, 15px); }
 .sobre-cartao p { margin: 0 0 8px; font-size: clamp(11px, 1.05vw, 13px); }
-.sobre-chamado { position: absolute; left: 5%; bottom: 8%; width: 55%; margin: 0 !important; font-size: clamp(12px, 1.2vw, 15px) !important; font-weight: bold; }
+.sobre-chamado { position: absolute; left: 5%; bottom: 10%; width: 36%; margin: 0 !important; font-size: clamp(12px, 1.2vw, 15px) !important; font-weight: bold; line-height: 1.3; }
+.sobre-cartao .apps { position: absolute; left: 6%; top: 8%; width: 56%; display: grid; grid-template-columns: repeat(3, 1fr); gap: 6%; }
+.sobre-cartao .apps span { display: block; aspect-ratio: 1; border: 2px solid var(--tinta); border-radius: 18%; background: #f4efe6; }
+.sobre-seta { position: absolute; left: 42%; bottom: 14%; width: 17%; height: auto; overflow: visible; }
 .sobre-qr { position: absolute; right: 6%; bottom: 8%; width: 30%; aspect-ratio: 1; background: #fff; display: block; }
 .sobre-qr img { display: block; width: 100%; height: 100%; }
 
