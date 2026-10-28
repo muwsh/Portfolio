@@ -32,12 +32,12 @@ function estaFora(el) {
 }
 function cair(el) {
   el.classList.add('caindo');
-  el.style.transition = 'translate 1.1s ease-in';
+  el.style.transition = 'translate 0.9s ease-in';
   el.style.translate = `${el._ox}px ${el._oy + window.innerHeight + 200}px`;
   el._timerQueda = setTimeout(() => {
     el.hidden = true;
     el.classList.remove('caindo');
-  }, 1100);
+  }, 900);
 }
 // Pega um objeto no meio da queda: ele para onde está e volta a ser arrastável
 function congelar(el) {
@@ -107,12 +107,12 @@ document.addEventListener('click', e => {
 
 // Transição suave entre lousa, destaques e mesa (animação vertical com desaceleração)
 let animandoScroll = false;
-function animarPara(y, duracao = 750) {
+function animarPara(y, duracao = 1000) {
   const origem = inicio.scrollTop, delta = y - origem, t0 = performance.now();
   animandoScroll = true;
   function passo(t) {
     const p = Math.min(1, (t - t0) / duracao);
-    const e = -(Math.cos(Math.PI * p) - 1) / 2; // ease-in-out senoidal, mais suave
+    const e = p < 0.5 ? 4 * p * p * p : 1 - Math.pow(-2 * p + 2, 3) / 2; // ease-in-out cúbico, mais suave
     inicio.scrollTop = origem + delta * e;
     if (p < 1) requestAnimationFrame(passo);
     else setTimeout(() => { animandoScroll = false; }, 300); // espera a inércia da roda passar
@@ -209,6 +209,16 @@ pilhaEl.addEventListener('wheel', e => {
   ativarCarta(cartaAtual + Math.sign(e.deltaY));
 }, { passive: false });
 ativarCarta(0);
+
+// Passar o mouse (ou focar) num nome da lista traz a carta correspondente para a frente
+nomesEl.addEventListener('mouseover', e => {
+  const nome = e.target.closest('.nome-projeto');
+  if (nome) ativarCarta(nome.dataset.indice);
+});
+nomesEl.addEventListener('focusin', e => {
+  const nome = e.target.closest('.nome-projeto');
+  if (nome) ativarCarta(nome.dataset.indice);
+});
 
 // Polaroids: 17 fotos em tira horizontal
 // Postais: 24 cartões, sempre exibidos na vertical (horizontais giram dentro da moldura)

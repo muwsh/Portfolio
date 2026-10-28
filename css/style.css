@@ -359,7 +359,8 @@ body {
 .papel-continuo { position: relative; width: min(820px, 92vw); margin: 0 auto; background: #f7f4ec; box-shadow: var(--sombra); padding: 40px; overflow: hidden; }
 .folha { position: relative; }
 .folha + .folha { margin-top: 48px; }
-.folha-capa { min-height: 70vh; }
+.folha-capa { min-height: 90vh; }
+.folha:not(.folha-capa) { min-height: 80vh; }
 .folha h2 { margin: 0 0 16px; font-size: 26px; }
 .cabecalho { display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; }
 .cabecalho h1 { margin: 0; font-size: clamp(26px, 4vw, 44px); }
