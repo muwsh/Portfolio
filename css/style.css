@@ -42,8 +42,9 @@ body {
 }
 
 /* Tela inicial: lousa de cortiça com peças móveis (exceto o papel central) */
-#inicio { padding: 0; overflow: hidden; }
-.secao { position: relative; height: 100%; scroll-snap-align: start; overflow: hidden; }
+#inicio { padding: 0; overflow-x: hidden; overflow-y: auto; scrollbar-width: none; }
+#inicio::-webkit-scrollbar { display: none; }
+.secao { position: relative; height: 100%; overflow: hidden; }
 #lousa { background: #ffffff; }
 .destaques { background: var(--papel); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 28px; padding: 24px; }
 .mesa-secao { background: radial-gradient(ellipse at 30% 20%, #c79a62, #a9753f 70%); }
@@ -64,7 +65,7 @@ body {
 /* Cortiça: retângulo marrom que pode ser arrastado */
 .cortica-peca {
   position: absolute;
-  left: 13.3%; top: 9.1%; width: 72.3%; height: 81.7%;
+  left: 13.3%; top: 9.1%; width: 72.3%; height: 81.7%; transform: rotate(-0.8deg);
   background: radial-gradient(circle at 30% 20%, rgba(255,255,255,0.08) 0 2px, transparent 3px) 0 0 / 14px 14px, #b98457;
   box-shadow: 0 14px 30px rgba(0,0,0,0.25);
   z-index: 0;
@@ -114,10 +115,10 @@ body {
 #sobre { padding: 0; background: #2d2d2d; display: flex; align-items: center; justify-content: center; overflow: hidden; }
 #sobre .voltar { position: absolute; top: 14px; left: 16px; z-index: 5; }
 #sobre .voltar button { color: #fff; }
-.sobre-cena { position: relative; width: min(1088px, calc(100vw - 32px), calc((100vh - 48px) * 1.7134)); aspect-ratio: 1088 / 635; }
+.sobre-cena { position: relative; width: min(calc(100vw - 32px), calc((100vh - 48px) * 1.7134)); aspect-ratio: 1088 / 635; }
 .sobre-pasta { position: absolute; left: 0.7%; top: 1.3%; width: 93.7%; height: 96.2%; background: #dea64a; box-shadow: var(--sombra); }
 .sobre-aba { position: absolute; left: 93.7%; top: 11%; width: 5.5%; height: 31%; background: #dea64a; clip-path: polygon(0 0, 100% 13%, 100% 87%, 0 100%); display: flex; align-items: center; justify-content: center; }
-.sobre-aba span { writing-mode: vertical-rl; transform: rotate(180deg); background: #fff; border: 1px solid #2b2620; padding: 8px 4px; font-size: 13px; }
+.sobre-aba span { writing-mode: vertical-rl; background: #fff; border: 1px solid #2b2620; padding: 8px 4px; font-size: 13px; }
 
 .sobre-papel { position: absolute; background: #fdfcf8; box-shadow: var(--sombra); color: #000; }
 .sobre-texto { left: 3%; top: 5.1%; width: 42.7%; height: 47.2%; transform: rotate(-2.5deg); padding: 3.5% 3.6%; overflow: hidden; color: var(--tinta); }
@@ -160,7 +161,9 @@ body {
 .caderno { max-width: 720px; margin: 0 auto; }
 
 /* Polaroids: tira horizontal com duas fileiras, rolagem lateral */
-.tira-polaroids { display: grid; grid-template-rows: repeat(2, auto); grid-auto-flow: column; grid-auto-columns: 200px; gap: 22px 28px; align-content: center; overflow-x: auto; overflow-y: hidden; height: calc(100vh - 80px); padding: 24px 40px; scrollbar-width: thin; }
+.tira-polaroids { display: grid; grid-template-rows: repeat(2, auto); grid-auto-flow: column; grid-auto-columns: 200px; gap: 22px 28px; align-content: center; overflow-x: auto; overflow-y: hidden; height: calc(100vh - 80px); padding: 24px 40px; scrollbar-width: none; cursor: grab; user-select: none; }
+.tira-polaroids::-webkit-scrollbar { display: none; }
+.tira-polaroids.arrastando { cursor: grabbing; }
 .tira-polaroids .polaroid { width: 200px; }
 
 .binder .espelho-postal { display: none; }
@@ -186,7 +189,7 @@ body {
 }
 
 /* Binder de postais: sempre na vertical, dois por folha */
-.binder { max-width: 760px; margin: 0 auto; }
+.binder { width: min(1100px, 96vw); margin: 0 auto; }
 .espelho-postal {
   display: none;
   grid-template-columns: 1fr 1fr;
@@ -213,11 +216,13 @@ body {
 .postal {
   background: #fff;
   padding: 10px;
-  width: min(240px, 100%);
+  height: min(calc(100vh - 230px), 70vw);
+  aspect-ratio: 2 / 3;
+  width: auto;
   box-shadow: var(--sombra);
   cursor: zoom-in;
 }
-.moldura { position: relative; aspect-ratio: 2 / 3; overflow: hidden; }
+.moldura { position: relative; width: 100%; height: 100%; overflow: hidden; container-type: size; }
 .moldura img {
   position: absolute;
   inset: 0;
@@ -226,13 +231,14 @@ body {
   object-fit: cover;
   display: block;
 }
-/* Foto 3:2 girada 90° ocupando a moldura vertical (ajustar se a proporção mudar) */
+/* Foto 3:2 girada 90° para preencher a página vertical (medida pela própria moldura) */
 .postal.horizontal .moldura img {
   inset: auto;
   top: 50%;
   left: 50%;
-  width: 150%;
-  height: auto;
+  width: 100cqh;
+  height: 100cqw;
+  max-width: none;
   transform: translate(-50%, -50%) rotate(90deg);
 }
 
@@ -285,7 +291,7 @@ body {
 
 
 /* Destaques: 4 cartas clicáveis */
-.cartas-destaque { display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr; gap: 28px 36px; width: min(92vw, 1100px); height: min(72vh, 680px); }
+.cartas-destaque { display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr; gap: 28px 36px; width: min(96vw, 1320px); height: min(80vh, 760px); }
 .carta-destaque {
   background: #fff;
   border: 2px solid var(--tinta);
@@ -318,15 +324,19 @@ body {
   font: inherit; font-size: clamp(12px, 1.3vw, 17px); font-weight: bold; text-align: center;
   color: #fff; text-shadow: 0 1px 2px rgba(0,0,0,0.5);
   box-shadow: 0 10px 18px rgba(0,0,0,0.35);
+  z-index: 1;
   cursor: pointer;
   transition: transform var(--transicao);
 }
-.objeto:hover, .objeto:focus-visible { transform: translateY(-5px) rotate(-1deg); }
-.objeto-sobre { left: 11.3%; top: 3.9%; width: 21.7%; aspect-ratio: 0.78; background: #d9bf8c; color: #3a2a14; text-shadow: none; }
-.objeto-projetos { left: 40.8%; top: 26.3%; width: 21%; aspect-ratio: 0.875; background: #e0692b; }
-.objeto-carimbo { left: 22.8%; top: 60.4%; width: 15.7%; aspect-ratio: 0.75; background: #1f1f1f; }
-.objeto-postais { left: 69.8%; top: 54.5%; width: 16.1%; aspect-ratio: 0.84; background: #d4652a; }
-.objeto-polaroids { left: 68.8%; top: 17.1%; width: 11.2%; aspect-ratio: 1.67; background: #5a2b2b; }
+.objeto:hover, .objeto:focus-visible { transform: translate(-50%, calc(-50% - 5px)) rotate(0deg); }
+.objeto-sobre { left: 22.6%; top: 29.6%; width: 22%; aspect-ratio: 0.81; background: #d9bf8c; color: #3a2a14; text-shadow: none; transform: translate(-50%, -50%) rotate(-10deg); }
+.objeto-projetos { left: 50.4%; top: 53.9%; width: 17.1%; aspect-ratio: 1.34; background: #7fc23b; isolation: isolate; transform: translate(-50%, -50%) rotate(22deg); }
+.objeto-projetos::before, .objeto-projetos::after { content: ""; position: absolute; inset: 0; z-index: -1; }
+.objeto-projetos::before { background: #e0692b; transform: translate(-6%, -58%) rotate(-6deg); }
+.objeto-projetos::after { background: #f1efe6; transform: translate(-2%, -30%) rotate(-12deg); }
+.objeto-carimbo { left: 30.9%; top: 79.5%; width: 12%; aspect-ratio: 0.67; background: #1f1f1f; transform: translate(-50%, -50%) rotate(13deg); }
+.objeto-postais { left: 77.7%; top: 71.8%; width: 15%; aspect-ratio: 0.83; background: #d4652a; transform: translate(-50%, -50%) rotate(-3.5deg); }
+.objeto-polaroids { left: 73.8%; top: 22.9%; width: 11.4%; aspect-ratio: 1.43; background: #5a2b2b; transform: translate(-50%, -50%) rotate(15deg); }
 
 /* Botão de menu, "Ver todos" e aba lateral com os objetos da mesa */
 .menu-botao { position: absolute; top: 20px; left: 20px; z-index: 3; background: none; border: 0; padding: 8px; cursor: pointer; display: flex; flex-direction: column; gap: 7px; }
@@ -356,7 +366,7 @@ body {
 #projeto .voltar { position: absolute; top: 14px; left: 16px; z-index: 5; }
 #projeto .voltar button { color: #fff; }
 .projeto-folhas { height: 100vh; overflow-y: auto; padding: 56px 16px 48px; }
-.papel-continuo { position: relative; width: min(820px, 92vw); margin: 0 auto; background: #f7f4ec; box-shadow: var(--sombra); padding: 40px; overflow: hidden; }
+.papel-continuo { position: relative; width: min(1400px, 72vw); margin: 0 auto; background: #f7f4ec; box-shadow: var(--sombra); padding: 40px; overflow: hidden; }
 .folha { position: relative; }
 .folha + .folha { margin-top: 48px; }
 .folha-capa { min-height: 90vh; }
@@ -372,7 +382,7 @@ body {
 /* Página de projetos: nomes à esquerda, pilha de cartas à direita */
 #cartas { background: #2d2d2d; color: #fff; }
 #cartas .voltar button { color: #fff; }
-.projetos-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; align-items: center; min-height: calc(100vh - 80px); }
+.projetos-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; align-items: center; min-height: calc(100vh - 80px); padding: 0 4vw 0 8vw; }
 .nomes h2 { font-size: 22px; margin: 0 0 24px; }
 .nomes ul { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 6px; }
 .nome-projeto {
@@ -380,14 +390,10 @@ body {
   text-align: left; cursor: pointer; transform-origin: left center;
   transition: transform var(--transicao);
 }
-/* Efeito dock na vertical: o nome sob o mouse cresce e os vizinhos crescem menos */
-.nomes li { position: relative; transform-origin: left center; transition: transform 500ms cubic-bezier(0.175, 0.885, 0.32, 1.1); }
-.nomes li:hover, .nomes li:focus-within { transform: scale(1.5); z-index: 99; }
-.nomes li:hover + li, .nomes li:focus-within + li { transform: scale(1.3); }
-.nomes li:hover + li + li, .nomes li:focus-within + li + li { transform: scale(1.15); }
-.nomes li:has(+ li:hover), .nomes li:has(+ li:focus-within) { transform: scale(1.3); }
-.nomes li:has(+ li + li:hover), .nomes li:has(+ li + li:focus-within) { transform: scale(1.15); }
-.pilha { position: relative; width: min(702px, 54vw); aspect-ratio: 1.94; justify-self: end; margin-right: 3vw; }
+/* Só o nome sob o mouse cresce; a área que reage é o próprio texto */
+.nomes li { position: relative; width: max-content; transform-origin: left center; transition: transform 350ms ease; }
+.nomes li:hover, .nomes li:focus-within { transform: scale(1.25); }
+.pilha { position: relative; width: min(860px, 60vw); aspect-ratio: 1.94; justify-self: end; margin-right: 3vw; }
 .carta-projeto {
   position: absolute; inset: 0;
   padding: 0; border: 0; font: inherit; color: #2d2d2d;
@@ -395,7 +401,7 @@ body {
   transition: transform 450ms ease, opacity 450ms ease, background-color 450ms ease;
 }
 .carta-projeto:not(.ativa) { background: #d4d4d2; }
-.carta-projeto .capa { position: absolute; left: 19%; right: 3%; top: -4%; bottom: 18%; background: var(--capa, #3142ff); transform: rotate(2deg); box-shadow: 0 6px 12px rgba(0,0,0,0.2); }
+.carta-projeto .capa { position: absolute; left: 19%; right: 3%; top: -4%; bottom: 18%; background: var(--capa, #3142ff); transform: rotate(4deg); box-shadow: 0 6px 12px rgba(0,0,0,0.2); }
 .carta-projeto .selos { position: absolute; left: 7%; top: 14%; display: flex; flex-direction: column; gap: 12px; }
 .carta-projeto .selos i { display: block; width: 70px; height: 70px; }
 .carta-projeto .selos i:first-child { background: #e60000; }

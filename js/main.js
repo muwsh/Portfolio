@@ -105,34 +105,7 @@ document.addEventListener('click', e => {
   }
 });
 
-// Transição suave entre lousa, destaques e mesa (animação vertical com desaceleração)
-let animandoScroll = false;
-function animarPara(y, duracao = 1000) {
-  const origem = inicio.scrollTop, delta = y - origem, t0 = performance.now();
-  animandoScroll = true;
-  function passo(t) {
-    const p = Math.min(1, (t - t0) / duracao);
-    const e = p < 0.5 ? 4 * p * p * p : 1 - Math.pow(-2 * p + 2, 3) / 2; // ease-in-out cúbico, mais suave
-    inicio.scrollTop = origem + delta * e;
-    if (p < 1) requestAnimationFrame(passo);
-    else setTimeout(() => { animandoScroll = false; }, 300); // espera a inércia da roda passar
-  }
-  requestAnimationFrame(passo);
-}
-const ordemSecoes = ['lousa', 'destaques', 'mesa'];
-// Um gesto da roda (inclusive a inércia do trackpad) gera uma única transição
-let gestoAberto = false, fimGesto;
-inicio.addEventListener('wheel', e => {
-  e.preventDefault();
-  clearTimeout(fimGesto);
-  fimGesto = setTimeout(() => { gestoAberto = false; }, 200);
-  if (gestoAberto || animandoScroll || e.deltaY === 0) return;
-  gestoAberto = true;
-  const atualIdx = ordemSecoes.indexOf(secaoAtual());
-  const proxIdx = Math.max(0, Math.min(ordemSecoes.length - 1, atualIdx + Math.sign(e.deltaY)));
-  if (proxIdx === atualIdx) return;
-  animarPara(document.getElementById(ordemSecoes[proxIdx]).offsetTop);
-}, { passive: false });
+// A rolagem entre lousa, destaques e mesa é a rolagem nativa do navegador (contínua, com a inércia do trackpad).
 
 // Ao rolar a sequência inicial, a URL acompanha a seção visível
 let timerScroll, ultimaSecao = 'lousa';
@@ -194,7 +167,8 @@ function ativarCarta(indice) {
   cartasEl.forEach((c, k) => {
     const off = k - cartaAtual, dist = Math.abs(off);
     c.classList.toggle('ativa', off === 0);
-    c.style.transform = `translateY(${off * 38}px) scale(${1 - dist * 0.07})`;
+    const giro = off === 0 ? -1.5 : (k % 2 ? 2.5 : -2.5); // cada carta inclina um pouco
+    c.style.transform = `translateY(${off * 38}px) rotate(${giro}deg) scale(${1 - dist * 0.07})`;
     c.style.zIndex = 100 - dist;
     c.style.opacity = dist > 2 ? '0' : '1';
     c.style.pointerEvents = dist > 2 ? 'none' : '';
@@ -233,7 +207,7 @@ polaroids.forEach((src, i) => {
   const div = document.createElement('div');
   div.className = 'polaroid';
   div.style.setProperty('--giro', ((i % 3) - 1) * 1.5 + 'deg'); // leve inclinação, como fotos coladas
-  div.innerHTML = `<img src="${src}" alt="" loading="lazy">`;
+  div.innerHTML = `<img src="${src}" alt="" loading="lazy" draggable="false">`;
   tira.appendChild(div);
 });
 // Roda do mouse percorre a tira na horizontal
@@ -241,6 +215,26 @@ tira.addEventListener('wheel', e => {
   e.preventDefault();
   tira.scrollLeft += e.deltaX || e.deltaY;
 }, { passive: false });
+// Clicar e arrastar move a tira para os lados; soltar depois de arrastar não abre a foto
+let arrasto = null, arrastou = false;
+tira.addEventListener('pointerdown', e => {
+  if (e.button !== 0) return;
+  arrasto = { x: e.clientX, esquerda: tira.scrollLeft };
+  arrastou = false;
+  tira.classList.add('arrastando');
+});
+document.addEventListener('pointermove', e => {
+  if (!arrasto) return;
+  const dx = e.clientX - arrasto.x;
+  if (Math.abs(dx) > 5) arrastou = true;
+  tira.scrollLeft = arrasto.esquerda - dx;
+});
+document.addEventListener('pointerup', () => {
+  if (!arrasto) return;
+  arrasto = null;
+  tira.classList.remove('arrastando');
+});
+tira.addEventListener('dragstart', e => e.preventDefault());
 
 const binder = document.querySelector('[data-binder]');
 for (let i = 0; i < postais.length; i += 2) {
@@ -304,6 +298,7 @@ function abrir(src) {
 }
 
 tira.addEventListener('click', e => {
+  if (arrastou) return;
   const p = e.target.closest('.polaroid');
   if (p) abrir(p.querySelector('img').src);
 });
