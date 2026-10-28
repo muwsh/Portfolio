@@ -387,6 +387,9 @@ body {
 .cabecalho { display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; }
 .cabecalho h1 { margin: 0; font-size: clamp(26px, 4vw, 44px); }
 .cabecalho time { font-size: 18px; white-space: nowrap; }
+.titulo-bloco { display: flex; flex-direction: column; gap: 6px; }
+.ficha-texto { margin: 0; font-size: 16px; }
+[data-projeto-texto] p { margin: 0 0 14px; line-height: 1.6; }
 .capa-foto { position: absolute; left: 8%; right: 8%; top: 24%; bottom: 14%; background: var(--capa, #3142ff); transform: rotate(-1.5deg); box-shadow: 0 10px 18px rgba(0,0,0,0.25); }
 .link-projeto { background: none; border: 0; padding: 0; font: inherit; font-weight: bold; cursor: pointer; text-align: left; }
 .link-projeto:hover, .link-projeto:focus-visible { text-decoration: underline; }

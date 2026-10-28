@@ -57,12 +57,32 @@ function secaoAtual() {
     Math.abs(document.getElementById(melhor).offsetTop - inicio.scrollTop) ? id : melhor, 'lousa');
 }
 
+// Dados de cada projeto para a carta (projetos sem dados mostram placeholder)
+const FICHAS = {
+  'reglette-typeface': {
+    cliente: 'Faculdade/ESPM',
+    integrantes: 'Tomás Takabayashi e Antônio Stein',
+    ano: '2025 · 2º semestre',
+    texto: [
+      'Inspirada no esporte de escalada, a Reglette tem sua forma baseada em vias reais de <em>bouldering</em>, rejeitando formas suaves.',
+      'Tive como objetivo criar uma fonte escalável, que trouxesse os ângulos e superfícies de pedras para cada letra.'
+    ]
+  }
+};
+
 function mostrarTela(id, registrarHistorico = true) {
   const projeto = id.startsWith('projeto/') ? PROJETOS.find(p => p.slug === id.slice(8)) : null;
   const secao = projeto ? undefined : SECOES_INICIO[id];
   const destino = projeto ? 'projeto' : (secao ? 'inicio' : telaValida(id));
   if (projeto) {
     document.querySelector('[data-projeto-titulo]').textContent = projeto.nome;
+    const ficha = FICHAS[projeto.slug];
+    document.querySelector('[data-projeto-cliente]').textContent = ficha ? ficha.cliente : '[Cliente: placeholder]';
+    document.querySelector('[data-projeto-integrantes]').textContent = ficha ? ficha.integrantes : '[Integrantes: placeholder]';
+    document.querySelector('[data-projeto-ano]').textContent = ficha ? ficha.ano : 'xx/xx/xxxx';
+    document.querySelector('[data-projeto-texto]').innerHTML = ficha
+      ? ficha.texto.map(t => `<p>${t}</p>`).join('')
+      : '<p>[Texto sobre o projeto: placeholder]</p>';
     document.querySelector('.capa-foto').style.setProperty('--capa', CORES[PROJETOS.indexOf(projeto) % CORES.length]);
     document.querySelector('.projeto-folhas').scrollTop = 0;
   }
@@ -127,9 +147,9 @@ window.addEventListener('popstate', () => mostrarTela(location.hash.slice(1) || 
 
 // Lista de projetos (placeholders até os textos e imagens existirem)
 const projetos = [
-  'Super Mulheres ONG', 'Revista TLGD',
-  'Identidade DSG LAB', '13° Mostra Estudantil', 'Reglette',
-  'Embalagem KitKat Sublime', 'Mimoz', 'Radar'
+  'Super Mulheres ONG', 'revista tlgd_',
+  'Identidade DSG LAB', 'Premiações ESPM', 'Reglette Typeface',
+  'KitKat Sublime', 'Mimoz', 'Radar'
 ];
 
 // Cada projeto tem endereço próprio: #projeto/<slug>
