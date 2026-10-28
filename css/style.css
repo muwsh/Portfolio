@@ -121,8 +121,13 @@ body {
 .sobre-aba span { writing-mode: vertical-rl; background: #fff; border: 1px solid #2b2620; padding: 8px 4px; font-size: 13px; }
 
 .sobre-papel { position: absolute; background: #fdfcf8; box-shadow: var(--sombra); color: #000; }
-.sobre-texto { left: 3%; top: 5.1%; width: 42.7%; height: 47.2%; transform: rotate(-2.5deg); padding: 3.5% 3.6%; overflow: hidden; color: var(--tinta); }
-.sobre-texto p { margin: 0; font-size: clamp(12px, 1.3vw, 16px); line-height: 1.7; overflow-wrap: anywhere; }
+.sobre-duas { left: 3%; top: 5.1%; width: 42.7%; height: 47.2%; transform: rotate(-2.5deg); display: flex; }
+.sobre-metade { flex: 1; min-width: 0; padding: 4%; overflow: hidden; color: var(--tinta); }
+.sobre-trabalhos { border-left: 1px solid rgba(0, 0, 0, 0.12); box-shadow: inset 8px 0 8px -8px rgba(0, 0, 0, 0.12); }
+.sobre-metade p, .sobre-metade li { margin: 0; font-size: clamp(11px, 1.05vw, 14px); line-height: 1.6; overflow-wrap: anywhere; }
+.sobre-trabalhos h2 { margin: 0 0 8px; font-size: clamp(13px, 1.25vw, 17px); }
+.sobre-trabalhos ul { margin: 0; padding: 0; list-style: none; columns: 2; column-gap: 12px; }
+.sobre-trabalhos li { break-inside: avoid; }
 
 .sobre-cartao { left: 8.5%; top: 58%; width: 32.8%; height: 34.6%; background: #fff; transform: rotate(2.3deg); padding: 4% 5%; color: var(--tinta); }
 .sobre-cartao h2 { margin: 0 0 2px; font-size: clamp(12px, 1.2vw, 15px); }
@@ -138,9 +143,13 @@ body {
 .faixa-aparencia { top: 47.6%; height: 5.5%; }
 .faixa-digitais { top: 67.4%; height: 5.7%; }
 
-.lista-info { position: absolute; left: 7.9%; top: 14.5%; width: 23%; height: 19%; margin: 0; padding: 0; list-style: none; display: grid; grid-template-rows: repeat(4, 1fr); }
+.lista-info { position: absolute; left: 7.9%; top: 14.5%; width: 50%; height: 22%; margin: 0; padding: 0; list-style: none; display: grid; grid-template-rows: repeat(5, 1fr); }
 .grade-aparencia { position: absolute; left: 7.2%; top: 54.5%; width: 74%; height: 11.5%; margin: 0; padding: 0; list-style: none; display: grid; grid-template-columns: 30% 1fr; grid-template-rows: 1fr 1fr; column-gap: 30.4%; }
-.lista-info li, .grade-aparencia li { display: flex; align-items: flex-end; border-bottom: 1px solid #000; font-size: clamp(10px, 1vw, 13px); padding-bottom: 2px; }
+.lista-info li, .grade-aparencia li { position: relative; display: flex; justify-content: space-between; align-items: flex-end; gap: 6px; border-bottom: 1px solid #000; font-size: clamp(10px, 1vw, 13px); padding-bottom: 2px; }
+.lista-info li em { font-style: normal; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.grade-aparencia li { flex-direction: column; align-items: flex-start; justify-content: flex-end; gap: 0; }
+.grade-aparencia li em { font-style: normal; white-space: nowrap; }
+.lista-info .tarja { position: absolute; right: 0; top: 8%; bottom: 14%; width: 42%; background: #000; }
 
 .foto-campo { position: absolute; left: 58.9%; top: 13.8%; width: 32.3%; height: 32.2%; margin: 0; padding: 0; border: 0; background: var(--cor, #1c2fd1); cursor: pointer; display: block; }
 .foto-campo:focus-visible { outline: 2px dashed #000; outline-offset: 4px; }

@@ -383,9 +383,6 @@ document.addEventListener('keydown', e => {
 });
 
 
-// Sobre mim: "olá" repetido no papel da esquerda (texto provisório)
-document.querySelectorAll('[data-ola]').forEach(el => { el.textContent = 'olá '.repeat(400); });
-
 // Sobre mim: quadrado de foto (placeholder) troca de cor a cada clique
 const cores = ['#1c2fd1', '#d7312b', '#f2b632', '#2e9e5b', '#7a3fb0'];
 const botaoFoto = document.querySelector('[data-trocar-cor]');
