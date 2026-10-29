@@ -209,7 +209,7 @@ body {
   align-items: center;
   width: max-content;
   margin: 0 auto;
-  padding: 40px;
+  padding: 48px 72px;
   background: var(--bolso);
   border-radius: 10px;
   box-shadow: var(--sombra);
@@ -303,7 +303,7 @@ body {
 
 
 /* Destaques: 4 cartas clicáveis */
-.cartas-destaque { display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr; gap: 28px 36px; width: min(96vw, 1320px); height: min(80vh, 760px); }
+.cartas-destaque { display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr; gap: 40px 56px; width: min(98vw, 1440px); height: min(82vh, 800px); }
 .carta-destaque {
   background: #fff;
   border: 2px solid var(--tinta);
