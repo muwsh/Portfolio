@@ -204,7 +204,7 @@ body {
 .espelho-postal {
   display: none;
   grid-template-columns: 1fr 1fr;
-  gap: 24px;
+  gap: 80px;
   justify-items: center;
   align-items: center;
   width: max-content;
