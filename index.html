@@ -56,11 +56,11 @@
 
     <section id="mesa" class="secao mesa-secao" aria-label="Mesa de navegação">
       <div class="mesa-objetos">
-        <button type="button" class="objeto objeto-sobre" data-ir="sobre">Sobre mim</button>
-        <button type="button" class="objeto objeto-projetos" data-ir="cartas">Projetos</button>
-        <button type="button" class="objeto objeto-carimbo" data-ir="carimbo">Carimbo</button>
-        <button type="button" class="objeto objeto-postais" data-ir="postais">Postais</button>
-        <button type="button" class="objeto objeto-polaroids" data-ir="polaroids">Polaroids</button>
+        <button type="button" class="objeto objeto-sobre" data-ir="sobre"><svg class="simbolo" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><line x1="6" y1="10" x2="11" y2="10"/><line x1="6" y1="14" x2="10" y2="14"/><circle cx="16" cy="11" r="2"/></svg>Sobre mim</button>
+        <button type="button" class="objeto objeto-projetos" data-ir="cartas"><svg class="simbolo" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.5l2.2 1.7 2.7-.4.9 2.6 2.4 1.3-.7 2.7 1.1 2.5-2.1 1.8-.2 2.7-2.7.5-1.6 2.2-2.4-1.2-2.5 1.2-1.5-2.2-2.7-.5-.2-2.7-2.1-1.8 1.1-2.5-.7-2.7 2.4-1.3.9-2.6 2.7.4z"/></svg>Projetos</button>
+        <button type="button" class="objeto objeto-carimbo" data-ir="carimbo"><svg class="simbolo" viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="15" width="14" height="5" rx="1"/><rect x="9" y="5" width="6" height="7" rx="1"/><line x1="12" y1="12" x2="12" y2="15"/></svg>Carimbo</button>
+        <button type="button" class="objeto objeto-postais" data-ir="postais"><svg class="simbolo" viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="4" width="16" height="16"/><rect x="7" y="7" width="10" height="10"/></svg>Postais</button>
+        <button type="button" class="objeto objeto-polaroids" data-ir="polaroids"><svg class="simbolo" viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="3" width="16" height="18" rx="1"/><rect x="6.5" y="5.5" width="11" height="10"/></svg>Polaroids</button>
       </div>
     </section>
 
@@ -68,7 +68,7 @@
 
   <!-- SOBRE MIM: pasta com texto, cartão com QR, ficha, aparência e digitais -->
   <main id="sobre" class="tela" data-tela aria-label="Sobre mim">
-    <nav class="voltar"><button type="button" data-voltar>← Voltar</button></nav>
+    <nav class="voltar"><button type="button" data-voltar aria-label="Voltar">✕</button></nav>
     <div class="sobre-cena">
       <div class="sobre-pasta" aria-hidden="true"></div>
       <div class="sobre-aba" aria-hidden="true"><span>Sobre mim</span></div>
@@ -143,7 +143,7 @@
 
   <!-- CARTAS: lista lateral + cartas de projeto -->
   <main id="cartas" class="tela" data-tela aria-label="Projetos">
-    <nav class="voltar"><button type="button" data-voltar>← Voltar</button></nav>
+    <nav class="voltar"><button type="button" data-voltar aria-label="Voltar">✕</button></nav>
     <div class="projetos-layout">
       <aside class="nomes">
         <h2>Projetos</h2>
@@ -155,7 +155,7 @@
 
   <!-- CARIMBO: identidade visual -->
   <main id="carimbo" class="tela" data-tela>
-    <nav class="voltar"><button type="button" data-voltar>← Voltar</button></nav>
+    <nav class="voltar"><button type="button" data-voltar aria-label="Voltar">✕</button></nav>
     <article class="caderno">
       <h2>Carimbo e carimbeira</h2>
       <p>[Texto sobre identidade pessoal: placeholder]</p>
@@ -164,13 +164,13 @@
 
   <!-- POLAROIDS: 17 fotos em tira horizontal -->
   <main id="polaroids" class="tela" data-tela>
-    <nav class="voltar"><button type="button" data-voltar>← Voltar</button></nav>
+    <nav class="voltar"><button type="button" data-voltar aria-label="Voltar">✕</button></nav>
     <div class="tira-polaroids" data-tira aria-label="Polaroids"></div>
   </main>
 
   <!-- POSTAIS: 12 cartões, sempre vertical -->
   <main id="postais" class="tela" data-tela>
-    <nav class="voltar"><button type="button" data-voltar>← Voltar</button></nav>
+    <nav class="voltar"><button type="button" data-voltar aria-label="Voltar">✕</button></nav>
     <div class="binder" data-binder></div>
   </main>
 
@@ -181,7 +181,7 @@
   </div>
 
   <main id="projeto" class="tela" data-tela aria-label="Projeto">
-  <nav class="voltar"><button type="button" data-voltar>‹ Voltar</button></nav>
+  <nav class="voltar"><button type="button" data-voltar aria-label="Voltar">✕</button></nav>
   <div class="projeto-folhas">
     <div class="papel-continuo">
       <section class="folha folha-capa">
