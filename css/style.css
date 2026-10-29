@@ -172,10 +172,10 @@ body {
 .caderno { max-width: 720px; margin: 0 auto; }
 
 /* Polaroids: tira horizontal com duas fileiras, rolagem lateral */
-.tira-polaroids { display: grid; grid-template-rows: repeat(2, auto); grid-auto-flow: column; grid-auto-columns: 200px; gap: 22px 28px; align-content: center; overflow-x: auto; overflow-y: hidden; height: calc(100vh - 80px); padding: 24px 40px; scrollbar-width: none; cursor: grab; user-select: none; }
+.tira-polaroids { display: grid; grid-template-rows: repeat(2, auto); grid-auto-flow: column; grid-auto-columns: 260px; gap: 34px 40px; align-content: center; overflow-x: auto; overflow-y: hidden; height: calc(100vh - 80px); padding: 24px 40px; scrollbar-width: none; cursor: grab; user-select: none; }
 .tira-polaroids::-webkit-scrollbar { display: none; }
 .tira-polaroids.arrastando { cursor: grabbing; }
-.tira-polaroids .polaroid { width: 200px; }
+.tira-polaroids .polaroid { width: 260px; }
 
 .binder .espelho-postal { display: none; }
 .binder .espelho-postal.atual { display: grid; }
@@ -209,7 +209,7 @@ body {
   align-items: center;
   width: max-content;
   margin: 0 auto;
-  padding: 24px;
+  padding: 40px;
   background: var(--bolso);
   border-radius: 10px;
   box-shadow: var(--sombra);

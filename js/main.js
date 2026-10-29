@@ -112,6 +112,18 @@ function mostrarTela(id, registrarHistorico = true) {
 }
 
 document.addEventListener('click', e => {
+  // Clicar fora da página (no fundo da tela) também volta, como o Esc e o botão Voltar
+  const telaAtiva = document.querySelector('[data-tela].ativa');
+  const fundo = telaAtiva && telaAtiva.id !== 'inicio' && (
+    e.target === telaAtiva ||
+    e.target.classList.contains('projeto-folhas') ||
+    (e.target.classList.contains('tira-polaroids') && !arrastou)
+  );
+  if (fundo) {
+    const voltar = telaAtiva.querySelector('[data-voltar]');
+    if (voltar) voltar.click();
+    return;
+  }
   const ir = e.target.closest('[data-ir]');
   if (ir) { fecharGaveta(); mostrarTela(ir.dataset.ir); return; }
   const pj = e.target.closest('[data-projeto]');
