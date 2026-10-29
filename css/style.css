@@ -327,7 +327,9 @@ body {
 .carta-destaque .nome { font-weight: bold; font-size: 16px; }
 
 /* Mesa: 5 objetos nas posições da foto (placeholders em cor sólida até as imagens reais) */
-.mesa-objetos { position: absolute; inset: 0; }
+.mesa-objetos { position: absolute; top: 64px; left: 50%; transform: translateX(-50%); height: calc(100% - 64px); width: min(100%, calc((100vh - 64px) * 1.7134)); }
+/* A mesa ocupa a tela inteira (a partir de 64 px); o rodapé fica logo abaixo e aparece ao rolar até o fim */
+#mesa { height: calc(100% + 64px); }
 .objeto {
   position: absolute;
   display: flex; align-items: center; justify-content: center;
@@ -340,7 +342,6 @@ body {
   cursor: pointer;
   transition: transform var(--transicao);
 }
-.objeto-projetos .simbolo { color: #2b2620; }
 .objeto .simbolo { position: absolute; top: 8px; right: 8px; width: 22px; height: 22px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linejoin: round; }
 .objeto:hover, .objeto:focus-visible { transform: translate(-50%, calc(-50% - 5px)) rotate(0deg); }
 .objeto-sobre { left: 22.6%; top: 30%; width: 18%; aspect-ratio: 0.81; background: #d9bf8c; color: #3a2a14; text-shadow: none; transform: translate(-50%, -50%) rotate(-10deg); }
@@ -351,6 +352,10 @@ body {
 .objeto-carimbo { left: 30.9%; top: 72%; width: 12%; aspect-ratio: 0.67; background: #1f1f1f; transform: translate(-50%, -50%) rotate(13deg); }
 .objeto-postais { left: 77.7%; top: 71.8%; width: 15%; aspect-ratio: 0.83; background: #d4652a; transform: translate(-50%, -50%) rotate(-3.5deg); }
 .objeto-polaroids { left: 73.8%; top: 22.9%; width: 11.4%; aspect-ratio: 1.43; background: #5a2b2b; transform: translate(-50%, -50%) rotate(15deg); }
+
+/* Símbolo de cada tela: canto superior direito, mesmo desenho do objeto da mesa (placeholder) */
+.simbolo-tela { position: absolute; top: 18px; right: 18px; width: 34px; height: 34px; z-index: 5; fill: none; stroke: var(--tinta); stroke-width: 1.6; stroke-linejoin: round; pointer-events: none; }
+#sobre .simbolo-tela, #cartas .simbolo-tela, #projeto .simbolo-tela { stroke: #fff; }
 
 /* Botão de menu, "Ver todos" e aba lateral com os objetos da mesa */
 .menu-botao { position: fixed; top: 20px; left: 20px; z-index: 3; background: none; border: 0; padding: 8px; cursor: pointer; display: flex; flex-direction: column; gap: 7px; }
@@ -372,7 +377,7 @@ body {
 .gaveta-topo { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; font-size: 20px; }
 .gaveta-topo button { background: none; border: 0; font-size: 28px; cursor: pointer; }
 .gaveta ul { list-style: none; margin: 0; padding: 0; }
-.gaveta li button { width: 100%; text-align: left; background: none; border: 0; border-bottom: 1px solid var(--tinta); font: inherit; font-size: 18px; padding: 14px 4px; cursor: pointer; }
+.gaveta li button { display: flex; align-items: center; gap: 12px; width: 100%; text-align: left; background: none; border: 0; border-bottom: 1px solid var(--tinta); font: inherit; font-size: 18px; padding: 14px 4px; cursor: pointer; }
 .gaveta li button:hover, .gaveta li button:focus-visible { background: #fff; }
 
 /* Página de cada projeto (conteúdo em branco por enquanto) */
@@ -423,3 +428,14 @@ body {
 .carta-projeto .selos i { display: block; width: 70px; height: 70px; }
 .carta-projeto .selos i:first-child { background: #e60000; }
 .carta-projeto .selos i:last-child { background: #ffdd33; }
+
+/* Ícones dos objetos (menu e rodapé) */
+.icone-item { width: 20px; height: 20px; flex: none; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linejoin: round; }
+
+/* Rodapé preto nas telas da página inicial: adesivo à esquerda, menu no meio, QR code à direita */
+.rodape-site { position: absolute; left: 0; right: 0; bottom: 0; height: 64px; z-index: 4; background: #000; color: #fff; display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 0 20px; }
+.adesivo-rodape { width: 34px; height: 34px; flex: none; border-radius: 50%; background: #f9e25b; }
+.rodape-nav { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px 22px; }
+.rodape-nav button { display: flex; align-items: center; gap: 8px; background: none; border: 0; padding: 6px 4px; font: inherit; font-size: 15px; color: #fff; cursor: pointer; }
+.qr-rodape { flex: none; width: 48px; height: 48px; background: #fff; padding: 3px; display: block; }
+.qr-rodape img { display: block; width: 100%; height: 100%; }
