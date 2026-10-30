@@ -384,7 +384,8 @@ body {
 #projeto { background: #2d2d2d; color: #2b2620; padding: 0; overflow: hidden; }
 #projeto .voltar { position: absolute; top: 14px; left: 16px; z-index: 5; }
 #projeto .voltar button { color: #fff; }
-.projeto-folhas { height: 100vh; overflow-y: auto; padding: 56px 16px 48px; }
+.projeto-folhas { height: 100vh; overflow-y: auto; padding: 56px 16px 48px;  scrollbar-width: none; }
+.projeto-folhas::-webkit-scrollbar { display: none; }
 .papel-continuo { position: relative; width: min(1400px, 72vw); margin: 0 auto; background: #f7f4ec; box-shadow: var(--sombra); padding: 40px; overflow: hidden; }
 .folha { position: relative; }
 .folha + .folha { margin-top: 48px; }
