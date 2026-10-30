@@ -1,12 +1,13 @@
 /* Tokens: ajuste cores e tamanhos aqui, em um lugar só */
 :root {
+  --rodape: 120px;
   --papel: #f4efe6;
   --tinta: #2b2620;
   --cortica: #c9a57a;
   --destaque: #d8473a;
   --sombra: 0 6px 14px rgba(0, 0, 0, 0.25);
   --transicao: 350ms ease;
-  --capa: #9fd6dc;   /* capa do álbum (azul-claro) */
+  --capa: #9fd6dc;   /* cor de fundo de capa de projeto */
   --bolso: #f7f7f4;  /* folha de bolsos */
 }
 
@@ -42,9 +43,10 @@ body {
 }
 
 /* Tela inicial: lousa de cortiça com peças móveis (exceto o papel central) */
-#inicio { padding: 0; overflow: hidden; }
-.secao { position: relative; height: 100%; scroll-snap-align: start; overflow: hidden; }
-#lousa { background: #ffffff; }
+#inicio { padding: 0; overflow-x: hidden; overflow-y: auto; scrollbar-width: none; }
+#inicio::-webkit-scrollbar { display: none; }
+.secao { position: relative; height: 100%; overflow: hidden; }
+#lousa { background: #ffffff; user-select: none; -webkit-user-select: none; -webkit-user-drag: none; }
 .destaques { background: var(--papel); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 28px; padding: 24px; }
 .mesa-secao { background: radial-gradient(ellipse at 30% 20%, #c79a62, #a9753f 70%); }
 .visualmente-oculto { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
@@ -64,7 +66,7 @@ body {
 /* Cortiça: retângulo marrom que pode ser arrastado */
 .cortica-peca {
   position: absolute;
-  left: 13.3%; top: 9.1%; width: 72.3%; height: 81.7%;
+  left: 13.3%; top: 9.1%; width: 72.3%; height: 81.7%; transform: rotate(-0.8deg);
   background: radial-gradient(circle at 30% 20%, rgba(255,255,255,0.08) 0 2px, transparent 3px) 0 0 / 14px 14px, #b98457;
   box-shadow: 0 14px 30px rgba(0,0,0,0.25);
   z-index: 0;
@@ -110,110 +112,57 @@ body {
 .qr-peca a { display: block; width: 100%; height: 100%; cursor: pointer; }
 .qr-peca img { width: 100%; height: 100%; display: block; }
 
-/* Sobre mim: dossiê sobre base de corte verde */
-#sobre { padding: 0; }
-.base-corte {
-  min-height: 100%;
-  padding: 24px;
-  background-color: #2f7a4f;
-  background-image:
-    linear-gradient(rgba(255, 255, 255, 0.12) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255, 255, 255, 0.12) 1px, transparent 1px);
-  background-size: 18px 18px;
-}
-.pasta-kraft {
-  position: relative;
-  max-width: 980px;
-  margin: 0 auto;
-  min-height: 600px;
-  padding: 36px;
-  background: #c8995e;
-  box-shadow: var(--sombra);
-  display: grid;
-  grid-template-columns: 1.1fr 1fr;
-  gap: 18px 22px;
-  align-items: start;
-}
-.aba-arquivo {
-  position: absolute;
-  top: -22px;
-  left: 40px;
-  background: #e9d8b4;
-  padding: 4px 16px;
-  font-family: monospace;
-  font-weight: bold;
-  letter-spacing: 1px;
-}
-.cartao-id {
-  display: flex;
-  gap: 12px;
-  background: #efe9dc;
-  padding: 12px;
-  box-shadow: var(--sombra);
-  transform: rotate(-1deg);
-}
-.foto-id {
-  width: 110px;
-  height: 130px;
-  background: #d8d2c4;
-  display: grid;
-  place-items: center;
-  font-size: 12px;
-}
-.titulo-id {
-  background: #222;
-  color: #fff;
-  padding: 4px 6px;
-  font-weight: bold;
-  margin: 0 0 8px;
-}
-.rotulo { font-size: 10px; margin: 6px 0 0; color: #555; }
-.dados-id p { margin: 2px 0; font-size: 13px; }
-.contatos { margin-top: 8px; display: flex; gap: 6px; }
-.contatos a { width: 26px; height: 26px; border-radius: 50%; border: 1px solid #333; display: grid; place-items: center; text-decoration: none; color: #222; font-size: 11px; }
+/* Sobre mim: pasta laranja sobre fundo escuro; papéis e ficha como na referência */
+#sobre { padding: 0; background: #2d2d2d; display: flex; align-items: center; justify-content: center; overflow: hidden; }
+#sobre .voltar { position: absolute; top: 14px; left: 16px; z-index: 5; }
+#sobre .voltar button { color: #fff; }
+.sobre-cena { position: relative; width: min(calc(100vw - 32px), calc((100vh - 48px) * 1.7134)); aspect-ratio: 1088 / 635; }
+.sobre-pasta { position: absolute; left: 0.7%; top: 1.3%; width: 93.7%; height: 96.2%; background: #dea64a; box-shadow: var(--sombra); }
+.sobre-aba { position: absolute; left: 93.7%; top: 11%; width: 5.5%; height: 31%; background: #dea64a; clip-path: polygon(0 0, 100% 13%, 100% 87%, 0 100%); display: flex; align-items: center; justify-content: center; }
+.sobre-aba span { writing-mode: vertical-rl; background: #fff; border: 1px solid #2b2620; padding: 8px 4px; font-size: 13px; }
 
-.nota-texto {
-  background: #fbfaf6;
-  padding: 18px;
-  font-family: Georgia, serif;
-  font-size: 14px;
-  line-height: 1.5;
-  box-shadow: var(--sombra);
-  transform: rotate(0.6deg);
-}
-.nota-texto p { margin: 0 0 10px; }
+.sobre-papel { position: absolute; background: #fdfcf8; box-shadow: var(--sombra); color: #000; }
+.sobre-duas { left: 3%; top: 5.1%; width: 42.7%; height: 47.2%; transform: rotate(-2.5deg); display: flex; gap: 2.2%; background: none; box-shadow: none; }
+.sobre-metade { flex: 1; min-width: 0; padding: 4%; overflow: hidden; color: var(--tinta); background: #fdfcf8; box-shadow: var(--sombra); }
+.sobre-metade p, .sobre-metade li { margin: 0; font-size: clamp(11px, 1.05vw, 14px); line-height: 1.6; overflow-wrap: anywhere; }
+.sobre-trabalhos h2 { margin: 0 0 8px; font-size: clamp(13px, 1.25vw, 17px); }
+.sobre-trabalhos ul { margin: 0; padding: 0; list-style: none; columns: 2; column-gap: 12px; }
+.sobre-trabalhos li { break-inside: avoid; }
 
-.quadro-idiomas {
-  background: #fff;
-  padding: 14px;
-  background-image: linear-gradient(#cfe0ea 1px, transparent 1px);
-  background-size: 100% 22px;
-  box-shadow: var(--sombra);
-  transform: rotate(-0.4deg);
-}
-.quadro-idiomas ul { list-style: none; padding: 0; margin: 8px 0 0; }
-.quadro-idiomas li { display: flex; justify-content: space-between; align-items: center; padding: 6px 0; font-family: cursive; font-size: 16px; }
-.nivel { display: inline-block; width: 160px; height: 14px; background: radial-gradient(circle, #e0b93a 6px, transparent 7px) 0 0 / 16px 14px repeat-x; -webkit-mask: linear-gradient(90deg, #000 calc(var(--n) * 20%), transparent 0); mask: linear-gradient(90deg, #000 calc(var(--n) * 20%), transparent 0); }
-.etiqueta {
-  display: inline-block;
-  background: #ffe36b;
-  padding: 2px 8px;
-  font-size: 12px;
-  margin: 0;
-  transform: rotate(-2deg);
-}
+.sobre-cartao { left: 8.5%; top: 58%; width: 32.8%; height: 34.6%; background: #fff; transform: rotate(2.3deg); padding: 4% 5%; color: var(--tinta); }
+.sobre-cartao h2 { margin: 0 0 2px; font-size: clamp(12px, 1.2vw, 15px); }
+.sobre-cartao p { margin: 0 0 8px; font-size: clamp(11px, 1.05vw, 13px); }
+.sobre-chamado { position: absolute; left: 5%; bottom: 10%; width: 36%; margin: 0 !important; font-size: clamp(12px, 1.2vw, 15px) !important; font-weight: bold; line-height: 1.3; }
+.sobre-cartao .apps { position: absolute; left: 6%; top: 8%; width: 56%; display: grid; grid-template-columns: repeat(3, 1fr); gap: 6%; }
+.sobre-cartao .apps span { display: block; aspect-ratio: 1; border: 2px solid var(--tinta); border-radius: 18%; background: #f4efe6; }
+.sobre-seta { position: absolute; left: 42%; bottom: 14%; width: 17%; height: auto; overflow: visible; }
+.sobre-qr { position: absolute; right: 6%; bottom: 8%; width: 30%; aspect-ratio: 1; background: #fff; display: block; }
+.sobre-qr img { display: block; width: 100%; height: 100%; }
 
-.adesivos { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; background: #d9342b; padding: 14px; box-shadow: var(--sombra); transform: rotate(1deg); }
-.adesivos .etiqueta { width: 100%; }
-.sticker { background: #fff; color: #222; padding: 6px 10px; font-weight: bold; font-size: 13px; box-shadow: 0 2px 4px rgba(0,0,0,0.3); }
+/* Ficha: fundo branco, faixas pretas, divisórias finas */
+.sobre-dossie { left: 49.1%; top: 5.9%; width: 43.2%; height: 89%; transform: rotate(1deg); font-family: "Courier New", monospace; }
+.sobre-dossie .faixa { position: absolute; left: 8.1%; width: 83.8%; margin: 0; background: #000; color: #fff; display: flex; align-items: center; justify-content: center; font-size: clamp(12px, 1.4vw, 18px); font-weight: bold; letter-spacing: 1px; }
+.faixa-info { top: 3.7%; height: 7.4%; }
+.faixa-aparencia { top: 47.6%; height: 5.5%; }
+.faixa-digitais { top: 67.4%; height: 5.7%; }
 
-.softwares { display: flex; flex-wrap: wrap; gap: 8px; grid-column: 1 / -1; }
-.ferramenta { border: 2px solid #2b2620; border-radius: 6px; padding: 8px 12px; font-weight: bold; background: #fff; }
-.ferramenta small { display: block; font-weight: normal; font-size: 10px; color: #b33; }
+.lista-info { position: absolute; left: 7.9%; top: 14.5%; width: 50%; height: 27%; margin: 0; padding: 0; list-style: none; display: grid; grid-template-rows: repeat(6, 1fr); }
+.grade-aparencia { position: absolute; left: 7.2%; top: 54.5%; width: 74%; height: 11.5%; margin: 0; padding: 0; list-style: none; display: grid; grid-template-columns: 30% 1fr; grid-template-rows: 1fr 1fr; column-gap: 30.4%; }
+.lista-info li, .grade-aparencia li { position: relative; display: flex; justify-content: space-between; align-items: flex-end; gap: 6px; border-bottom: 1px solid #000; font-size: clamp(10px, 1vw, 13px); padding-bottom: 2px; }
+.lista-info li em { font-style: normal; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.grade-aparencia li { flex-direction: column; align-items: flex-start; justify-content: flex-end; gap: 0; }
+.grade-aparencia li em { font-style: normal; white-space: nowrap; }
+.lista-info .tarja { position: absolute; right: 0; top: 8%; bottom: 14%; width: 42%; background: #000; }
 
-@media (max-width: 720px) {
-  .pasta-kraft { grid-template-columns: 1fr; }
-}
+.foto-campo { position: absolute; left: 58.9%; top: 13.8%; width: 32.3%; height: 32.2%; margin: 0; padding: 0; border: 0; background: var(--cor, #1c2fd1); cursor: pointer; display: block; }
+.foto-campo:focus-visible { outline: 2px dashed #000; outline-offset: 4px; }
+
+.digitais { position: absolute; left: 6.8%; top: 72.9%; width: 83.4%; height: 22.7%; display: grid; grid-template-rows: 1fr 1fr; border: 1px solid #000; }
+.digitais .mao { display: grid; grid-template-columns: repeat(5, 1fr); border-bottom: 1px solid #000; }
+.digitais .mao:last-child { border-bottom: 0; }
+.digitais .mao > * { border-right: 1px solid #000; }
+.digitais .mao > *:last-child { border-right: 0; }
+.digitais .mao b { display: block; padding: 3px 4px; font-size: clamp(10px, 1vw, 13px); }
 
 /* Cartas */
 .arquivo { display: block; }
@@ -223,30 +172,14 @@ body {
 /* Carimbo */
 .caderno { max-width: 720px; margin: 0 auto; }
 
-/* Polaroids: álbum aberto, duas folhas de 4 lado a lado (cada espelho = 8 fotos) */
-.album { max-width: 980px; margin: 0 auto; }
-.album .espelho, .binder .espelho-postal { display: none; }
-.album .espelho.atual, .binder .espelho-postal.atual { display: grid; }
-.espelho {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 0;
-  height: calc(100vh - 150px);
-  background: var(--capa);
-  padding: 18px;
-  border-radius: 10px;
-  box-shadow: var(--sombra);
-}
-.pagina {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  grid-template-rows: 1fr 1fr;
-  gap: 14px;
-  padding: 14px;
-  background: var(--bolso);
-  min-height: 0;
-}
-.pagina:first-child { border-right: 1px solid rgba(0, 0, 0, 0.08); }
+/* Polaroids: tira horizontal com duas fileiras, rolagem lateral */
+.tira-polaroids { display: grid; grid-template-rows: repeat(2, auto); grid-auto-flow: column; grid-auto-columns: 260px; gap: 34px 40px; align-content: center; overflow-x: auto; overflow-y: hidden; height: calc(100vh - 80px); padding: 24px 40px; scrollbar-width: none; cursor: grab; user-select: none; }
+.tira-polaroids::-webkit-scrollbar { display: none; }
+.tira-polaroids.arrastando { cursor: grabbing; }
+.tira-polaroids .polaroid { width: 260px; }
+
+.binder .espelho-postal { display: none; }
+.binder .espelho-postal.atual { display: grid; }
 .polaroid {
   display: flex;
   flex-direction: column;
@@ -268,15 +201,16 @@ body {
 }
 
 /* Binder de postais: sempre na vertical, dois por folha */
-.binder { max-width: 760px; margin: 0 auto; }
+.binder { display: flex; justify-content: center; }
 .espelho-postal {
   display: none;
   grid-template-columns: 1fr 1fr;
-  gap: 24px;
+  gap: 80px;
   justify-items: center;
   align-items: center;
-  height: calc(100vh - 150px);
-  padding: 24px;
+  width: max-content;
+  margin: 0 auto;
+  padding: 48px 72px;
   background: var(--bolso);
   border-radius: 10px;
   box-shadow: var(--sombra);
@@ -295,11 +229,13 @@ body {
 .postal {
   background: #fff;
   padding: 10px;
-  width: min(240px, 100%);
+  height: min(calc(100vh - 210px), 60vw);
+  aspect-ratio: 2 / 3;
+  width: auto;
   box-shadow: var(--sombra);
   cursor: zoom-in;
 }
-.moldura { position: relative; aspect-ratio: 2 / 3; overflow: hidden; }
+.moldura { position: relative; width: 100%; height: 100%; overflow: hidden; container-type: size; }
 .moldura img {
   position: absolute;
   inset: 0;
@@ -308,18 +244,19 @@ body {
   object-fit: cover;
   display: block;
 }
-/* Foto 3:2 girada 90° ocupando a moldura vertical (ajustar se a proporção mudar) */
+/* Foto 3:2 girada 90° para preencher a página vertical (medida pela própria moldura) */
 .postal.horizontal .moldura img {
   inset: auto;
   top: 50%;
   left: 50%;
-  width: 150%;
-  height: auto;
+  width: 100cqh;
+  height: 100cqw;
+  max-width: none;
   transform: translate(-50%, -50%) rotate(90deg);
 }
 
 /* Virar página */
-.espelho.atual, .espelho-postal.atual { animation: virar 400ms ease; }
+.espelho-postal.atual { animation: virar 400ms ease; }
 @keyframes virar {
   from { opacity: 0; transform: perspective(1200px) rotateY(-14deg) translateX(12px); }
   to   { opacity: 1; transform: none; }
@@ -357,7 +294,7 @@ body {
 }
 .ampliada[hidden] { display: none; }
 .ampliada img { max-width: 92vw; max-height: 88vh; }
-.ampliada .fechar { position: absolute; top: 12px; right: 16px; font-size: 32px; background: none; border: 0; color: #fff; cursor: pointer; }
+.ampliada .fechar { position: absolute; top: 12px; left: 16px; font-size: 32px; background: none; border: 0; color: #fff; cursor: pointer; }
 
 /* Celular: adaptação futura. Por enquanto, só ajuste mínimo */
 @media (max-width: 720px) {
@@ -367,7 +304,7 @@ body {
 
 
 /* Destaques: 4 cartas clicáveis */
-.cartas-destaque { display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr; gap: 28px 36px; width: min(92vw, 1100px); height: min(72vh, 680px); }
+.cartas-destaque { display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr; gap: 40px 56px; width: min(98vw, 1440px); height: min(82vh, 800px); }
 .carta-destaque {
   background: #fff;
   border: 2px solid var(--tinta);
@@ -391,7 +328,9 @@ body {
 .carta-destaque .nome { font-weight: bold; font-size: 16px; }
 
 /* Mesa: 5 objetos nas posições da foto (placeholders em cor sólida até as imagens reais) */
-.mesa-objetos { position: absolute; inset: 0; }
+.mesa-objetos { position: absolute; top: calc(var(--rodape) + 12px); left: 0; right: 0; height: calc(100vh - var(--rodape) - 12px); }
+/* A mesa ocupa a tela inteira (a partir de 64 px); o rodapé fica logo abaixo e aparece ao rolar até o fim */
+#mesa { height: calc(100% + var(--rodape)); }
 .objeto {
   position: absolute;
   display: flex; align-items: center; justify-content: center;
@@ -400,18 +339,26 @@ body {
   font: inherit; font-size: clamp(12px, 1.3vw, 17px); font-weight: bold; text-align: center;
   color: #fff; text-shadow: 0 1px 2px rgba(0,0,0,0.5);
   box-shadow: 0 10px 18px rgba(0,0,0,0.35);
+  z-index: 1;
   cursor: pointer;
   transition: transform var(--transicao);
 }
-.objeto:hover, .objeto:focus-visible { transform: translateY(-5px) rotate(-1deg); }
-.objeto-sobre { left: 11.3%; top: 3.9%; width: 21.7%; aspect-ratio: 0.78; background: #d9bf8c; color: #3a2a14; text-shadow: none; }
-.objeto-projetos { left: 40.8%; top: 26.3%; width: 21%; aspect-ratio: 0.875; background: #e0692b; }
-.objeto-carimbo { left: 22.8%; top: 60.4%; width: 15.7%; aspect-ratio: 0.75; background: #1f1f1f; }
-.objeto-postais { left: 69.8%; top: 54.5%; width: 16.1%; aspect-ratio: 0.84; background: #d4652a; }
-.objeto-polaroids { left: 68.8%; top: 17.1%; width: 11.2%; aspect-ratio: 1.67; background: #5a2b2b; }
+.objeto:hover, .objeto:focus-visible { transform: translate(-50%, calc(-50% - 5px)) rotate(0deg); }
+.objeto-sobre { left: 22.6%; top: 30%; width: 18%; aspect-ratio: 0.81; background: #d9bf8c; color: #3a2a14; text-shadow: none; transform: translate(-50%, -50%) rotate(-10deg); }
+.objeto-projetos { left: 50.4%; top: 53.9%; width: 17.1%; aspect-ratio: 1.34; background: #7fc23b; isolation: isolate; transform: translate(-50%, -50%) rotate(22deg); }
+.objeto-projetos::before, .objeto-projetos::after { content: ""; position: absolute; inset: 0; z-index: -1; }
+.objeto-projetos::before { background: #e0692b; transform: translate(-6%, -58%) rotate(-6deg); }
+.objeto-projetos::after { background: #f1efe6; transform: translate(-2%, -30%) rotate(-12deg); }
+.objeto-carimbo { left: 30.9%; top: 72%; width: 12%; aspect-ratio: 0.67; background: #1f1f1f; transform: translate(-50%, -50%) rotate(13deg); }
+.objeto-postais { left: 77.7%; top: 71.8%; width: 15%; aspect-ratio: 0.83; background: #d4652a; transform: translate(-50%, -50%) rotate(-3.5deg); }
+.objeto-polaroids { left: 73.8%; top: 22.9%; width: 11.4%; aspect-ratio: 1.43; background: #5a2b2b; transform: translate(-50%, -50%) rotate(15deg); }
+
+/* Símbolo de cada tela: canto superior direito, mesmo desenho do objeto da mesa (placeholder) */
+.simbolo-tela { position: absolute; top: 18px; right: 18px; width: 34px; height: 34px; z-index: 5; fill: none; stroke: var(--tinta); stroke-width: 1.6; stroke-linejoin: round; pointer-events: none; }
+#sobre .simbolo-tela, #cartas .simbolo-tela, #projeto .simbolo-tela { stroke: #fff; }
 
 /* Botão de menu, "Ver todos" e aba lateral com os objetos da mesa */
-.menu-botao { position: absolute; top: 20px; left: 20px; z-index: 3; background: none; border: 0; padding: 8px; cursor: pointer; display: flex; flex-direction: column; gap: 7px; }
+.menu-botao { position: fixed; top: 20px; left: 20px; z-index: 3; background: none; border: 0; padding: 8px; cursor: pointer; display: flex; flex-direction: column; gap: 7px; }
 .menu-botao span { display: block; width: 50px; height: 8px; background: var(--tinta); border-radius: 6px; }
 .ver-todos { position: absolute; bottom: 18px; left: 50%; transform: translateX(-50%); background: none; border: 0; font: inherit; font-size: 18px; text-decoration: underline; cursor: pointer; padding: 8px 16px; }
 .gaveta {
@@ -430,29 +377,35 @@ body {
 .gaveta-topo { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; font-size: 20px; }
 .gaveta-topo button { background: none; border: 0; font-size: 28px; cursor: pointer; }
 .gaveta ul { list-style: none; margin: 0; padding: 0; }
-.gaveta li button { width: 100%; text-align: left; background: none; border: 0; border-bottom: 1px solid var(--tinta); font: inherit; font-size: 18px; padding: 14px 4px; cursor: pointer; }
+.gaveta li button { display: flex; align-items: center; gap: 12px; width: 100%; text-align: left; background: none; border: 0; border-bottom: 1px solid var(--tinta); font: inherit; font-size: 18px; padding: 14px 4px; cursor: pointer; }
 .gaveta li button:hover, .gaveta li button:focus-visible { background: #fff; }
 
 /* Página de cada projeto (conteúdo em branco por enquanto) */
 #projeto { background: #2d2d2d; color: #2b2620; padding: 0; overflow: hidden; }
 #projeto .voltar { position: absolute; top: 14px; left: 16px; z-index: 5; }
 #projeto .voltar button { color: #fff; }
-.projeto-folhas { height: 100vh; overflow: hidden; }
-.folha { position: relative; height: 100vh; display: flex; align-items: center; justify-content: center; }
-.folha:not(:last-child)::after { content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 4px; background: var(--destaque); }
-.folha .papel { position: relative; width: min(820px, 92vw); height: min(86vh, 760px); background: #f7f4ec; box-shadow: var(--sombra); padding: 40px; overflow: hidden; }
-.folha .papel h2 { margin: 0 0 16px; font-size: 26px; }
+.projeto-folhas { height: 100vh; overflow-y: auto; padding: 56px 16px 48px;  scrollbar-width: none; }
+.projeto-folhas::-webkit-scrollbar { display: none; }
+.papel-continuo { position: relative; width: min(1400px, 72vw); margin: 0 auto; background: #f7f4ec; box-shadow: var(--sombra); padding: 40px; overflow: hidden; }
+.folha { position: relative; }
+.folha + .folha { margin-top: 48px; }
+.folha-capa { min-height: 90vh; }
+.folha:not(.folha-capa) { min-height: 80vh; }
+.folha h2 { margin: 0 0 16px; font-size: 26px; }
 .cabecalho { display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; }
 .cabecalho h1 { margin: 0; font-size: clamp(26px, 4vw, 44px); }
 .cabecalho time { font-size: 18px; white-space: nowrap; }
+.titulo-bloco { display: flex; flex-direction: column; gap: 6px; }
+.ficha-texto { margin: 0; font-size: 16px; }
+[data-projeto-texto] p { margin: 0 0 14px; line-height: 1.6; }
 .capa-foto { position: absolute; left: 8%; right: 8%; top: 24%; bottom: 14%; background: var(--capa, #3142ff); transform: rotate(-1.5deg); box-shadow: 0 10px 18px rgba(0,0,0,0.25); }
 .link-projeto { background: none; border: 0; padding: 0; font: inherit; font-weight: bold; cursor: pointer; text-align: left; }
 .link-projeto:hover, .link-projeto:focus-visible { text-decoration: underline; }
 
 /* Página de projetos: nomes à esquerda, pilha de cartas à direita */
-#cartas { background: #2d2d2d; color: #fff; }
+#cartas { background: #2d2d2d; color: #fff; overflow: hidden; }
 #cartas .voltar button { color: #fff; }
-.projetos-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; align-items: center; min-height: calc(100vh - 80px); }
+.projetos-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; align-items: center; min-height: calc(100vh - 80px); padding: 0 4vw 0 8vw; }
 .nomes h2 { font-size: 22px; margin: 0 0 24px; }
 .nomes ul { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 6px; }
 .nome-projeto {
@@ -460,21 +413,31 @@ body {
   text-align: left; cursor: pointer; transform-origin: left center;
   transition: transform var(--transicao);
 }
-/* Efeito dock na vertical: o nome sob o mouse cresce e os vizinhos crescem menos */
-.nomes li { position: relative; transform-origin: left center; transition: transform 500ms cubic-bezier(0.175, 0.885, 0.32, 1.1); }
-.nomes li:hover, .nomes li:focus-within { transform: scale(1.5); z-index: 99; }
-.nomes li:hover + li, .nomes li:focus-within + li { transform: scale(1.3); }
-.nomes li:hover + li + li, .nomes li:focus-within + li + li { transform: scale(1.15); }
-.nomes li:has(+ li:hover), .nomes li:has(+ li:focus-within) { transform: scale(1.3); }
-.nomes li:has(+ li + li:hover), .nomes li:has(+ li + li:focus-within) { transform: scale(1.15); }
-.pilha { position: relative; width: min(420px, 90%); aspect-ratio: 0.72; justify-self: center; }
+/* Só o nome sob o mouse cresce; a área que reage é o próprio texto */
+.nomes li { position: relative; width: max-content; transform-origin: left center; transition: transform 350ms ease; }
+.nomes li:hover, .nomes li:focus-within { transform: scale(1.25); }
+.pilha { position: relative; width: min(860px, 60vw); aspect-ratio: 1.94; justify-self: end; margin-right: 3vw; }
 .carta-projeto {
   position: absolute; inset: 0;
-  display: flex; flex-direction: column; gap: 10px;
-  padding: 14px; border: 0; text-align: left; font: inherit; color: #2d2d2d;
+  padding: 0; border: 0; font: inherit; color: #2d2d2d;
   background: #fff; box-shadow: var(--sombra); cursor: pointer;
-  transition: transform 450ms ease, opacity 450ms ease;
+  transition: transform 450ms ease, opacity 450ms ease, background-color 450ms ease;
 }
-.carta-projeto .capa { flex: 1; background: var(--capa, #3142ff); }
-.carta-projeto .info { display: flex; justify-content: space-between; align-items: center; font-weight: bold; }
-.carta-projeto .selos i { display: inline-block; width: 14px; height: 14px; margin-left: 4px; background: var(--destaque); }
+.carta-projeto:not(.ativa) { background: #d4d4d2; }
+.carta-projeto .capa { position: absolute; left: 19%; right: 3%; top: -4%; bottom: 18%; background: var(--capa, #3142ff); transform: rotate(4deg); box-shadow: 0 6px 12px rgba(0,0,0,0.2); }
+.carta-projeto .selos { position: absolute; left: 7%; top: 14%; display: flex; flex-direction: column; gap: 12px; }
+.carta-projeto .selos i { display: block; width: 70px; height: 70px; }
+.carta-projeto .selos i:first-child { background: #e60000; }
+.carta-projeto .selos i:last-child { background: #ffdd33; }
+
+/* Ícones dos objetos (menu e rodapé) */
+.icone-item { width: 20px; height: 20px; flex: none; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linejoin: round; }
+
+/* Rodapé preto nas telas da página inicial: adesivo à esquerda, menu no meio, QR code à direita */
+.rodape-site { position: absolute; left: 0; right: 0; bottom: 0; height: var(--rodape); z-index: 4; background: #000; color: #fff; display: flex; align-items: center; justify-content: space-between; gap: 24px; padding: 0 56px; }
+.adesivo-rodape { width: 64px; height: 64px; flex: none; border-radius: 50%; background: #f9e25b; }
+.rodape-nav { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px 22px; }
+.rodape-nav button { display: flex; align-items: center; gap: 10px; background: none; border: 0; padding: 8px 6px; font: inherit; font-size: 17px; color: #fff; cursor: pointer; }
+.rodape-nav .icone-item { width: 24px; height: 24px; }
+.qr-rodape { flex: none; width: 88px; height: 88px; background: #fff; padding: 3px; display: block; }
+.qr-rodape img { display: block; width: 100%; height: 100%; }

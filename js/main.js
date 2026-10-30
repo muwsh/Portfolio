@@ -32,12 +32,12 @@ function estaFora(el) {
 }
 function cair(el) {
   el.classList.add('caindo');
-  el.style.transition = 'translate 1.1s ease-in';
+  el.style.transition = 'translate 0.9s ease-in';
   el.style.translate = `${el._ox}px ${el._oy + window.innerHeight + 200}px`;
   el._timerQueda = setTimeout(() => {
     el.hidden = true;
     el.classList.remove('caindo');
-  }, 1100);
+  }, 900);
 }
 // Pega um objeto no meio da queda: ele para onde está e volta a ser arrastável
 function congelar(el) {
@@ -57,12 +57,32 @@ function secaoAtual() {
     Math.abs(document.getElementById(melhor).offsetTop - inicio.scrollTop) ? id : melhor, 'lousa');
 }
 
+// Dados de cada projeto para a carta (projetos sem dados mostram placeholder)
+const FICHAS = {
+  'reglette-typeface': {
+    cliente: 'Escola Superior de Propaganda e Marketing',
+    integrantes: 'Tomás Takabayashi e Antônio Stein',
+    ano: '2025-2',
+    texto: [
+      'Inspirada no esporte de escalada, a Reglette tem sua forma baseada em vias reais de <em>bouldering</em>, rejeitando formas suaves.',
+      'Tive como objetivo criar uma fonte escalável, que trouxesse os ângulos e superfícies de pedras para cada letra.'
+    ]
+  }
+};
+
 function mostrarTela(id, registrarHistorico = true) {
   const projeto = id.startsWith('projeto/') ? PROJETOS.find(p => p.slug === id.slice(8)) : null;
   const secao = projeto ? undefined : SECOES_INICIO[id];
   const destino = projeto ? 'projeto' : (secao ? 'inicio' : telaValida(id));
   if (projeto) {
     document.querySelector('[data-projeto-titulo]').textContent = projeto.nome;
+    const ficha = FICHAS[projeto.slug];
+    document.querySelector('[data-projeto-cliente]').textContent = ficha ? ficha.cliente : '[Cliente: placeholder]';
+    document.querySelector('[data-projeto-integrantes]').textContent = ficha ? ficha.integrantes : '[Integrantes: placeholder]';
+    document.querySelector('[data-projeto-ano]').textContent = ficha ? ficha.ano : 'xx/xx/xxxx';
+    document.querySelector('[data-projeto-texto]').innerHTML = ficha
+      ? ficha.texto.map(t => `<p>${t}</p>`).join('')
+      : '<p>[Texto sobre o projeto: placeholder]</p>';
     document.querySelector('.capa-foto').style.setProperty('--capa', CORES[PROJETOS.indexOf(projeto) % CORES.length]);
     document.querySelector('.projeto-folhas').scrollTop = 0;
   }
@@ -92,6 +112,18 @@ function mostrarTela(id, registrarHistorico = true) {
 }
 
 document.addEventListener('click', e => {
+  // Clicar fora da página (no fundo da tela) também volta, como o Esc e o botão Voltar
+  const telaAtiva = document.querySelector('[data-tela].ativa');
+  const fundo = telaAtiva && telaAtiva.id !== 'inicio' && (
+    e.target === telaAtiva ||
+    e.target.classList.contains('projeto-folhas') ||
+    (e.target.classList.contains('tira-polaroids') && !arrastou)
+  );
+  if (fundo) {
+    const voltar = telaAtiva.querySelector('[data-voltar]');
+    if (voltar) voltar.click();
+    return;
+  }
   const ir = e.target.closest('[data-ir]');
   if (ir) { fecharGaveta(); mostrarTela(ir.dataset.ir); return; }
   const pj = e.target.closest('[data-projeto]');
@@ -105,29 +137,7 @@ document.addEventListener('click', e => {
   }
 });
 
-// Transição suave entre lousa, destaques e mesa (animação vertical com desaceleração)
-let animandoScroll = false;
-function animarPara(y, duracao = 800) {
-  const origem = inicio.scrollTop, delta = y - origem, t0 = performance.now();
-  animandoScroll = true;
-  function passo(t) {
-    const p = Math.min(1, (t - t0) / duracao);
-    const e = p < 0.5 ? 4 * p * p * p : 1 - Math.pow(-2 * p + 2, 3) / 2; // ease-in-out cúbico
-    inicio.scrollTop = origem + delta * e;
-    if (p < 1) requestAnimationFrame(passo);
-    else setTimeout(() => { animandoScroll = false; }, 300); // espera a inércia da roda passar
-  }
-  requestAnimationFrame(passo);
-}
-const ordemSecoes = ['lousa', 'destaques', 'mesa'];
-inicio.addEventListener('wheel', e => {
-  e.preventDefault();
-  if (animandoScroll || e.deltaY === 0) return;
-  const atualIdx = ordemSecoes.indexOf(secaoAtual());
-  const proxIdx = Math.max(0, Math.min(ordemSecoes.length - 1, atualIdx + Math.sign(e.deltaY)));
-  if (proxIdx === atualIdx) return;
-  animarPara(document.getElementById(ordemSecoes[proxIdx]).offsetTop);
-}, { passive: false });
+// A rolagem entre lousa, destaques e mesa é a rolagem nativa do navegador (contínua, com a inércia do trackpad).
 
 // Ao rolar a sequência inicial, a URL acompanha a seção visível
 let timerScroll, ultimaSecao = 'lousa';
@@ -149,9 +159,9 @@ window.addEventListener('popstate', () => mostrarTela(location.hash.slice(1) || 
 
 // Lista de projetos (placeholders até os textos e imagens existirem)
 const projetos = [
-  'Super Mulheres ONG', 'Revista TLGD',
-  'Identidade DSG LAB', '13° Mostra Estudantil', 'Reglette',
-  'Embalagem KitKat Sublime', 'Mimoz', 'Radar'
+  'Super Mulheres ONG', 'revista tlgd_',
+  'Identidade DSG LAB', 'Premiações ESPM', 'Reglette Typeface',
+  'KitKat Sublime', 'Mimoz', 'Radar'
 ];
 
 // Cada projeto tem endereço próprio: #projeto/<slug>
@@ -175,7 +185,8 @@ PROJETOS.forEach((p, i) => {
   carta.dataset.projeto = p.slug;
   carta.dataset.indice = i;
   carta.style.setProperty('--capa', CORES[i % CORES.length]);
-  carta.innerHTML = `<span class="capa" aria-hidden="true"></span><span class="info"><span>${p.nome}</span><span class="selos" aria-hidden="true"><i></i><i></i></span></span>`;
+  carta.setAttribute('aria-label', p.nome);
+  carta.innerHTML = `<span class="selos" aria-hidden="true"><i></i><i></i></span><span class="capa" aria-hidden="true"></span>`;
   pilhaEl.appendChild(carta);
 });
 
@@ -188,7 +199,8 @@ function ativarCarta(indice) {
   cartasEl.forEach((c, k) => {
     const off = k - cartaAtual, dist = Math.abs(off);
     c.classList.toggle('ativa', off === 0);
-    c.style.transform = `translateY(${off * 18}px) scale(${1 - dist * 0.05}) rotate(${off * 1.5}deg)`;
+    const giro = off === 0 ? -1.5 : (k % 2 ? 2.5 : -2.5); // cada carta inclina um pouco
+    c.style.transform = `translateY(${off * 38}px) rotate(${giro}deg) scale(${1 - dist * 0.07})`;
     c.style.zIndex = 100 - dist;
     c.style.opacity = dist > 2 ? '0' : '1';
     c.style.pointerEvents = dist > 2 ? 'none' : '';
@@ -204,7 +216,17 @@ pilhaEl.addEventListener('wheel', e => {
 }, { passive: false });
 ativarCarta(0);
 
-// Polaroids: 17 fotos, 4 por folha
+// Passar o mouse (ou focar) num nome da lista traz a carta correspondente para a frente
+nomesEl.addEventListener('mouseover', e => {
+  const nome = e.target.closest('.nome-projeto');
+  if (nome) ativarCarta(nome.dataset.indice);
+});
+nomesEl.addEventListener('focusin', e => {
+  const nome = e.target.closest('.nome-projeto');
+  if (nome) ativarCarta(nome.dataset.indice);
+});
+
+// Polaroids: 17 fotos em tira horizontal
 // Postais: 24 cartões, sempre exibidos na vertical (horizontais giram dentro da moldura)
 const polaroids = Array.from({ length: 17 }, (_, i) => `img/polaroid-${String(i + 1).padStart(2, '0')}.webp`);
 const postais = Array.from({ length: 24 }, (_, i) => ({
@@ -212,26 +234,39 @@ const postais = Array.from({ length: 24 }, (_, i) => ({
   orientacao: [3, 8, 19, 21].includes(i + 1) ? 'horizontal' : 'vertical' // fotos 3, 8, 19 e 21 são horizontais
 }));
 
-const POR_PAGINA = 4;   // fotos por folha
-const POR_ESPELHO = 8; // duas folhas abertas lado a lado
-const album = document.querySelector('[data-album]');
-for (let i = 0; i < polaroids.length; i += POR_ESPELHO) {
-  const espelho = document.createElement('div');
-  espelho.className = 'espelho';
-  for (let j = i; j < Math.min(i + POR_ESPELHO, polaroids.length); j += POR_PAGINA) {
-    const pagina = document.createElement('div');
-    pagina.className = 'pagina';
-    polaroids.slice(j, j + POR_PAGINA).forEach((src, k) => {
-      const div = document.createElement('div');
-      div.className = 'polaroid';
-      div.style.setProperty('--giro', ((j + k) % 3 - 1) * 1.5 + 'deg'); // leve inclinação, como em álbum real
-      div.innerHTML = `<img src="${src}" alt="" loading="lazy">`;
-      pagina.appendChild(div);
-    });
-    espelho.appendChild(pagina);
-  }
-  album.appendChild(espelho);
-}
+const tira = document.querySelector('[data-tira]');
+polaroids.forEach((src, i) => {
+  const div = document.createElement('div');
+  div.className = 'polaroid';
+  div.style.setProperty('--giro', ((i % 3) - 1) * 1.5 + 'deg'); // leve inclinação, como fotos coladas
+  div.innerHTML = `<img src="${src}" alt="" loading="lazy" draggable="false">`;
+  tira.appendChild(div);
+});
+// Roda do mouse percorre a tira na horizontal
+tira.addEventListener('wheel', e => {
+  e.preventDefault();
+  tira.scrollLeft += e.deltaX || e.deltaY;
+}, { passive: false });
+// Clicar e arrastar move a tira para os lados; soltar depois de arrastar não abre a foto
+let arrasto = null, arrastou = false;
+tira.addEventListener('pointerdown', e => {
+  if (e.button !== 0) return;
+  arrasto = { x: e.clientX, esquerda: tira.scrollLeft };
+  arrastou = false;
+  tira.classList.add('arrastando');
+});
+document.addEventListener('pointermove', e => {
+  if (!arrasto) return;
+  const dx = e.clientX - arrasto.x;
+  if (Math.abs(dx) > 5) arrastou = true;
+  tira.scrollLeft = arrasto.esquerda - dx;
+});
+document.addEventListener('pointerup', () => {
+  if (!arrasto) return;
+  arrasto = null;
+  tira.classList.remove('arrastando');
+});
+tira.addEventListener('dragstart', e => e.preventDefault());
 
 const binder = document.querySelector('[data-binder]');
 for (let i = 0; i < postais.length; i += 2) {
@@ -283,7 +318,6 @@ function montarLivro(container, nomeTela) {
   virar(0);
 }
 
-montarLivro(album, 'polaroids');
 montarLivro(binder, 'postais');
 
 // Visualização ampliada: a foto aparece no sentido em que foi feita (sem girar)
@@ -295,7 +329,8 @@ function abrir(src) {
   ampliada.hidden = false;
 }
 
-album.addEventListener('click', e => {
+tira.addEventListener('click', e => {
+  if (arrastou) return;
   const p = e.target.closest('.polaroid');
   if (p) abrir(p.querySelector('img').src);
 });
@@ -308,8 +343,19 @@ binder.addEventListener('click', e => {
 function fechar() { ampliada.hidden = true; }
 document.querySelector('[data-fechar]').addEventListener('click', fechar);
 ampliada.addEventListener('click', e => { if (e.target === ampliada) fechar(); });
-document.addEventListener('keydown', e => { if (e.key === 'Escape') fechar(); });
+// Esc: fecha a ampliação; depois a aba lateral; depois volta da tela atual (igual ao botão Voltar)
+document.addEventListener('keydown', e => {
+  if (e.key !== 'Escape') return;
+  if (!ampliada.hidden) { fechar(); return; }
+  if (document.querySelector('.gaveta.aberta')) { fecharGaveta(); return; }
+  const voltar = document.querySelector('[data-tela].ativa [data-voltar]');
+  if (voltar) voltar.click();
+});
 
+
+// Lousa: nada é selecionado ao arrastar (texto, QR code ou fundo)
+document.getElementById('lousa').addEventListener('selectstart', e => e.preventDefault());
+document.getElementById('lousa').addEventListener('dragstart', e => e.preventDefault());
 
 // Peças da lousa: arrastar move; ao soltar fora da cortiça, a peça cai e sai da tela
 document.querySelectorAll('[data-peca]').forEach(el => {
@@ -376,30 +422,21 @@ function fecharGaveta() {
 botaoMenu.addEventListener('click', abrirGaveta);
 document.querySelector('[data-fechar-gaveta]').addEventListener('click', fecharGaveta);
 document.addEventListener('keydown', e => {
-  if (e.key === 'Escape') fecharGaveta();
 });
 
-// Página do projeto: uma folha por vez, com a roda do mouse (animada, como na mesa)
-const folhasProjeto = document.querySelector('.projeto-folhas');
-let animandoFolhas = false;
-function animarFolhas(y, duracao = 800) {
-  const origem = folhasProjeto.scrollTop, delta = y - origem, t0 = performance.now();
-  animandoFolhas = true;
-  function passo(t) {
-    const p = Math.min(1, (t - t0) / duracao);
-    const e = p < 0.5 ? 4 * p * p * p : 1 - Math.pow(-2 * p + 2, 3) / 2;
-    folhasProjeto.scrollTop = origem + delta * e;
-    if (p < 1) requestAnimationFrame(passo);
-    else setTimeout(() => { animandoFolhas = false; }, 300);
-  }
-  requestAnimationFrame(passo);
+
+// Sobre mim: o quadrado de foto (placeholder) troca de cor sozinho a cada 3 s e também ao clicar
+const cores = ['#1c2fd1', '#d7312b', '#f2b632', '#2e9e5b', '#7a3fb0'];
+const botaoFoto = document.querySelector('[data-trocar-cor]');
+let corAtual = 0, temporizadorFoto;
+function trocarCor() {
+  corAtual = (corAtual + 1) % cores.length;
+  botaoFoto.style.setProperty('--cor', cores[corAtual]);
 }
-folhasProjeto.addEventListener('wheel', e => {
-  e.preventDefault();
-  if (animandoFolhas || e.deltaY === 0) return;
-  const total = folhasProjeto.querySelectorAll('.folha').length;
-  const atual = Math.round(folhasProjeto.scrollTop / folhasProjeto.clientHeight);
-  const prox = Math.max(0, Math.min(total - 1, atual + Math.sign(e.deltaY)));
-  if (prox === atual) return;
-  animarFolhas(prox * folhasProjeto.clientHeight);
-}, { passive: false });
+function iniciarTrocaAutomatica() {
+  clearInterval(temporizadorFoto);
+  temporizadorFoto = setInterval(trocarCor, 3000);
+}
+botaoFoto.style.setProperty('--cor', cores[corAtual]);
+iniciarTrocaAutomatica();
+botaoFoto.addEventListener('click', () => { trocarCor(); iniciarTrocaAutomatica(); });
