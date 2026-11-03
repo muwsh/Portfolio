@@ -485,10 +485,10 @@ body {
 }
 
 /* Polaroids: entram e saem empilhadas à esquerda; a tela só aparece e some (sem deslizar) */
-#polaroids.de-objeto { transform: none; transition: visibility 0s linear 2200ms; }
-#polaroids.de-objeto.ativa { transition: visibility 0s; }
+#polaroids.de-objeto { transition: transform 520ms cubic-bezier(0.2, 0.7, 0.2, 1) 1000ms, visibility 0s linear 1550ms; }
+#polaroids.de-objeto.ativa { transition: transform 520ms cubic-bezier(0.2, 0.7, 0.2, 1), visibility 0s; }
+#polaroids.de-objeto.troca-rapida { transition: opacity 200ms ease, visibility 0s linear 200ms; }
 #polaroids .polaroid { transition: transform 600ms cubic-bezier(0.2, 0.7, 0.2, 1); }
-.polaroid.em-fora { transform: translate(var(--xf, 0), var(--yf, 0)) rotate(var(--pgiro, 0deg)) scale(0.55); }
 .polaroid.em-pilha { transform: translate(var(--x1, 0), var(--y1, 0)) rotate(var(--pgiro, 0deg)) scale(0.55); }
 
 /* Foto ampliada: inclina seguindo o mouse (sem brilho ou holografia) */
@@ -512,4 +512,3 @@ body {
 
 /* Abrir um projeto: a tela do objeto só some rápido, sem deslizar */
 .tela.de-objeto.troca-rapida { opacity: 0; transform: none; transition: opacity 200ms ease, visibility 0s linear 200ms; }
-#polaroids.de-objeto.troca-rapida { transition: opacity 200ms ease, visibility 0s linear 200ms; }
