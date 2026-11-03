@@ -97,7 +97,11 @@ function mostrarTela(id, registrarHistorico = true) {
     if (registrarHistorico) history.replaceState(history.state, '', '#' + secaoAtual());
   }
 
-  const saindoPolaroids = anterior && anterior.id === 'polaroids' && destino !== 'polaroids';
+  // Abrir um projeto (carta) não passa pela animação de saída do objeto: a tela só faz um fade rápido
+  const trocaRapida = destino === 'projeto' && anterior && anterior.classList.contains('de-objeto');
+  telas.forEach(t => t.classList.remove('troca-rapida'));
+  if (trocaRapida) anterior.classList.add('troca-rapida');
+  const saindoPolaroids = anterior && anterior.id === 'polaroids' && destino !== 'polaroids' && !trocaRapida;
   const entrandoPolaroids = destino === 'polaroids' && !(anterior && anterior.id === 'polaroids');
   document.getElementById('fundo-objeto').classList.toggle('visivel', OBJETOS.includes(destino));
   inicio.classList.toggle('sob-objeto', OBJETOS.includes(destino) || destino === 'projeto');
@@ -323,7 +327,7 @@ function calcularPilhas() {
     const pilhaY = linha ? H * 0.7 : H * 0.3;
     el.style.setProperty('--x1', (pilhaX - cx) + 'px');
     el.style.setProperty('--y1', (pilhaY - cy) + 'px');
-    el.style.setProperty('--xf', (-W * 0.3 - cx) + 'px');
+    el.style.setProperty('--xf', (W * 1.3 - cx) + 'px'); // as pilhas entram e saem pela direita
     el.style.setProperty('--yf', (pilhaY - cy) + 'px');
     el.style.setProperty('--pgiro', ((i * 37) % 9 - 4) + 'deg');
     el.style.zIndex = total - k;

@@ -509,3 +509,7 @@ body {
 .escurecer-bordas::before { top: 0; background: linear-gradient(rgba(18, 15, 23, 0.6), rgba(18, 15, 23, 0.3) 45%, rgba(18, 15, 23, 0)); }
 .escurecer-bordas::after { bottom: 0; background: linear-gradient(to top, rgba(18, 15, 23, 0.6), rgba(18, 15, 23, 0.3) 45%, rgba(18, 15, 23, 0)); }
 .escurecer-bordas.sem-topo::before, .escurecer-bordas.sem-fim::after { opacity: 0; }
+
+/* Abrir um projeto: a tela do objeto só some rápido, sem deslizar */
+.tela.de-objeto.troca-rapida { opacity: 0; transform: none; transition: opacity 200ms ease, visibility 0s linear 200ms; }
+#polaroids.de-objeto.troca-rapida { transition: opacity 200ms ease, visibility 0s linear 200ms; }
