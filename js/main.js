@@ -21,8 +21,7 @@ function resetarPecas() {
     el.style.zIndex = '';
     el.dataset.arrastou = '';
     el._ox = 0; el._oy = 0;
-    el.classList.remove('descolando');
-    el.style.removeProperty('--peel');
+    el.classList.remove('descolado');
   });
 }
 
@@ -89,6 +88,7 @@ function mostrarTela(id, registrarHistorico = true) {
       : '<p>[Texto sobre o projeto: placeholder]</p>';
     document.querySelector('.capa-foto').style.setProperty('--capa', CORES[PROJETOS.indexOf(projeto) % CORES.length]);
     document.querySelector('.projeto-folhas').scrollTop = 0;
+    atualizarBordasProjeto();
   }
   const anterior = document.querySelector('[data-tela].ativa');
   if (anterior && anterior.id === 'inicio' && destino !== 'inicio') {
@@ -100,6 +100,7 @@ function mostrarTela(id, registrarHistorico = true) {
   const saindoPolaroids = anterior && anterior.id === 'polaroids' && destino !== 'polaroids';
   const entrandoPolaroids = destino === 'polaroids' && !(anterior && anterior.id === 'polaroids');
   document.getElementById('fundo-objeto').classList.toggle('visivel', OBJETOS.includes(destino));
+  inicio.classList.toggle('sob-objeto', OBJETOS.includes(destino) || destino === 'projeto');
   if (saindoPolaroids) empilharPolaroids();
   if (entrandoPolaroids) montarPilhaPolaroids();
 
@@ -165,6 +166,16 @@ inicio.addEventListener('scroll', () => {
     }
   }, 150);
 });
+
+// Bordas da página de projeto: o escurecimento some do lado em que não há mais o que rolar
+const folhasProjeto = document.querySelector('.projeto-folhas');
+const telaProjeto = document.getElementById('projeto');
+function atualizarBordasProjeto() {
+  const fim = folhasProjeto.scrollHeight - folhasProjeto.clientHeight;
+  telaProjeto.classList.toggle('sem-topo', folhasProjeto.scrollTop < 8);
+  telaProjeto.classList.toggle('sem-fim', folhasProjeto.scrollTop > fim - 8);
+}
+folhasProjeto.addEventListener('scroll', atualizarBordasProjeto);
 
 // Botão voltar do navegador
 window.addEventListener('popstate', () => mostrarTela(location.hash.slice(1) || 'lousa', false));
@@ -291,13 +302,18 @@ function aplicarPilha(el, ligado, animar) {
 }
 // Calcula, para cada foto, o deslocamento até o centro da pilha (à esquerda da tela)
 function calcularPilha() {
-  const pilhaX = Math.max(150, window.innerWidth * 0.14);
-  const pilhaY = window.innerHeight / 2;
+  const total = polaroidEls().length;
+  const colunas = Math.ceil(total / 2);
+  const passo = 70;
+  const inicioX = window.innerWidth - 90 - (colunas - 1) * passo; // lado direito, em 2 fileiras
+  const centroY = window.innerHeight / 2;
   polaroidEls().forEach((el, i) => {
     aplicarPilha(el, false, false);
     const r = el.getBoundingClientRect();
-    el.style.setProperty('--px', (pilhaX + (i % 4) * 1.5 - (r.left + r.width / 2)) + 'px');
-    el.style.setProperty('--py', (pilhaY - i * 1.2 - (r.top + r.height / 2)) + 'px');
+    const alvoX = inicioX + Math.floor(i / 2) * passo;
+    const alvoY = centroY + (i % 2 ? 90 : -90);
+    el.style.setProperty('--px', (alvoX - (r.left + r.width / 2)) + 'px');
+    el.style.setProperty('--py', (alvoY - (r.top + r.height / 2)) + 'px');
     el.style.setProperty('--pgiro', ((i * 37) % 11 - 5) + 'deg');
   });
 }
@@ -308,18 +324,19 @@ function montarPilhaPolaroids() {
 }
 function espalharPolaroids() {
   polaroidEls().forEach((el, i) => {
-    el.style.transitionDelay = (i * PILHA_DELAY) + 'ms';
+    const atraso = 350 + i * PILHA_DELAY; // a pilha fica visível um instante antes de se espalhar
+    el.style.transitionDelay = atraso + 'ms';
     el.classList.remove('em-pilha');
-    setTimeout(() => { el.style.transitionDelay = ''; }, i * PILHA_DELAY + 900);
+    setTimeout(() => { el.style.transitionDelay = ''; }, atraso + 900);
   });
 }
 function empilharPolaroids() {
   calcularPilha();
   const total = polaroidEls().length;
   polaroidEls().forEach((el, i) => {
-    el.style.transitionDelay = ((total - 1 - i) * 22) + 'ms';
+    el.style.transitionDelay = ((total - 1 - i) * 15) + 'ms';
     el.classList.add('em-pilha');
-    setTimeout(() => { el.style.transitionDelay = ''; }, (total - 1 - i) * 22 + 900);
+    setTimeout(() => { el.style.transitionDelay = ''; }, (total - 1 - i) * 15 + 900);
   });
 }
 
@@ -382,11 +399,11 @@ const ampliada = document.querySelector('[data-ampliada]');
 const ampliadaImg = document.querySelector('[data-ampliada-img]');
 
 // Foto ampliada: inclina no sentido do mouse, sem efeito de brilho
-const INCLINACAO = 14;
+const INCLINACAO = 5;
 ampliadaImg.addEventListener('pointermove', e => {
   const nx = Math.max(-1, Math.min(1, (e.clientX - window.innerWidth / 2) / (ampliadaImg.offsetWidth / 2)));
   const ny = Math.max(-1, Math.min(1, (e.clientY - window.innerHeight / 2) / (ampliadaImg.offsetHeight / 2)));
-  ampliadaImg.style.transform = `perspective(1100px) rotateX(${-ny * INCLINACAO}deg) rotateY(${nx * INCLINACAO}deg) scale(1.03)`;
+  ampliadaImg.style.transform = `perspective(1100px) rotateX(${-ny * INCLINACAO}deg) rotateY(${nx * INCLINACAO}deg) scale(1.01)`;
 });
 ampliadaImg.addEventListener('pointerleave', () => { ampliadaImg.style.transform = ''; });
 
@@ -507,36 +524,11 @@ botaoFoto.style.setProperty('--cor', cores[corAtual]);
 iniciarTrocaAutomatica();
 botaoFoto.addEventListener('click', () => { trocarCor(); iniciarTrocaAutomatica(); });
 
-// Adesivos da lousa (exceto o QR code): ao pressionar, a ponta do canto mais próximo descola
-// e a intensidade cresce com o movimento do mouse; ao soltar, o adesivo cola de novo
+// Adesivos da lousa (exceto o QR code): ao pressionar, o adesivo se levanta do fundo; ao soltar, volta
 const pecasDescolaveis = [...document.querySelectorAll('[data-peca]')].filter(el => !el.querySelector('.qr-peca'));
 pecasDescolaveis.forEach(el => {
-  el.insertAdjacentHTML('beforeend', '<span class="peel-corte" aria-hidden="true"></span><span class="peel-verso" aria-hidden="true"></span>');
-  el.addEventListener('pointerdown', e => {
-    if (e.button !== 0) return;
-    const r = el.getBoundingClientRect();
-    const canto = (e.clientY < r.top + r.height / 2 ? 't' : 'b') + (e.clientX < r.left + r.width / 2 ? 'l' : 'r');
-    el.classList.remove('canto-tl', 'canto-tr', 'canto-bl', 'canto-br');
-    el.classList.add('canto-' + canto);
-    el._peel = { energia: 0, ultimo: { x: e.clientX, y: e.clientY } };
-    el.style.setProperty('--peel', 0.08);
-  });
+  el.addEventListener('pointerdown', e => { if (e.button === 0) el.classList.add('descolado'); });
 });
-document.addEventListener('pointermove', e => {
-  pecasDescolaveis.forEach(el => {
-    const p = el._peel;
-    if (!p) return;
-    p.energia += Math.hypot(e.clientX - p.ultimo.x, e.clientY - p.ultimo.y);
-    p.ultimo = { x: e.clientX, y: e.clientY };
-    el.style.setProperty('--peel', (0.08 + 0.92 * (1 - Math.exp(-p.energia / 500))).toFixed(3));
-  });
-});
-function colarAdesivos() {
-  pecasDescolaveis.forEach(el => {
-    if (!el._peel) return;
-    el._peel = null;
-    el.style.removeProperty('--peel'); // volta a 0 com a transição
-  });
-}
+const colarAdesivos = () => pecasDescolaveis.forEach(el => el.classList.remove('descolado'));
 document.addEventListener('pointerup', colarAdesivos);
 document.addEventListener('pointercancel', colarAdesivos);

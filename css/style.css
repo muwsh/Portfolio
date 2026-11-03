@@ -57,8 +57,7 @@ body {
   touch-action: none;
   user-select: none;
   transform: rotate(var(--giro, 0deg));
-  --peel: 0; --s: calc(var(--peel) * 40%);
-  transition: box-shadow var(--transicao), --peel 450ms ease-out;
+  transition: box-shadow var(--transicao), transform 250ms ease;
   box-shadow: 0 8px 14px rgba(0,0,0,0.3);
   z-index: 3;
 }
@@ -467,23 +466,11 @@ body {
   transition: transform 520ms cubic-bezier(0.2, 0.7, 0.2, 1), visibility 0s;
 }
 
-/* Adesivos da lousa: ao pressionar, a ponta do canto mais próximo descola; ao soltar, cola de novo */
-@property --peel { syntax: '<number>'; inherits: true; initial-value: 0; }
-.peel-corte, .peel-verso { position: absolute; width: var(--s); height: var(--s); pointer-events: none; }
-.peel-corte { background: #b98457; }
-.peel-verso { background: #d4d4d8; filter: drop-shadow(-2px -2px 3px rgba(0, 0, 0, 0.3)); }
-.canto-br .peel-corte, .canto-br .peel-verso { right: 0; bottom: 0; }
-.canto-bl .peel-corte, .canto-bl .peel-verso { left: 0; bottom: 0; }
-.canto-tr .peel-corte, .canto-tr .peel-verso { right: 0; top: 0; }
-.canto-tl .peel-corte, .canto-tl .peel-verso { left: 0; top: 0; }
-.canto-br .peel-corte { clip-path: polygon(100% 0, 100% 100%, 0 100%); }
-.canto-br .peel-verso { clip-path: polygon(0 0, 100% 0, 0 100%); }
-.canto-bl .peel-corte { clip-path: polygon(0 0, 0 100%, 100% 100%); }
-.canto-bl .peel-verso { clip-path: polygon(0 0, 100% 0, 100% 100%); }
-.canto-tr .peel-corte { clip-path: polygon(0 0, 100% 0, 100% 100%); }
-.canto-tr .peel-verso { clip-path: polygon(0 0, 0 100%, 100% 100%); }
-.canto-tl .peel-corte { clip-path: polygon(0 0, 100% 0, 0 100%); }
-.canto-tl .peel-verso { clip-path: polygon(100% 0, 100% 100%, 0 100%); }
+/* Adesivos da lousa: ao pressionar, o adesivo se levanta do fundo (sombra maior); ao soltar, volta */
+.peca.descolado {
+  transform: rotate(var(--giro, 0deg)) translateY(-6px) scale(1.04);
+  box-shadow: 0 22px 30px rgba(0, 0, 0, 0.35);
+}
 
 /* Lista de projetos: aparece depois que a tela desliza, vindo da esquerda; some rápido ao sair */
 #cartas .nomes {
@@ -498,10 +485,26 @@ body {
 }
 
 /* Polaroids: entram e saem empilhadas à esquerda; a tela só aparece e some (sem deslizar) */
-#polaroids.de-objeto { transform: none; transition: visibility 0s linear 800ms; }
+#polaroids.de-objeto { transform: none; transition: visibility 0s linear 1000ms; }
 #polaroids.de-objeto.ativa { transition: visibility 0s; }
-#polaroids .polaroid { transition: transform 800ms cubic-bezier(0.2, 0.7, 0.2, 1); }
-.polaroid.em-pilha { transform: translate(var(--px, 0), var(--py, 0)) rotate(var(--pgiro, 0deg)); }
+#polaroids .polaroid { transition: transform 600ms cubic-bezier(0.2, 0.7, 0.2, 1); }
+.polaroid.em-pilha { transform: translate(var(--px, 0), var(--py, 0)) rotate(var(--pgiro, 0deg)) scale(0.4); }
 
 /* Foto ampliada: inclina seguindo o mouse (sem brilho ou holografia) */
 .ampliada img { transition: transform 200ms ease-out; will-change: transform; }
+
+/* A mesa continua por baixo enquanto um objeto está aberto (a parte transparente do fundo deixa ela aparecer) */
+#inicio.sob-objeto { opacity: 1; }
+
+/* Botão de fechar (X) aparece com fade in depois da transição, em todas as telas */
+.voltar { opacity: 0; transition: opacity 250ms ease; }
+.tela.ativa .voltar { opacity: 1; transition: opacity 400ms ease 500ms; }
+
+/* Bordas escurecidas (no lugar de blur): topo e fim da página de projeto, somem quando não há mais o que rolar */
+.escurecer-bordas::before, .escurecer-bordas::after {
+  content: ""; position: absolute; left: 0; right: 0; height: 96px; z-index: 4;
+  pointer-events: none; transition: opacity 300ms ease;
+}
+.escurecer-bordas::before { top: 0; background: linear-gradient(rgba(18, 15, 23, 0.6), rgba(18, 15, 23, 0.3) 45%, rgba(18, 15, 23, 0)); }
+.escurecer-bordas::after { bottom: 0; background: linear-gradient(to top, rgba(18, 15, 23, 0.6), rgba(18, 15, 23, 0.3) 45%, rgba(18, 15, 23, 0)); }
+.escurecer-bordas.sem-topo::before, .escurecer-bordas.sem-fim::after { opacity: 0; }
