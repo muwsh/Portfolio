@@ -291,56 +291,91 @@ document.addEventListener('pointerup', () => {
 });
 tira.addEventListener('dragstart', e => e.preventDefault());
 
-// Entrada e saída: as fotos se empilham à esquerda e se espalham (ou voltam à pilha)
-const PILHA_DELAY = 35;
+// Polaroids. Entrada: duas pilhas (uma em cima, outra embaixo) chegam da esquerda e param;
+// depois as fotos saem das pilhas uma a uma para a posição final. A foto do topo de cada pilha
+// é a mais à esquerda na posição final, então a ordem de saída segue da esquerda para a direita.
+// Saída: o caminho inverso.
+const PILHA_ESCALA = 0.55;
+let timersPolaroids = [];
 const polaroidEls = () => [...tira.querySelectorAll('.polaroid')];
-function aplicarPilha(el, ligado, animar) {
+function aplicarEstado(el, classe, animar) {
   el.style.transition = animar ? '' : 'none';
-  el.classList.toggle('em-pilha', ligado);
+  el.classList.remove('em-fora', 'em-pilha');
+  if (classe) el.classList.add(classe);
   void el.offsetWidth; // aplica o estado antes de liberar a transição
   el.style.transition = '';
 }
-// Calcula, para cada foto, o deslocamento até o centro da pilha (à esquerda da tela)
-function calcularPilha() {
+function limparTimers() {
+  timersPolaroids.forEach(clearTimeout);
+  timersPolaroids = [];
+}
+// Mede a posição final de cada foto e calcula os destinos das pilhas e a posição de partida (fora da tela)
+function calcularPilhas() {
+  const W = window.innerWidth, H = window.innerHeight;
   const total = polaroidEls().length;
-  const colunas = Math.ceil(total / 2);
-  const passo = 70;
-  const inicioX = window.innerWidth - 90 - (colunas - 1) * passo; // lado direito, em 2 fileiras
-  const centroY = window.innerHeight / 2;
   polaroidEls().forEach((el, i) => {
-    aplicarPilha(el, false, false);
+    aplicarEstado(el, null, false);
     const r = el.getBoundingClientRect();
-    const alvoX = inicioX + Math.floor(i / 2) * passo;
-    const alvoY = centroY + (i % 2 ? 90 : -90);
-    el.style.setProperty('--px', (alvoX - (r.left + r.width / 2)) + 'px');
-    el.style.setProperty('--py', (alvoY - (r.top + r.height / 2)) + 'px');
-    el.style.setProperty('--pgiro', ((i * 37) % 11 - 5) + 'deg');
+    const cx = r.left + r.width / 2, cy = r.top + r.height / 2;
+    const linha = i % 2;                 // 0 = pilha de cima, 1 = pilha de baixo
+    const k = Math.floor(i / 2);         // posição na pilha (0 = a mais à esquerda, no topo)
+    const pilhaX = W * 0.14;
+    const pilhaY = linha ? H * 0.7 : H * 0.3;
+    el.style.setProperty('--x1', (pilhaX - cx) + 'px');
+    el.style.setProperty('--y1', (pilhaY - cy) + 'px');
+    el.style.setProperty('--xf', (-W * 0.3 - cx) + 'px');
+    el.style.setProperty('--yf', (pilhaY - cy) + 'px');
+    el.style.setProperty('--pgiro', ((i * 37) % 9 - 4) + 'deg');
+    el.style.zIndex = total - k;
   });
 }
 function montarPilhaPolaroids() {
+  limparTimers();
   tira.scrollLeft = 0;
-  calcularPilha();
-  polaroidEls().forEach(el => aplicarPilha(el, true, false));
+  calcularPilhas();
+  polaroidEls().forEach(el => aplicarEstado(el, 'em-fora', false));
 }
+// Passo 1: as duas pilhas chegam da esquerda; passo 2: as fotos saem das pilhas para a posição final
 function espalharPolaroids() {
-  polaroidEls().forEach((el, i) => {
-    const atraso = 350 + i * PILHA_DELAY; // a pilha fica visível um instante antes de se espalhar
-    el.style.transitionDelay = atraso + 'ms';
-    el.classList.remove('em-pilha');
-    setTimeout(() => { el.style.transitionDelay = ''; }, atraso + 900);
+  limparTimers();
+  polaroidEls().forEach(el => {
+    el.style.transitionDuration = '700ms';
+    el.style.transitionDelay = '0ms';
+    el.classList.remove('em-fora');
+    el.classList.add('em-pilha');
   });
+  timersPolaroids.push(setTimeout(() => {
+    polaroidEls().forEach((el, i) => {
+      el.style.transitionDuration = '600ms';
+      el.style.transitionDelay = (i * 80) + 'ms';
+      el.classList.remove('em-pilha');
+      timersPolaroids.push(setTimeout(() => {
+        el.style.transitionDelay = '';
+        el.style.transitionDuration = '';
+        el.style.zIndex = '';
+      }, i * 80 + 700));
+    });
+  }, 1100));
 }
+// Saída: as fotos voltam às pilhas (da última para a primeira) e as pilhas saem pela esquerda
 function empilharPolaroids() {
-  calcularPilha();
+  limparTimers();
+  calcularPilhas();
   const total = polaroidEls().length;
   polaroidEls().forEach((el, i) => {
-    el.style.transitionDelay = ((total - 1 - i) * 15) + 'ms';
+    el.style.transitionDuration = '500ms';
+    el.style.transitionDelay = ((total - 1 - i) * 60) + 'ms';
     el.classList.add('em-pilha');
-    setTimeout(() => { el.style.transitionDelay = ''; }, (total - 1 - i) * 15 + 900);
   });
+  timersPolaroids.push(setTimeout(() => {
+    polaroidEls().forEach(el => {
+      el.style.transitionDuration = '600ms';
+      el.style.transitionDelay = '0ms';
+      el.classList.remove('em-pilha');
+      el.classList.add('em-fora');
+    });
+  }, total * 60 + 500));
 }
-
-
 
 const binder = document.querySelector('[data-binder]');
 for (let i = 0; i < postais.length; i += 2) {
