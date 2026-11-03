@@ -98,13 +98,15 @@ function mostrarTela(id, registrarHistorico = true) {
   }
 
   // Abrir um projeto (carta) não passa pela animação de saída do objeto: a tela só faz um fade rápido
-  const trocaRapida = destino === 'projeto' && anterior && anterior.classList.contains('de-objeto');
-  telas.forEach(t => t.classList.remove('troca-rapida'));
-  if (trocaRapida) anterior.classList.add('troca-rapida');
-  const saindoPolaroids = anterior && anterior.id === 'polaroids' && destino !== 'polaroids' && !trocaRapida;
+  // Abrir um projeto: a tela de onde ele vem fica parada por baixo e a carta só faz fade in (e fade out ao fechar)
+  const sobProjeto = destino === 'projeto' && anterior && anterior.id !== 'projeto';
+  telas.forEach(t => t.classList.remove('sob-projeto'));
+  if (sobProjeto) anterior.classList.add('sob-projeto');
+  const saindoPolaroids = anterior && anterior.id === 'polaroids' && destino !== 'polaroids' && !sobProjeto;
   const entrandoPolaroids = destino === 'polaroids' && !(anterior && anterior.id === 'polaroids');
-  document.getElementById('fundo-objeto').classList.toggle('visivel', OBJETOS.includes(destino));
-  inicio.classList.toggle('sob-objeto', OBJETOS.includes(destino) || destino === 'projeto');
+  document.body.classList.toggle('menu-visivel', destino === 'inicio');
+  document.getElementById('fundo-objeto').classList.toggle('visivel', OBJETOS.includes(destino) || (destino === 'projeto' && anterior && anterior.classList.contains('de-objeto')));
+  inicio.classList.toggle('sob-objeto', OBJETOS.includes(destino));
   if (saindoPolaroids) empilharPolaroids();
   if (entrandoPolaroids) montarPilhaPolaroids();
 
@@ -116,6 +118,7 @@ function mostrarTela(id, registrarHistorico = true) {
   });
 
   if (entrandoPolaroids) espalharPolaroids();
+  document.getElementById('cartas').classList.toggle('sem-entrada', destino === 'cartas' && anterior && anterior.id === 'projeto');
 
   if (destino === 'inicio') {
     const alvo = document.getElementById(secao || 'lousa');
@@ -295,76 +298,93 @@ document.addEventListener('pointerup', () => {
 });
 tira.addEventListener('dragstart', e => e.preventDefault());
 
-// Polaroids. A tela desliza da direita (como os outros objetos) com duas pilhas paradas na direita.
-// Depois as fotos saem das pilhas uma a uma para a posição final, da esquerda para a direita
-// (a foto do topo de cada pilha é a mais à esquerda). Ao fechar, as fotos voltam às pilhas
-// e a tela sai para a direita junto com as pilhas.
+// Polaroids. A tela desliza da direita com duas pilhas paradas na direita; depois as fotos saem
+// das pilhas para a posição final, uma a uma, da esquerda para a direita. Só entram na animação
+// as fotos que aparecem na primeira tela (mesmo as cortadas na borda); as que exigem rolagem ficam
+// de fora e só aparecem quando as outras se espalham. Ao fechar, o caminho é o inverso e a tela
+// sai pela direita junto com as pilhas.
 const polaroidEls = () => [...tira.querySelectorAll('.polaroid')];
 const telaPolaroids = document.getElementById('polaroids');
+const ATRASO_ESPALHAR = 450, PASSO_ESPALHAR = 40, DURACAO_ESPALHAR = 420;
+const PASSO_EMPILHAR = 15, DURACAO_EMPILHAR = 300;
 let timersPolaroids = [];
+let animadasPolaroids = [];
 function limparTimers() {
   timersPolaroids.forEach(clearTimeout);
   timersPolaroids = [];
 }
-// Posição de cada foto em relação à tela (medida na mesma referência, então não depende do deslizamento)
+// Mede as fotos na posição final (relativas à tela, então não dependem do deslizamento)
+// e define, para cada foto animada, o destino da pilha (de cima ou de baixo) e a ordem de saída
 function calcularPilhas() {
   const W = window.innerWidth, H = window.innerHeight;
-  const total = polaroidEls().length;
   const tr = telaPolaroids.getBoundingClientRect();
-  polaroidEls().forEach((el, i) => {
+  animadasPolaroids = [];
+  polaroidEls().forEach(el => {
     el.style.transition = 'none';
     el.classList.remove('em-pilha');
     void el.offsetWidth;
     const r = el.getBoundingClientRect();
     el.style.transition = '';
     const cx = r.left - tr.left + r.width / 2, cy = r.top - tr.top + r.height / 2;
-    const linha = i % 2;                 // 0 = pilha de cima, 1 = pilha de baixo
-    const k = Math.floor(i / 2);         // posição na pilha (0 = a mais à esquerda, no topo)
+    el._cx = cx; el._cy = cy;
+    el.dataset.animada = r.left - tr.left < W ? '1' : '';
+    if (el.dataset.animada) animadasPolaroids.push(el);
+  });
+  const total = animadasPolaroids.length;
+  animadasPolaroids.forEach((el, idx) => {
+    const linha = idx % 2;               // 0 = pilha de cima, 1 = pilha de baixo
+    const k = Math.floor(idx / 2);       // posição na pilha (0 = a mais à esquerda, no topo)
     const pilhaX = W * 0.86;             // pilhas paradas à direita
     const pilhaY = linha ? H * 0.7 : H * 0.3;
-    el.style.setProperty('--x1', (pilhaX - cx) + 'px');
-    el.style.setProperty('--y1', (pilhaY - cy) + 'px');
-    el.style.setProperty('--pgiro', ((i * 37) % 9 - 4) + 'deg');
+    el.style.setProperty('--x1', (pilhaX - el._cx) + 'px');
+    el.style.setProperty('--y1', (pilhaY - el._cy) + 'px');
+    el.style.setProperty('--pgiro', ((idx * 37) % 9 - 4) + 'deg');
     el.style.zIndex = total - k;
   });
 }
 function montarPilhaPolaroids() {
   limparTimers();
+  telaPolaroids.style.transition = '';
   tira.scrollLeft = 0;
   calcularPilhas();
   polaroidEls().forEach(el => {
     el.style.transition = 'none';
-    el.classList.add('em-pilha');
+    el.classList.toggle('sem-animacao', !el.dataset.animada);
+    el.classList.toggle('em-pilha', !!el.dataset.animada);
     void el.offsetWidth;
     el.style.transition = '';
   });
 }
-// Depois que a tela chega, as fotos saem das pilhas para a posição final (uma a uma)
+// Depois que a tela chega, as fotos saem das pilhas para a posição final (as que estavam fora aparecem junto)
 function espalharPolaroids() {
   limparTimers();
   timersPolaroids.push(setTimeout(() => {
-    polaroidEls().forEach((el, i) => {
-      el.style.transitionDuration = '600ms';
-      el.style.transitionDelay = (i * 80) + 'ms';
+    animadasPolaroids.forEach((el, i) => {
+      el.style.transitionDuration = DURACAO_ESPALHAR + 'ms';
+      el.style.transitionDelay = (i * PASSO_ESPALHAR) + 'ms';
       el.classList.remove('em-pilha');
       timersPolaroids.push(setTimeout(() => {
         el.style.transitionDelay = '';
         el.style.transitionDuration = '';
         el.style.zIndex = '';
-      }, i * 80 + 700));
+      }, i * PASSO_ESPALHAR + DURACAO_ESPALHAR + 50));
     });
-  }, 600));
+    polaroidEls().filter(el => !el.dataset.animada).forEach(el => el.classList.remove('sem-animacao'));
+  }, ATRASO_ESPALHAR));
 }
 // Saída: as fotos voltam às pilhas (da última para a primeira); a tela sai depois, junto com as pilhas
 function empilharPolaroids() {
   limparTimers();
   calcularPilhas();
-  const total = polaroidEls().length;
-  polaroidEls().forEach((el, i) => {
-    el.style.transitionDuration = '500ms';
-    el.style.transitionDelay = ((total - 1 - i) * 30) + 'ms';
+  const n = animadasPolaroids.length;
+  animadasPolaroids.forEach((el, i) => {
+    el.style.transitionDuration = DURACAO_EMPILHAR + 'ms';
+    el.style.transitionDelay = ((n - 1 - i) * PASSO_EMPILHAR) + 'ms';
     el.classList.add('em-pilha');
   });
+  polaroidEls().filter(el => !el.dataset.animada).forEach(el => el.classList.add('sem-animacao'));
+  const espera = (n - 1) * PASSO_EMPILHAR + DURACAO_EMPILHAR + 50;
+  telaPolaroids.style.transition = `transform 520ms cubic-bezier(0.2, 0.7, 0.2, 1) ${espera}ms, visibility 0s linear ${espera + 520}ms`;
 }
 
 const binder = document.querySelector('[data-binder]');
@@ -520,15 +540,24 @@ const gaveta = document.getElementById('gaveta');
 const botaoMenu = document.querySelector('[data-abrir-gaveta]');
 function abrirGaveta() {
   gaveta.classList.add('aberta');
+  botaoMenu.classList.add('aberto');
   botaoMenu.setAttribute('aria-expanded', 'true');
   gaveta.querySelector('li button').focus();
 }
 function fecharGaveta() {
   gaveta.classList.remove('aberta');
+  botaoMenu.classList.remove('aberto');
   botaoMenu.setAttribute('aria-expanded', 'false');
 }
-botaoMenu.addEventListener('click', abrirGaveta);
-document.querySelector('[data-fechar-gaveta]').addEventListener('click', fecharGaveta);
+// O botão do menu abre e fecha a barra; enquanto ela está aberta, ele vira um X e acompanha a barra
+botaoMenu.addEventListener('click', () => (gaveta.classList.contains('aberta') ? fecharGaveta() : abrirGaveta()));
+
+// Botão "Voltar ao topo" (abaixo do rodapé, aparece só no fim da mesa)
+document.querySelector('[data-voltar-topo]').addEventListener('click', () => mostrarTela('lousa'));
+inicio.addEventListener('scroll', () => {
+  const fim = inicio.scrollHeight - inicio.clientHeight - 4;
+  document.getElementById('mesa').classList.toggle('fim', inicio.scrollTop >= fim);
+});
 document.addEventListener('keydown', e => {
 });
 

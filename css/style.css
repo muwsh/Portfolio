@@ -330,7 +330,8 @@ body {
 /* Mesa: 5 objetos nas posições da foto (placeholders em cor sólida até as imagens reais) */
 .mesa-objetos { position: absolute; top: calc(var(--rodape) + 12px); left: 0; right: 0; height: calc(100vh - var(--rodape) - 12px); }
 /* A mesa ocupa a tela inteira (a partir de 64 px); o rodapé fica logo abaixo e aparece ao rolar até o fim */
-#mesa { height: calc(100% + var(--rodape)); }
+#mesa { height: calc(100% + var(--rodape) + 120px); position: relative; }
+#mesa .rodape-site { bottom: 120px; }
 .objeto {
   position: absolute;
   display: flex; align-items: center; justify-content: center;
@@ -358,9 +359,16 @@ body {
 #sobre .simbolo-tela, #cartas .simbolo-tela, #projeto .simbolo-tela { stroke: #fff; }
 
 /* Botão de menu, "Ver todos" e aba lateral com os objetos da mesa */
-.menu-botao { position: fixed; top: 20px; left: 20px; z-index: 3; background: none; border: 0; padding: 8px; cursor: pointer; display: flex; flex-direction: column; gap: 7px; }
-.menu-botao span { display: block; width: 50px; height: 8px; background: var(--tinta); border-radius: 6px; }
-.ver-todos { position: absolute; bottom: 18px; left: 50%; transform: translateX(-50%); background: none; border: 0; font: inherit; font-size: 18px; text-decoration: underline; cursor: pointer; padding: 8px 16px; }
+.menu-botao { position: fixed; top: 20px; left: 20px; z-index: 3; background: none; border: 0; padding: 8px; cursor: pointer; display: flex; flex-direction: column; gap: 7px; opacity: 0; pointer-events: none; transition: transform 400ms cubic-bezier(0.2, 0.7, 0.2, 1), opacity 300ms ease; }
+body.menu-visivel .menu-botao { opacity: 1; pointer-events: auto; }
+/* Aberto: o botão acompanha a barra (fica no canto superior direito dela) e as três barras viram um X */
+.menu-botao.aberto { transform: translateX(calc(min(320px, 85vw) - 100px)); z-index: 31; }
+.menu-botao span { transition: transform 300ms ease, opacity 200ms ease; }
+.menu-botao.aberto span:nth-child(1) { transform: translateY(15px) rotate(45deg); }
+.menu-botao.aberto span:nth-child(2) { opacity: 0; }
+.menu-botao.aberto span:nth-child(3) { transform: translateY(-15px) rotate(-45deg); }
+.menu-botao > span { display: block; width: 50px; height: 8px; background: var(--tinta); border-radius: 6px; }
+.ver-todos { position: absolute; bottom: 18px; left: 50%; transform: translateX(-50%); background: none; border: 0; font: inherit; font-size: 18px; cursor: pointer; padding: 8px 16px; }
 .gaveta {
   position: fixed; top: 0; left: 0; bottom: 0;
   width: min(320px, 85vw);
@@ -374,8 +382,15 @@ body {
   transition: transform var(--transicao), visibility var(--transicao);
 }
 .gaveta.aberta { transform: none; visibility: visible; }
+.gaveta { transition: transform 400ms cubic-bezier(0.2, 0.7, 0.2, 1), visibility 400ms; }
+.gaveta li { opacity: 0; transform: translateX(-24px); transition: opacity 200ms ease, transform 250ms ease; }
+.gaveta.aberta li { opacity: 1; transform: none; transition: opacity 350ms ease, transform 400ms cubic-bezier(0.2, 0.7, 0.2, 1); }
+.gaveta.aberta li:nth-child(1) { transition-delay: 120ms; }
+.gaveta.aberta li:nth-child(2) { transition-delay: 180ms; }
+.gaveta.aberta li:nth-child(3) { transition-delay: 240ms; }
+.gaveta.aberta li:nth-child(4) { transition-delay: 300ms; }
+.gaveta.aberta li:nth-child(5) { transition-delay: 360ms; }
 .gaveta-topo { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; font-size: 20px; }
-.gaveta-topo button { background: none; border: 0; font-size: 28px; cursor: pointer; }
 .gaveta ul { list-style: none; margin: 0; padding: 0; }
 .gaveta li button { display: flex; align-items: center; gap: 12px; width: 100%; text-align: left; background: none; border: 0; border-bottom: 1px solid var(--tinta); font: inherit; font-size: 18px; padding: 14px 4px; cursor: pointer; }
 .gaveta li button:hover, .gaveta li button:focus-visible { background: #fff; }
@@ -468,8 +483,8 @@ body {
 
 /* Adesivos da lousa: ao pressionar, o adesivo se levanta do fundo (sombra maior); ao soltar, volta */
 .peca.descolado {
-  transform: rotate(var(--giro, 0deg)) translateY(-6px) scale(1.04);
-  box-shadow: 0 22px 30px rgba(0, 0, 0, 0.35);
+  transform: rotate(var(--giro, 0deg)) translateY(-4px) scale(1.02);
+  box-shadow: 0 16px 22px rgba(0, 0, 0, 0.3);
 }
 
 /* Lista de projetos: aparece depois que a tela desliza, vindo da esquerda; some rápido ao sair */
@@ -487,8 +502,8 @@ body {
 /* Polaroids: entram e saem empilhadas à esquerda; a tela só aparece e some (sem deslizar) */
 #polaroids.de-objeto { transition: transform 520ms cubic-bezier(0.2, 0.7, 0.2, 1) 1000ms, visibility 0s linear 1550ms; }
 #polaroids.de-objeto.ativa { transition: transform 520ms cubic-bezier(0.2, 0.7, 0.2, 1), visibility 0s; }
-#polaroids.de-objeto.troca-rapida { transition: opacity 200ms ease, visibility 0s linear 200ms; }
-#polaroids .polaroid { transition: transform 600ms cubic-bezier(0.2, 0.7, 0.2, 1); }
+#polaroids .polaroid { transition: transform 420ms cubic-bezier(0.2, 0.7, 0.2, 1), opacity 400ms ease; }
+.polaroid.sem-animacao { opacity: 0; }
 .polaroid.em-pilha { transform: translate(var(--x1, 0), var(--y1, 0)) rotate(var(--pgiro, 0deg)) scale(0.55); }
 
 /* Foto ampliada: inclina seguindo o mouse (sem brilho ou holografia) */
@@ -510,5 +525,66 @@ body {
 .escurecer-bordas::after { bottom: 0; background: linear-gradient(to top, rgba(18, 15, 23, 0.6), rgba(18, 15, 23, 0.3) 45%, rgba(18, 15, 23, 0)); }
 .escurecer-bordas.sem-topo::before, .escurecer-bordas.sem-fim::after { opacity: 0; }
 
-/* Abrir um projeto: a tela do objeto só some rápido, sem deslizar */
-.tela.de-objeto.troca-rapida { opacity: 0; transform: none; transition: opacity 200ms ease, visibility 0s linear 200ms; }
+
+/* Voltar de um projeto para o menu de cartas: lista e X aparecem direto, sem fade */
+#cartas.sem-entrada .nomes, #cartas.sem-entrada .voltar { opacity: 1; transform: none; transition: none; }
+
+/* Telas sob uma carta: ficam paradas por baixo enquanto a carta faz fade in */
+.tela.sob-projeto, #polaroids.de-objeto.sob-projeto { opacity: 1; visibility: visible; transform: none; transition: none; }
+/* Voltar de um projeto para o menu de cartas: sem deslizar, sem fade na lista e no X */
+#cartas.sem-entrada { transform: none; transition: none; }
+
+/* Botões de texto (ver todos e rodapé): texto em caixa alta com linha que cresce no hover */
+.ver-todos, .rodape-nav button { position: relative; text-transform: uppercase; font-weight: 800; transition: color 400ms cubic-bezier(0.25, 0.8, 0.25, 1); }
+.ver-todos { color: var(--tinta); }
+.ver-todos:hover, .ver-todos:focus-visible { color: #000; }
+.rodape-nav button { color: #e1e1e1; }
+.rodape-nav button:hover, .rodape-nav button:focus-visible { color: #fff; }
+.ver-todos::after, .rodape-nav button::after {
+  content: ""; position: absolute; bottom: -2px; left: 50%; width: 0; height: 2px;
+  background: currentColor; pointer-events: none;
+  transition: width 400ms cubic-bezier(0.25, 0.8, 0.25, 1), left 400ms cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+.ver-todos:hover::after, .ver-todos:focus-visible::after, .rodape-nav button:hover::after, .rodape-nav button:focus-visible::after { width: 100%; left: 0; }
+
+/* Botões das telas de objetos: X com leve zoom e giro anti-horário */
+.voltar button { transition: transform 250ms ease; }
+.voltar button:hover, .voltar button:focus-visible { transform: scale(1.15) rotate(-10deg); }
+
+/* Aplicativos no sobre mim: círculos com tooltip com o nome ao passar o mouse */
+.sobre-cartao .apps { justify-items: center; }
+.sobre-cartao .apps span {
+  width: 50px; height: auto; aspect-ratio: 1; justify-self: center;
+  border: 0; border-radius: 50%; background: #fff;
+  box-shadow: 0 10px 10px rgba(0, 0, 0, 0.1);
+  position: relative; cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+.sobre-cartao .apps span:hover { transform: translateY(-6px); }
+.sobre-cartao .apps span::after {
+  content: attr(title); position: absolute; left: 50%; top: -34px; transform: translateX(-50%);
+  background: var(--tinta); color: #fff; font-size: 12px; padding: 4px 8px; border-radius: 5px; white-space: nowrap;
+  opacity: 0; pointer-events: none; transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+.sobre-cartao .apps span:hover::after { opacity: 1; top: -40px; }
+
+/* Botão voltar ao topo: aparece só depois de rolar até o fim da mesa, abaixo do rodapé */
+.voltar-topo {
+  position: absolute; bottom: 35px; left: 50%; transform: translateX(-50%);
+  width: 50px; height: 50px; border-radius: 50%; background-color: rgb(20, 20, 20); border: none;
+  font-weight: 600; display: flex; align-items: center; justify-content: center;
+  box-shadow: 0px 0px 0px 4px rgba(180, 160, 255, 0.253);
+  cursor: pointer; overflow: hidden; position: absolute;
+  opacity: 0; pointer-events: none;
+  transition: opacity 400ms ease, width 300ms, border-radius 300ms, background-color 300ms;
+}
+#mesa.fim .voltar-topo { opacity: 1; pointer-events: auto; }
+.voltar-topo .svgIcon { width: 12px; height: 16px; fill: #fff; transition: transform 300ms; }
+.voltar-topo::before {
+  position: absolute; bottom: -20px; content: "Voltar ao topo"; color: #fff; font-size: 0; opacity: 0;
+}
+.voltar-topo:hover { width: 140px; border-radius: 50px; background-color: rgb(181, 160, 255); }
+.voltar-topo:hover .svgIcon { transform: translateY(-200%); }
+.voltar-topo:hover::before { font-size: 13px; opacity: 1; bottom: unset; transition: opacity 300ms; }
+
+/* O menu aparece só nas telas da página inicial (lousa, destaques e mesa) */
