@@ -5,6 +5,7 @@ const inicio = document.getElementById('inicio');
 const telas = [...document.querySelectorAll('[data-tela]')];
 // Telas abertas a partir dos objetos da mesa (fundo da mesa, entrada pela direita)
 const OBJETOS = ['sobre', 'cartas', 'carimbo', 'polaroids', 'postais'];
+let timerFundo = null;
 
 function telaValida(id) {
   return telas.some(t => t.id === id) ? id : 'inicio';
@@ -105,9 +106,16 @@ function mostrarTela(id, registrarHistorico = true) {
   const saindoPolaroids = anterior && anterior.id === 'polaroids' && destino !== 'polaroids' && !sobProjeto;
   const entrandoPolaroids = destino === 'polaroids' && !(anterior && anterior.id === 'polaroids');
   document.body.classList.toggle('menu-visivel', destino === 'inicio');
-  document.getElementById('fundo-objeto').classList.toggle('visivel', OBJETOS.includes(destino) || (destino === 'projeto' && anterior && anterior.classList.contains('de-objeto')));
+  const esperaPolaroids = saindoPolaroids ? empilharPolaroids() : 0; // as fotos recolhem antes de a tela sair
+  // O fundo só sai depois que as polaroids recolhem (ao sair delas para outra tela)
+  const fundoVisivel = OBJETOS.includes(destino) || (destino === 'projeto' && anterior && anterior.classList.contains('de-objeto'));
+  clearTimeout(timerFundo);
+  if (saindoPolaroids && !fundoVisivel) {
+    timerFundo = setTimeout(() => document.getElementById('fundo-objeto').classList.remove('visivel'), esperaPolaroids);
+  } else {
+    document.getElementById('fundo-objeto').classList.toggle('visivel', fundoVisivel);
+  }
   inicio.classList.toggle('sob-objeto', OBJETOS.includes(destino));
-  if (saindoPolaroids) empilharPolaroids();
   if (entrandoPolaroids) montarPilhaPolaroids();
 
   telas.forEach(t => {
@@ -385,6 +393,7 @@ function empilharPolaroids() {
   polaroidEls().filter(el => !el.dataset.animada).forEach(el => el.classList.add('sem-animacao'));
   const espera = (n - 1) * PASSO_EMPILHAR + DURACAO_EMPILHAR + 50;
   telaPolaroids.style.transition = `transform 520ms cubic-bezier(0.2, 0.7, 0.2, 1) ${espera}ms, visibility 0s linear ${espera + 520}ms`;
+  return espera;
 }
 
 const binder = document.querySelector('[data-binder]');

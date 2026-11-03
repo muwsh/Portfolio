@@ -359,7 +359,7 @@ body {
 #sobre .simbolo-tela, #cartas .simbolo-tela, #projeto .simbolo-tela { stroke: #fff; }
 
 /* Botão de menu, "Ver todos" e aba lateral com os objetos da mesa */
-.menu-botao { position: fixed; top: 20px; left: 20px; z-index: 3; background: none; border: 0; padding: 8px; cursor: pointer; display: flex; flex-direction: column; gap: 7px; opacity: 0; pointer-events: none; transition: transform 400ms cubic-bezier(0.2, 0.7, 0.2, 1), opacity 300ms ease; }
+.menu-botao { position: fixed; top: 20px; left: 20px; z-index: 3; background: none; border: 0; padding: 8px; cursor: pointer; display: flex; flex-direction: column; gap: 7px; opacity: 0; pointer-events: none; transition: transform 550ms cubic-bezier(0.2, 0.7, 0.2, 1), opacity 300ms ease; }
 body.menu-visivel .menu-botao { opacity: 1; pointer-events: auto; }
 /* Aberto: o botão acompanha a barra (fica no canto superior direito dela) e as três barras viram um X */
 .menu-botao.aberto { transform: translateX(calc(min(320px, 85vw) - 100px)); z-index: 31; }
@@ -382,7 +382,7 @@ body.menu-visivel .menu-botao { opacity: 1; pointer-events: auto; }
   transition: transform var(--transicao), visibility var(--transicao);
 }
 .gaveta.aberta { transform: none; visibility: visible; }
-.gaveta { transition: transform 400ms cubic-bezier(0.2, 0.7, 0.2, 1), visibility 400ms; }
+.gaveta { transition: transform 550ms cubic-bezier(0.2, 0.7, 0.2, 1), visibility 550ms; }
 .gaveta li { opacity: 0; transform: translateX(-24px); transition: opacity 200ms ease, transform 250ms ease; }
 .gaveta.aberta li { opacity: 1; transform: none; transition: opacity 350ms ease, transform 400ms cubic-bezier(0.2, 0.7, 0.2, 1); }
 .gaveta.aberta li:nth-child(1) { transition-delay: 120ms; }
@@ -534,11 +534,10 @@ body.menu-visivel .menu-botao { opacity: 1; pointer-events: auto; }
 /* Voltar de um projeto para o menu de cartas: sem deslizar, sem fade na lista e no X */
 #cartas.sem-entrada { transform: none; transition: none; }
 
-/* Botões de texto (ver todos e rodapé): texto em caixa alta com linha que cresce no hover */
-.ver-todos, .rodape-nav button { position: relative; text-transform: uppercase; font-weight: 800; transition: color 400ms cubic-bezier(0.25, 0.8, 0.25, 1); }
-.ver-todos { color: var(--tinta); }
+/* Ver todos e rodapé: mesma fonte e posição de antes; a linha sob o texto cresce no hover */
+.ver-todos { text-decoration: underline; transition: color 400ms cubic-bezier(0.25, 0.8, 0.25, 1); }
 .ver-todos:hover, .ver-todos:focus-visible { color: #000; }
-.rodape-nav button { color: #e1e1e1; }
+.rodape-nav button { position: relative; transition: color 400ms cubic-bezier(0.25, 0.8, 0.25, 1); }
 .rodape-nav button:hover, .rodape-nav button:focus-visible { color: #fff; }
 .ver-todos::after, .rodape-nav button::after {
   content: ""; position: absolute; bottom: -2px; left: 50%; width: 0; height: 2px;
@@ -550,6 +549,7 @@ body.menu-visivel .menu-botao { opacity: 1; pointer-events: auto; }
 /* Botões das telas de objetos: X com leve zoom e giro anti-horário */
 .voltar button { transition: transform 250ms ease; }
 .voltar button:hover, .voltar button:focus-visible { transform: scale(1.15) rotate(-10deg); }
+.voltar button { font-size: 30px; line-height: 1; }
 
 /* Aplicativos no sobre mim: círculos com tooltip com o nome ao passar o mouse */
 .sobre-cartao .apps { justify-items: center; }
@@ -560,7 +560,7 @@ body.menu-visivel .menu-botao { opacity: 1; pointer-events: auto; }
   position: relative; cursor: pointer;
   transition: all 0.2s cubic-bezier(0.68, -0.55, 0.265, 1.55);
 }
-.sobre-cartao .apps span:hover { transform: translateY(-6px); }
+.sobre-cartao .apps span:hover { transform: translateY(-3px); }
 .sobre-cartao .apps span::after {
   content: attr(title); position: absolute; left: 50%; top: -34px; transform: translateX(-50%);
   background: var(--tinta); color: #fff; font-size: 12px; padding: 4px 8px; border-radius: 5px; white-space: nowrap;
@@ -568,23 +568,20 @@ body.menu-visivel .menu-botao { opacity: 1; pointer-events: auto; }
 }
 .sobre-cartao .apps span:hover::after { opacity: 1; top: -40px; }
 
-/* Botão voltar ao topo: aparece só depois de rolar até o fim da mesa, abaixo do rodapé */
+/* Botão voltar ao topo: preto como o rodapé; ao passar o mouse vira uma pílula com o texto */
 .voltar-topo {
   position: absolute; bottom: 35px; left: 50%; transform: translateX(-50%);
-  width: 50px; height: 50px; border-radius: 50%; background-color: rgb(20, 20, 20); border: none;
-  font-weight: 600; display: flex; align-items: center; justify-content: center;
-  box-shadow: 0px 0px 0px 4px rgba(180, 160, 255, 0.253);
-  cursor: pointer; overflow: hidden; position: absolute;
-  opacity: 0; pointer-events: none;
-  transition: opacity 400ms ease, width 300ms, border-radius 300ms, background-color 300ms;
+  width: 46px; height: 46px; border-radius: 50%; background: #000; border: 0; padding: 0;
+  display: flex; align-items: center; justify-content: center; overflow: hidden;
+  cursor: pointer; opacity: 0; pointer-events: none;
+  transition: opacity 400ms ease, width 300ms ease, border-radius 300ms ease, background-color 300ms ease;
 }
 #mesa.fim .voltar-topo { opacity: 1; pointer-events: auto; }
-.voltar-topo .svgIcon { width: 12px; height: 16px; fill: #fff; transition: transform 300ms; }
-.voltar-topo::before {
-  position: absolute; bottom: -20px; content: "Voltar ao topo"; color: #fff; font-size: 0; opacity: 0;
-}
-.voltar-topo:hover { width: 140px; border-radius: 50px; background-color: rgb(181, 160, 255); }
+.voltar-topo .svgIcon { width: 13px; height: 16px; fill: #fff; flex: none; transition: transform 300ms ease; }
+.voltar-topo .texto { position: absolute; color: #fff; font-size: 13px; letter-spacing: 0.04em; white-space: nowrap; opacity: 0; transition: opacity 250ms ease; }
+.voltar-topo:hover, .voltar-topo:focus-visible { width: 150px; border-radius: 23px; background: #222; }
 .voltar-topo:hover .svgIcon { transform: translateY(-200%); }
-.voltar-topo:hover::before { font-size: 13px; opacity: 1; bottom: unset; transition: opacity 300ms; }
+.voltar-topo:hover .texto { opacity: 1; }
 
-/* O menu aparece só nas telas da página inicial (lousa, destaques e mesa) */
+/* Voltar de um projeto ao menu de cartas e abrir um projeto: a lista da esquerda fica parada */
+#cartas.sob-projeto .nomes, #cartas.sob-projeto .voltar { opacity: 1; transform: none; transition: none; }
