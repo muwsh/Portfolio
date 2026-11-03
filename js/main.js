@@ -19,6 +19,8 @@ function resetarPecas() {
     el.style.zIndex = '';
     el.dataset.arrastou = '';
     el._ox = 0; el._oy = 0;
+    el.classList.remove('descolando');
+    el.style.removeProperty('--peel');
   });
 }
 
@@ -159,7 +161,7 @@ window.addEventListener('popstate', () => mostrarTela(location.hash.slice(1) || 
 
 // Lista de projetos (placeholders até os textos e imagens existirem)
 const projetos = [
-  'Super Mulheres ONG', 'revista tlgd_',
+  'Super Mulheres ONG', 'Revista tlgd_',
   'Identidade DSG LAB', 'Premiações ESPM', 'Reglette Typeface',
   'KitKat Sublime', 'Mimoz', 'Radar'
 ];
@@ -440,3 +442,23 @@ function iniciarTrocaAutomatica() {
 botaoFoto.style.setProperty('--cor', cores[corAtual]);
 iniciarTrocaAutomatica();
 botaoFoto.addEventListener('click', () => { trocarCor(); iniciarTrocaAutomatica(); });
+
+// Adesivos da lousa (exceto o QR code): clicar sem arrastar começa a descolar a ponta;
+// a intensidade começa baixa e cresce conforme o mouse se move
+document.querySelectorAll('[data-peca]').forEach(el => {
+  if (el.querySelector('.qr-peca')) return;
+  el.insertAdjacentHTML('beforeend', '<span class="peel-corte" aria-hidden="true"></span><span class="peel-verso" aria-hidden="true"></span>');
+  let energia = 0, ultimo = null;
+  el.addEventListener('click', () => {
+    if (el.classList.contains('descolando')) return;
+    el.classList.add('descolando');
+    energia = 0; ultimo = null;
+    el.style.setProperty('--peel', 0.08);
+  });
+  document.addEventListener('pointermove', e => {
+    if (!el.classList.contains('descolando')) return;
+    if (ultimo) energia += Math.hypot(e.clientX - ultimo.x, e.clientY - ultimo.y);
+    ultimo = { x: e.clientX, y: e.clientY };
+    el.style.setProperty('--peel', (0.08 + 0.92 * (1 - Math.exp(-energia / 500))).toFixed(3));
+  });
+});
