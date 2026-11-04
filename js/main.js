@@ -106,6 +106,8 @@ function mostrarTela(id, registrarHistorico = true) {
   const saindoPolaroids = anterior && anterior.id === 'polaroids' && destino !== 'polaroids' && !sobProjeto;
   const entrandoPolaroids = destino === 'polaroids' && !(anterior && anterior.id === 'polaroids');
   document.body.classList.toggle('menu-visivel', destino === 'inicio');
+  // Ao entrar no menu de projetos, a pilha começa pela primeira carta (a de cima da lista)
+  if (destino === 'cartas' && anterior && anterior.id !== 'cartas') ativarCarta(0);
   const esperaPolaroids = saindoPolaroids ? empilharPolaroids() : 0; // as fotos recolhem antes de a tela sair
   // O fundo só sai depois que as polaroids recolhem (ao sair delas para outra tela)
   const fundoVisivel = OBJETOS.includes(destino) || (destino === 'projeto' && anterior && anterior.classList.contains('de-objeto'));
