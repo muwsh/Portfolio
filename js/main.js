@@ -433,7 +433,7 @@ function montarLivro(container, nomeTela) {
     const pagina = dir === 'prox' ? antigo.children[1] : antigo.children[0];
     const verso = dir === 'prox' ? destino.children[0] : destino.children[1];
     if (!pagina || !verso) return;
-    container.querySelectorAll('.folha-virando').forEach(f => f.remove());
+    container.querySelectorAll('.recorte-folha').forEach(f => f.remove());
     const base = container.getBoundingClientRect();
     const sp = antigo.getBoundingClientRect();
     const meia = sp.width / 2;
@@ -442,29 +442,48 @@ function montarLivro(container, nomeTela) {
     // posição do postal dentro da metade (igual nos dois lados, por simetria)
     const x = pr.left - bordaX, y = pr.top - sp.top, w = pr.width, h = pr.height;
     const lado = el => `<div class="postal-folha" style="left:${x}px;top:${y}px;width:${w}px;height:${h}px">${el.outerHTML}</div>`;
+    // recorte da página aberta: a folha 3D fica dentro dela, sem passar do binder
+    const recorte = document.createElement('div');
+    recorte.className = 'recorte-folha';
+    recorte.style.left = (sp.left - base.left) + 'px';
+    recorte.style.top = (sp.top - base.top) + 'px';
+    recorte.style.width = sp.width + 'px';
+    recorte.style.height = sp.height + 'px';
     const folha = document.createElement('div');
     folha.className = 'folha-virando ' + (dir === 'prox' ? 'para-frente' : 'para-tras');
-    folha.style.left = (bordaX - base.left) + 'px';
-    folha.style.top = (sp.top - base.top) + 'px';
+    folha.style.left = (bordaX - sp.left) + 'px';
+    folha.style.top = '0px';
     folha.style.width = meia + 'px';
     folha.style.height = sp.height + 'px';
     folha.innerHTML = `<div class="face frente">${lado(pagina)}</div><div class="face verso">${lado(verso)}</div>`;
-    container.appendChild(folha);
+    recorte.appendChild(folha);
+    container.appendChild(recorte);
     void folha.offsetWidth; // aplica a posição inicial antes de girar
     folha.classList.add('virando');
-    setTimeout(() => folha.remove(), 850);
+    setTimeout(() => recorte.remove(), 850);
   }
 
-  function virar(i) {
-    const novo = Math.max(0, Math.min(folhas.length - 1, i));
-    if (novo === atual && folhas[atual].classList.contains('atual')) return;
-    const dir = novo > atual ? 'prox' : 'ant';
-    if (container.dataset.livro !== undefined) virarFolha(dir, folhas[atual], folhas[novo]);
+  // Troca a página de fato (depois que a folha passou da metade, quando ela já não está visível)
+  function mostrar(novo) {
     atual = novo;
     folhas.forEach((f, k) => f.classList.toggle('atual', k === atual));
     contador.textContent = `${atual + 1} / ${folhas.length}`;
     ant.disabled = atual === 0;
     prox.disabled = atual === folhas.length - 1;
+  }
+  let pendente = null; // virada em andamento: { alvo, timer }
+
+  function virar(i) {
+    const novo = Math.max(0, Math.min(folhas.length - 1, i));
+    if (pendente) { clearTimeout(pendente.timer); mostrar(pendente.alvo); pendente = null; }
+    if (novo === atual) return;
+    const dir = novo > atual ? 'prox' : 'ant';
+    if (container.dataset.livro !== undefined) {
+      virarFolha(dir, folhas[atual], folhas[novo]);
+      pendente = { alvo: novo, timer: setTimeout(() => { mostrar(novo); pendente = null; }, 400) };
+    } else {
+      mostrar(novo);
+    }
   }
 
   ant.addEventListener('click', () => virar(atual - 1));
@@ -474,7 +493,7 @@ function montarLivro(container, nomeTela) {
     if (e.key === 'ArrowRight') virar(atual + 1);
     if (e.key === 'ArrowLeft') virar(atual - 1);
   });
-  virar(0);
+  mostrar(0);
 }
 
 binder.dataset.livro = '';
