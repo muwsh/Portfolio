@@ -406,7 +406,7 @@ for (let i = 0; i < postais.length; i += 2) {
     const div = document.createElement('div');
     div.className = `postal ${p.orientacao}`;
     div.dataset.src = p.src;
-    div.innerHTML = `<div class="moldura"><img src="${p.src}" alt="" loading="lazy"></div>`;
+    div.innerHTML = `<div class="moldura"><img src="${p.src}" alt=""></div>`;
     espelho.appendChild(div);
   });
   binder.appendChild(espelho);
