@@ -428,21 +428,27 @@ function montarLivro(container, nomeTela) {
   const prox = controles.querySelector('[data-prox]');
   const contador = controles.querySelector('[data-contador]');
 
-  // Página que vira: uma folha (a postal da borda do meio) gira em torno da lombada e revela a próxima
+  // Página que vira: a metade da página (papel + postal) gira em torno da lombada e revela a próxima
   function virarFolha(dir, antigo, destino) {
     const pagina = dir === 'prox' ? antigo.children[1] : antigo.children[0];
     const verso = dir === 'prox' ? destino.children[0] : destino.children[1];
     if (!pagina || !verso) return;
     container.querySelectorAll('.folha-virando').forEach(f => f.remove());
     const base = container.getBoundingClientRect();
-    const r = pagina.getBoundingClientRect();
+    const sp = antigo.getBoundingClientRect();
+    const meia = sp.width / 2;
+    const bordaX = dir === 'prox' ? sp.left + meia : sp.left; // a lombada é a borda interna da metade
+    const pr = pagina.getBoundingClientRect();
+    // posição do postal dentro da metade (igual nos dois lados, por simetria)
+    const x = pr.left - bordaX, y = pr.top - sp.top, w = pr.width, h = pr.height;
+    const lado = el => `<div class="postal-folha" style="left:${x}px;top:${y}px;width:${w}px;height:${h}px">${el.outerHTML}</div>`;
     const folha = document.createElement('div');
     folha.className = 'folha-virando ' + (dir === 'prox' ? 'para-frente' : 'para-tras');
-    folha.style.left = (r.left - base.left) + 'px';
-    folha.style.top = (r.top - base.top) + 'px';
-    folha.style.width = r.width + 'px';
-    folha.style.height = r.height + 'px';
-    folha.innerHTML = `<div class="face frente">${pagina.outerHTML}</div><div class="face verso">${verso.outerHTML}</div>`;
+    folha.style.left = (bordaX - base.left) + 'px';
+    folha.style.top = (sp.top - base.top) + 'px';
+    folha.style.width = meia + 'px';
+    folha.style.height = sp.height + 'px';
+    folha.innerHTML = `<div class="face frente">${lado(pagina)}</div><div class="face verso">${lado(verso)}</div>`;
     container.appendChild(folha);
     void folha.offsetWidth; // aplica a posição inicial antes de girar
     folha.classList.add('virando');

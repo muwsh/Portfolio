@@ -229,7 +229,7 @@ body {
 .postal {
   background: #fff;
   padding: 10px;
-  height: min(calc(100vh - 210px), 60vw);
+  height: min(calc(100vh - 270px), 60vw);
   aspect-ratio: 2 / 3;
   width: auto;
   box-shadow: var(--sombra);
@@ -598,4 +598,6 @@ body.menu-visivel .menu-botao { opacity: 1; pointer-events: auto; }
 .folha-virando.para-tras.virando { transform: rotateY(180deg); }
 .folha-virando .face { position: absolute; inset: 0; backface-visibility: hidden; -webkit-backface-visibility: hidden; }
 .folha-virando .verso { transform: rotateY(180deg); }
-.folha-virando .face > .postal { width: 100%; height: 100%; aspect-ratio: auto; }
+.folha-virando .face { background: var(--bolso); border-radius: 10px; box-shadow: var(--sombra); overflow: hidden; }
+.postal-folha { position: absolute; }
+.postal-folha > .postal { width: 100%; height: 100%; aspect-ratio: auto; }
