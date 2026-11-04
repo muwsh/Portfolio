@@ -428,9 +428,32 @@ function montarLivro(container, nomeTela) {
   const prox = controles.querySelector('[data-prox]');
   const contador = controles.querySelector('[data-contador]');
 
+  // Página que vira: uma folha (a postal da borda do meio) gira em torno da lombada e revela a próxima
+  function virarFolha(dir, antigo, destino) {
+    const pagina = dir === 'prox' ? antigo.children[1] : antigo.children[0];
+    const verso = dir === 'prox' ? destino.children[0] : destino.children[1];
+    if (!pagina || !verso) return;
+    container.querySelectorAll('.folha-virando').forEach(f => f.remove());
+    const base = container.getBoundingClientRect();
+    const r = pagina.getBoundingClientRect();
+    const folha = document.createElement('div');
+    folha.className = 'folha-virando ' + (dir === 'prox' ? 'para-frente' : 'para-tras');
+    folha.style.left = (r.left - base.left) + 'px';
+    folha.style.top = (r.top - base.top) + 'px';
+    folha.style.width = r.width + 'px';
+    folha.style.height = r.height + 'px';
+    folha.innerHTML = `<div class="face frente">${pagina.outerHTML}</div><div class="face verso">${verso.outerHTML}</div>`;
+    container.appendChild(folha);
+    void folha.offsetWidth; // aplica a posição inicial antes de girar
+    folha.classList.add('virando');
+    setTimeout(() => folha.remove(), 850);
+  }
+
   function virar(i) {
     const novo = Math.max(0, Math.min(folhas.length - 1, i));
     if (novo === atual && folhas[atual].classList.contains('atual')) return;
+    const dir = novo > atual ? 'prox' : 'ant';
+    if (container.dataset.livro !== undefined) virarFolha(dir, folhas[atual], folhas[novo]);
     atual = novo;
     folhas.forEach((f, k) => f.classList.toggle('atual', k === atual));
     contador.textContent = `${atual + 1} / ${folhas.length}`;
@@ -448,6 +471,7 @@ function montarLivro(container, nomeTela) {
   virar(0);
 }
 
+binder.dataset.livro = '';
 montarLivro(binder, 'postais');
 
 // Visualização ampliada: a foto aparece no sentido em que foi feita (sem girar)
