@@ -180,6 +180,7 @@ body {
 
 .binder .espelho-postal { display: none; }
 .binder .espelho-postal.atual { display: grid; }
+.binder .espelho-postal > .postal { margin: 0 56px; }
 .polaroid {
   display: flex;
   flex-direction: column;
@@ -201,16 +202,16 @@ body {
 }
 
 /* Binder de postais: sempre na vertical, dois por folha */
-.binder { display: flex; justify-content: center; position: relative; perspective: 2200px; padding: 40px; overflow: hidden; }
+.binder { display: flex; justify-content: center; position: relative; padding: 24px 40px; overflow: hidden; }
 .espelho-postal {
   display: none;
   grid-template-columns: 1fr 1fr;
-  gap: 80px;
+  gap: 0;
   justify-items: center;
   align-items: center;
   width: max-content;
   margin: 0 auto;
-  padding: 48px 72px;
+  padding: 48px 0;
   background: var(--bolso);
   border-radius: 10px;
   box-shadow: var(--sombra);
@@ -229,7 +230,7 @@ body {
 .postal {
   background: #fff;
   padding: 10px;
-  height: min(calc(100vh - 320px), 64vw);
+  height: min(calc(100vh - 290px), 70vw);
   aspect-ratio: 2 / 3;
   width: auto;
   box-shadow: var(--sombra);
@@ -590,15 +591,11 @@ body.menu-visivel .menu-botao { opacity: 1; pointer-events: auto; }
 #mesa::after { content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 120px; background: #000; pointer-events: none; z-index: 0; }
 #mesa .voltar-topo { z-index: 2; }
 
-/* Virar página do binder de postais: a folha gira em torno da lombada (o meio do livro) */
-.recorte-folha { position: absolute; overflow: hidden; perspective: 2200px; pointer-events: none; z-index: 5; }
-.folha-virando { position: absolute; z-index: 5; transform-style: preserve-3d; pointer-events: none; transition: transform 800ms cubic-bezier(0.45, 0.05, 0.25, 1); }
-.folha-virando.para-frente { transform-origin: left center; }
-.folha-virando.para-tras { transform-origin: right center; }
-.folha-virando.para-frente.virando { transform: rotateY(-180deg); }
-.folha-virando.para-tras.virando { transform: rotateY(180deg); }
-.folha-virando .face { position: absolute; inset: 0; backface-visibility: hidden; -webkit-backface-visibility: hidden; }
-.folha-virando .verso { transform: rotateY(180deg); }
-.folha-virando .face { background: var(--bolso); border-radius: 10px; box-shadow: var(--sombra); overflow: hidden; }
-.postal-folha { position: absolute; }
-.postal-folha > .postal { width: 100%; height: 100%; aspect-ratio: auto; }
+/* Virada de página do binder: a folha gira em torno da lombada (geometria de dobra do PageFlip) */
+.virada { position: absolute; z-index: 5; pointer-events: none; }
+.virada-caixa { position: absolute; top: 0; overflow: hidden; transform-origin: 0 0; background: var(--bolso); }
+.virada-caixa.esq { border-radius: 10px 0 0 10px; background: linear-gradient(to left, rgba(0,0,0,0.07), transparent 24px), var(--bolso); }
+.virada-caixa.dir { border-radius: 0 10px 10px 0; background: linear-gradient(to right, rgba(0,0,0,0.07), transparent 24px), var(--bolso); }
+.virada-sombra { position: absolute; inset: 0; }
+.pagina-virada { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; background: var(--bolso); }
+.pagina-virada.espelhada { transform: scaleX(-1); }

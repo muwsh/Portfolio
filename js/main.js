@@ -428,42 +428,137 @@ function montarLivro(container, nomeTela) {
   const prox = controles.querySelector('[data-prox]');
   const contador = controles.querySelector('[data-contador]');
 
-  // Página que vira: a metade da página (papel + postal) gira em torno da lombada e revela a próxima
-  function virarFolha(dir, antigo, destino) {
-    const pagina = dir === 'prox' ? antigo.children[1] : antigo.children[0];
-    const verso = dir === 'prox' ? destino.children[0] : destino.children[1];
-    if (!pagina || !verso) return;
-    container.querySelectorAll('.recorte-folha').forEach(f => f.remove());
-    const base = container.getBoundingClientRect();
-    const sp = antigo.getBoundingClientRect();
-    const meia = sp.width / 2;
-    const bordaX = dir === 'prox' ? sp.left + meia : sp.left; // a lombada é a borda interna da metade
-    const pr = pagina.getBoundingClientRect();
-    // posição do postal dentro da metade (igual nos dois lados, por simetria)
-    const x = pr.left - bordaX, y = pr.top - sp.top, w = pr.width, h = pr.height;
-    const lado = el => `<div class="postal-folha" style="left:${x}px;top:${y}px;width:${w}px;height:${h}px">${el.outerHTML}</div>`;
-    // recorte da página aberta: a folha 3D fica dentro dela, sem passar do binder
-    const recorte = document.createElement('div');
-    recorte.className = 'recorte-folha';
-    recorte.style.left = (sp.left - base.left) + 'px';
-    recorte.style.top = (sp.top - base.top) + 'px';
-    recorte.style.width = sp.width + 'px';
-    recorte.style.height = sp.height + 'px';
-    const folha = document.createElement('div');
-    folha.className = 'folha-virando ' + (dir === 'prox' ? 'para-frente' : 'para-tras');
-    folha.style.left = (bordaX - sp.left) + 'px';
-    folha.style.top = '0px';
-    folha.style.width = meia + 'px';
-    folha.style.height = sp.height + 'px';
-    folha.innerHTML = `<div class="face frente">${lado(pagina)}</div><div class="face verso">${lado(verso)}</div>`;
-    recorte.appendChild(folha);
-    container.appendChild(recorte);
-    void folha.offsetWidth; // aplica a posição inicial antes de girar
-    folha.classList.add('virando');
-    setTimeout(() => recorte.remove(), 850);
+  // Página que vira: a folha gira em torno da lombada, com a geometria de dobra da referência PageFlip
+  const DURACAO_VIRADA = 800;
+  let virada = null; // { alvo, finalizar } enquanto uma virada está em andamento
+  const alvo = () => (virada ? virada.alvo : atual);
+
+  const sub = (a, b) => ({ x: a.x - b.x, y: a.y - b.y });
+  const dot = (a, b) => a.x * b.x + a.y * b.y;
+  const lerp = (a, b, t) => ({ x: a.x + (b.x - a.x) * t, y: a.y + (b.y - a.y) * t });
+  const easeInOut = t => (t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2);
+
+  // Parte de um polígono de um dos lados da reta que passa por m com normal n
+  function recortar(pontos, m, n, negativo) {
+    const lado = p => { const d = dot(sub(p, m), n); return negativo ? -d : d; };
+    const saida = [];
+    for (let i = 0; i < pontos.length; i++) {
+      const a = pontos[i], b = pontos[(i + 1) % pontos.length];
+      const da = lado(a), db = lado(b);
+      if (da >= 0) saida.push(a);
+      if ((da >= 0) !== (db >= 0)) saida.push(lerp(a, b, da / (da - db)));
+    }
+    return saida;
+  }
+  const poligonoCss = (pontos, dx) => pontos.length
+    ? `polygon(${pontos.map(p => `${(p.x - dx).toFixed(2)}px ${p.y.toFixed(2)}px`).join(', ')})`
+    : 'polygon(0 0)';
+
+  // A dobra fica na metade entre o canto de origem e onde o canto está agora
+  function dobra(at, canto, x0, w, h) {
+    const d = sub(at, canto);
+    const l = Math.hypot(d.x, d.y);
+    if (l < 0.5) return null;
+    const n = { x: d.x / l, y: d.y / l };
+    const m = lerp(canto, at, 0.5);
+    const pagina = [{ x: x0, y: 0 }, { x: x0 + w, y: 0 }, { x: x0 + w, y: h }, { x: x0, y: h }];
+    const k = 2 * dot(m, n);
+    const a = 1 - 2 * n.x * n.x, bc = -2 * n.x * n.y, dd = 1 - 2 * n.y * n.y;
+    const e = a * x0 + k * n.x - x0, f = bc * x0 + k * n.y;
+    return {
+      frente: poligonoCss(recortar(pagina, m, n, false), x0),
+      verso: poligonoCss(recortar(pagina, m, n, true), x0),
+      matriz: `matrix(${a}, ${bc}, ${bc}, ${dd}, ${e}, ${f})`,
+      progresso: Math.min(1, l / (2 * w)),
+    };
   }
 
-  // Troca a página de fato (depois que a folha passou da metade, quando ela já não está visível)
+  function caixa(x, w, h, classes) {
+    const d = document.createElement('div');
+    d.className = classes;
+    d.style.left = x + 'px';
+    d.style.width = w + 'px';
+    d.style.height = h + 'px';
+    return d;
+  }
+
+  // Metade de página: o postal copiado e centralizado no papel (espelhado no verso da folha)
+  function metade(postal, espelhada) {
+    const papel = document.createElement('div');
+    papel.className = 'pagina-virada' + (espelhada ? ' espelhada' : '');
+    papel.appendChild(postal.cloneNode(true));
+    return papel;
+  }
+
+  function virarFolha(dir, antigo, destino, novo) {
+    const [pe, pd] = [antigo.children[0], antigo.children[1]];
+    const [de, dd] = [destino.children[0], destino.children[1]];
+    const sp = antigo.getBoundingClientRect();
+    const base = container.getBoundingClientRect();
+    const w = sp.width / 2, h = sp.height;
+    const x0 = dir === 1 ? w : 0;
+
+    const overlay = document.createElement('div');
+    overlay.className = 'virada';
+    overlay.style.cssText = `left:${sp.left - base.left}px;top:${sp.top - base.top}px;width:${sp.width}px;height:${h}px`;
+    // Por baixo da folha: a metade que fica e a metade que chega
+    const esq = caixa(0, w, h, 'virada-caixa esq');
+    esq.appendChild(metade(dir === 1 ? pe : de));
+    const direita = caixa(w, w, h, 'virada-caixa dir');
+    direita.appendChild(metade(dir === 1 ? dd : pd));
+    // A folha: frente (página que sai) e verso (página que chega, espelhada)
+    const frente = caixa(x0, w, h, 'virada-caixa');
+    frente.appendChild(metade(dir === 1 ? pd : pe));
+    const sombra = document.createElement('div');
+    sombra.className = 'virada-sombra';
+    const verso = caixa(x0, w, h, 'virada-caixa');
+    verso.appendChild(metade(dir === 1 ? de : dd, true));
+    sombra.appendChild(verso);
+    overlay.append(esq, direita, frente, sombra);
+    container.appendChild(overlay);
+
+    const canto = { x: dir === 1 ? 2 * w : 0, y: h };
+    const ini = { x: canto.x - dir, y: canto.y - 1 };
+    const fim = { x: canto.x - dir * 2 * w, y: canto.y };
+    const levante = h * 0.05 * (canto.y === 0 ? 1 : -1);
+    const quadro = t => {
+      const p = lerp(ini, fim, t);
+      const g = dobra({ x: p.x, y: p.y + Math.sin(Math.PI * t) * levante }, canto, x0, w, h);
+      if (!g) {
+        frente.style.clipPath = 'none';
+        sombra.style.display = 'none';
+        return;
+      }
+      sombra.style.display = '';
+      frente.style.clipPath = g.frente;
+      verso.style.clipPath = g.verso;
+      verso.style.transform = g.matriz;
+      sombra.style.filter = `drop-shadow(0 ${2 + g.progresso * 6}px ${6 + g.progresso * 10}px rgb(0 0 0 / ${0.12 + (1 - g.progresso) * 0.1}))`;
+    };
+
+    let inicioTempo = null, quadroId = 0, feito = false;
+    const controle = { alvo: novo, finalizar: null };
+    controle.finalizar = () => {
+      if (feito) return;
+      feito = true;
+      cancelAnimationFrame(quadroId);
+      overlay.remove();
+      if (virada === controle) virada = null;
+      mostrar(novo);
+    };
+    const passo = ts => {
+      if (inicioTempo === null) inicioTempo = ts;
+      const t = Math.min(1, (ts - inicioTempo) / DURACAO_VIRADA);
+      quadro(easeInOut(t));
+      if (t < 1) quadroId = requestAnimationFrame(passo);
+      else controle.finalizar();
+    };
+    quadro(0);
+    quadroId = requestAnimationFrame(passo);
+    return controle;
+  }
+
+  // Troca a página de fato (quando a virada termina, por baixo da folha já igual)
   function mostrar(novo) {
     atual = novo;
     folhas.forEach((f, k) => f.classList.toggle('atual', k === atual));
@@ -471,27 +566,25 @@ function montarLivro(container, nomeTela) {
     ant.disabled = atual === 0;
     prox.disabled = atual === folhas.length - 1;
   }
-  let pendente = null; // virada em andamento: { alvo, timer }
 
   function virar(i) {
+    if (virada) virada.finalizar(); // uma virada nova conclui a que estava em andamento
     const novo = Math.max(0, Math.min(folhas.length - 1, i));
-    if (pendente) { clearTimeout(pendente.timer); mostrar(pendente.alvo); pendente = null; }
     if (novo === atual) return;
-    const dir = novo > atual ? 'prox' : 'ant';
+    const dir = novo > atual ? 1 : -1;
     if (container.dataset.livro !== undefined) {
-      virarFolha(dir, folhas[atual], folhas[novo]);
-      pendente = { alvo: novo, timer: setTimeout(() => { mostrar(novo); pendente = null; }, 400) };
+      virada = virarFolha(dir, folhas[atual], folhas[novo], novo);
     } else {
       mostrar(novo);
     }
   }
 
-  ant.addEventListener('click', () => virar(atual - 1));
-  prox.addEventListener('click', () => virar(atual + 1));
+  ant.addEventListener('click', () => virar(alvo() - 1));
+  prox.addEventListener('click', () => virar(alvo() + 1));
   document.addEventListener('keydown', e => {
     if (!container.closest('[data-tela]').classList.contains('ativa')) return;
-    if (e.key === 'ArrowRight') virar(atual + 1);
-    if (e.key === 'ArrowLeft') virar(atual - 1);
+    if (e.key === 'ArrowRight') virar(alvo() + 1);
+    if (e.key === 'ArrowLeft') virar(alvo() - 1);
   });
   mostrar(0);
 }
