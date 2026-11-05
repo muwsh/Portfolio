@@ -439,6 +439,17 @@ function montarLivro(container, nomeTela) {
   const prox = criarSeta('seta-prox', 'Próxima página', 'M9 5l7 7-7 7');
   container.append(ant, prox);
 
+  // As setas ficam encostadas nas bordas do álbum (a altura segue o binder, centralizada)
+  function posicionarSetas() {
+    const sp = folhas[atual].getBoundingClientRect();
+    const base = container.getBoundingClientRect();
+    const folga = 6;
+    ant.style.left = (sp.left - base.left - ant.offsetWidth - folga) + 'px';
+    ant.style.right = 'auto';
+    prox.style.left = (sp.right - base.left + folga) + 'px';
+    prox.style.right = 'auto';
+  }
+
   let virada = null; // virada em andamento
   const alvo = () => (virada ? virada.alvo : atual);
 
@@ -448,6 +459,7 @@ function montarLivro(container, nomeTela) {
     contador.textContent = `${atual + 1} / ${folhas.length}`;
     ant.classList.toggle('fim', atual === 0);
     prox.classList.toggle('fim', atual === folhas.length - 1);
+    posicionarSetas();
   }
 
   function caixa(x, w, h, classes) {
@@ -607,6 +619,9 @@ function montarLivro(container, nomeTela) {
     }
   }, true);
 
+  ant.addEventListener('pointerenter', posicionarSetas);
+  prox.addEventListener('pointerenter', posicionarSetas);
+  window.addEventListener('resize', posicionarSetas);
   ant.addEventListener('click', () => virar(alvo() - 1));
   prox.addEventListener('click', () => virar(alvo() + 1));
   document.addEventListener('keydown', e => {
