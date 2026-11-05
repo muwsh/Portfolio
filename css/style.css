@@ -569,27 +569,27 @@ body.menu-visivel .menu-botao { opacity: 1; pointer-events: auto; }
 }
 .sobre-cartao .apps span:hover::after { opacity: 1; top: -40px; }
 
-/* Botão voltar ao topo: preto como o rodapé; ao passar o mouse vira uma pílula com o texto */
+/* Botão voltar ao topo: só a seta, sem círculo. Aparece quando o mouse chega perto da borda de baixo
+   (área de revelação maior que a de clique); sobre a seta, o texto aparece no lugar da seta */
 .voltar-topo {
   position: absolute; bottom: 35px; left: 50%; transform: translateX(-50%);
-  width: 46px; height: 46px; border-radius: 50%; background: #000; border: 1.5px solid #e1e1e1; padding: 0;
-  display: flex; align-items: center; justify-content: center; overflow: hidden;
+  width: 46px; height: 46px; padding: 0; border: 0; background: none;
+  display: flex; align-items: center; justify-content: center;
   cursor: pointer; opacity: 0; pointer-events: none;
-  transition: opacity 400ms ease, width 300ms ease, border-radius 300ms ease, background-color 300ms ease;
+  transition: opacity 400ms ease;
 }
-#mesa.fim .voltar-topo { opacity: 1; pointer-events: auto; }
-.voltar-topo .svgIcon { width: 13px; height: 16px; fill: #e1e1e1; flex: none; transition: transform 300ms ease; }
-.voltar-topo .texto { position: absolute; color: #000; font-size: 13px; letter-spacing: 0.04em; white-space: nowrap; opacity: 0; transition: opacity 250ms ease; }
-.voltar-topo:hover, .voltar-topo:focus-visible { width: 150px; border-radius: 23px; background: #fff; border-color: #fff; }
-.voltar-topo:hover .svgIcon { transform: translateY(-200%); fill: #000; }
-.voltar-topo:hover .texto { opacity: 1; }
+#mesa.fim.revelar .voltar-topo, #mesa.fim .voltar-topo:hover, #mesa.fim .voltar-topo:focus-visible { opacity: 1; pointer-events: auto; }
+.voltar-topo .svgIcon { width: 13px; height: 16px; fill: #e1e1e1; flex: none; transition: transform 300ms ease, opacity 250ms ease; }
+.voltar-topo .texto { position: absolute; color: #e1e1e1; font-size: 13px; letter-spacing: 0.04em; white-space: nowrap; opacity: 0; transition: opacity 250ms ease; }
+.voltar-topo:hover .svgIcon, .voltar-topo:focus-visible .svgIcon { transform: translateY(-200%); opacity: 0; }
+.voltar-topo:hover .texto, .voltar-topo:focus-visible .texto { opacity: 1; }
+#mesa .voltar-topo { z-index: 2; }
 
 /* Voltar de um projeto ao menu de cartas e abrir um projeto: a lista da esquerda fica parada */
 #cartas.sob-projeto .nomes, #cartas.sob-projeto .voltar { opacity: 1; transform: none; transition: none; }
 
 /* Faixa abaixo do rodapé na mesa: preta, como o rodapé, onde fica o botão voltar ao topo */
 #mesa::after { content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 120px; background: #000; pointer-events: none; z-index: 0; }
-#mesa .voltar-topo { z-index: 2; }
 
 /* Virada rígida do binder: a folha gira em torno da lombada, como uma tampa de pasta */
 .virada { position: absolute; z-index: 5; perspective: 1800px; pointer-events: none; }

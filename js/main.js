@@ -753,6 +753,13 @@ inicio.addEventListener('scroll', () => {
   const fim = inicio.scrollHeight - inicio.clientHeight - 4;
   document.getElementById('mesa').classList.toggle('fim', inicio.scrollTop >= fim);
 });
+// Revela a seta quando o mouse chega perto da borda de baixo, no centro (a área de clique continua só a seta)
+const mesaEl = document.getElementById('mesa');
+document.addEventListener('pointermove', e => {
+  const perto = e.clientY > window.innerHeight - 200 && Math.abs(e.clientX - window.innerWidth / 2) < 220;
+  mesaEl.classList.toggle('revelar', perto);
+});
+document.documentElement.addEventListener('pointerleave', () => mesaEl.classList.remove('revelar'));
 document.addEventListener('keydown', e => {
 });
 
