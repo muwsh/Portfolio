@@ -202,7 +202,7 @@ body {
 }
 
 /* Binder de postais: sempre na vertical, dois por folha */
-.binder { display: flex; justify-content: center; position: relative; padding: 14px 40px; overflow: hidden; }
+.binder { display: flex; justify-content: center; position: relative; padding: 14px 40px; overflow: visible; }
 .espelho-postal {
   display: none;
   grid-template-columns: 1fr 1fr;
@@ -592,7 +592,7 @@ body.menu-visivel .menu-botao { opacity: 1; pointer-events: auto; }
 #mesa::after { content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 120px; background: #000; pointer-events: none; z-index: 0; }
 
 /* Virada rígida do binder: a folha gira em torno da lombada, como uma tampa de pasta */
-.virada { position: absolute; z-index: 5; perspective: 1800px; pointer-events: none; }
+.virada { position: absolute; z-index: 5; perspective: 3200px; pointer-events: none; }
 .virada-caixa { position: absolute; top: 0; overflow: hidden; background: var(--bolso); }
 .virada-caixa.esq { border-radius: 10px 0 0 10px; }
 .virada-caixa.dir { border-radius: 0 10px 10px 0; }
