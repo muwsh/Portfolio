@@ -202,7 +202,7 @@ body {
 }
 
 /* Binder de postais: sempre na vertical, dois por folha */
-.binder { display: flex; justify-content: center; position: relative; padding: 24px 40px; overflow: hidden; }
+.binder { display: flex; justify-content: center; position: relative; padding: 14px 40px; overflow: hidden; }
 .espelho-postal {
   display: none;
   grid-template-columns: 1fr 1fr;
@@ -230,7 +230,7 @@ body {
 .postal {
   background: #fff;
   padding: 10px;
-  height: min(calc(100vh - 290px), 70vw);
+  height: min(calc(100vh - 272px), calc(75vw - 330px));
   aspect-ratio: 2 / 3;
   width: auto;
   box-shadow: var(--sombra);
