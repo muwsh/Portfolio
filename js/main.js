@@ -517,7 +517,7 @@ function montarLivro(container, nomeTela) {
     const v = { alvo: novo, dir, theta: 0, frame: 0, overlay, concluido: false };
     v.definir = theta => {
       v.theta = theta;
-      folha.style.transform = `rotateY(${dir === 1 ? theta : -theta}deg)`;
+      folha.style.transform = `rotateY(${dir === 1 ? -theta : theta}deg)`;
       overlay.style.setProperty('--brilho', (Math.sin(theta * Math.PI / 180) * 0.45).toFixed(3));
     };
     v.concluir = completo => {
