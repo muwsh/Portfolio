@@ -229,7 +229,7 @@ body {
 .postal {
   background: #fff;
   padding: 10px;
-  height: min(calc(100vh - 350px), 60vw);
+  height: min(calc(100vh - 320px), 64vw);
   aspect-ratio: 2 / 3;
   width: auto;
   box-shadow: var(--sombra);
