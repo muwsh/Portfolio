@@ -591,11 +591,23 @@ body.menu-visivel .menu-botao { opacity: 1; pointer-events: auto; }
 #mesa::after { content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 120px; background: #000; pointer-events: none; z-index: 0; }
 #mesa .voltar-topo { z-index: 2; }
 
-/* Virada de página do binder: a folha gira em torno da lombada (geometria de dobra do PageFlip) */
-.virada { position: absolute; z-index: 5; pointer-events: none; }
-.virada-caixa { position: absolute; top: 0; overflow: hidden; transform-origin: 0 0; background: var(--bolso); }
-.virada-caixa.esq { border-radius: 10px 0 0 10px; background: linear-gradient(to left, rgba(0,0,0,0.07), transparent 24px), var(--bolso); }
-.virada-caixa.dir { border-radius: 0 10px 10px 0; background: linear-gradient(to right, rgba(0,0,0,0.07), transparent 24px), var(--bolso); }
-.virada-sombra { position: absolute; inset: 0; }
+/* Virada rígida do binder: a folha gira em torno da lombada, como uma tampa de pasta */
+.virada { position: absolute; z-index: 5; perspective: 1800px; pointer-events: none; }
+.virada-caixa { position: absolute; top: 0; overflow: hidden; background: var(--bolso); }
+.virada-caixa.esq { border-radius: 10px 0 0 10px; }
+.virada-caixa.dir { border-radius: 0 10px 10px 0; }
+.folha-virada { position: absolute; top: 0; transform-style: preserve-3d; }
+.folha-virada .face { position: absolute; inset: 0; overflow: hidden; background: var(--bolso); backface-visibility: hidden; -webkit-backface-visibility: hidden; }
+.folha-virada .face.verso { transform: rotateY(180deg); }
 .pagina-virada { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; background: var(--bolso); }
-.pagina-virada.espelhada { transform: scaleX(-1); }
+.reflexo { position: absolute; inset: 0; pointer-events: none; background: linear-gradient(100deg, transparent 25%, rgba(255,255,255,0.7) 50%, transparent 75%); opacity: var(--brilho, 0); }
+
+/* Setas laterais: só a seta aparece quando o mouse passa pela faixa de cada lado */
+.seta { position: absolute; top: 25%; height: 50%; width: 88px; z-index: 6; padding: 0; border: 0; background: none; color: var(--tinta); display: flex; align-items: center; justify-content: center; cursor: pointer; opacity: 0; transition: opacity 320ms ease; }
+.seta svg { width: 44px; height: 44px; fill: none; stroke: currentColor; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; transition: transform 320ms ease; }
+.seta:hover, .seta:focus-visible { opacity: 1; }
+.seta-ant { left: 0; }
+.seta-prox { right: 0; }
+.seta-ant:hover svg { transform: translateX(-4px); }
+.seta-prox:hover svg { transform: translateX(4px); }
+.seta.fim { opacity: 0 !important; pointer-events: none; }
