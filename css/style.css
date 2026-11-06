@@ -174,7 +174,6 @@ body {
 /* Carimbo: caderneta à direita e carimbo com almofada à esquerda (tinta azul escura, provisória) */
 .composicao-carimbo { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); width: min(92vw, 980px); pointer-events: none; }
 .composicao-carimbo svg { width: 100%; height: auto; display: block; }
-.composicao-carimbo .papel-fundo { fill: #f3f1ea; filter: drop-shadow(0 8px 14px rgba(0,0,0,0.18)); }
 #carimbo .caderno { position: absolute; left: 40px; bottom: 40px; max-width: 300px; margin: 0; }
 
 /* Polaroids: tira horizontal com duas fileiras, rolagem lateral */
