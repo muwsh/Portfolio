@@ -171,6 +171,12 @@ body {
 
 /* Carimbo */
 .caderno { max-width: 720px; margin: 0 auto; }
+/* Carimbo: caderneta à direita e carimbo com almofada à esquerda (tinta azul escura, provisória) */
+.composicao-carimbo { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); width: min(92vw, 980px); pointer-events: none; }
+.composicao-carimbo svg { width: 100%; height: auto; display: block; }
+.composicao-carimbo .papel-fundo { fill: #f3f1ea; filter: drop-shadow(0 8px 14px rgba(0,0,0,0.18)); }
+.composicao-carimbo .prendedor { }
+#carimbo .caderno { position: absolute; left: 40px; bottom: 40px; max-width: 300px; margin: 0; }
 
 /* Polaroids: tira horizontal com duas fileiras, rolagem lateral */
 .tira-polaroids { display: grid; grid-template-rows: repeat(2, auto); grid-auto-flow: column; grid-auto-columns: 260px; gap: 34px 40px; align-content: center; overflow-x: auto; overflow-y: hidden; height: calc(100vh - 80px); padding: 24px 40px; scrollbar-width: none; cursor: grab; user-select: none; }
@@ -331,8 +337,7 @@ body {
 /* Mesa: 5 objetos nas posições da foto (placeholders em cor sólida até as imagens reais) */
 .mesa-objetos { position: absolute; top: calc(var(--rodape) + 12px); left: 0; right: 0; height: calc(100vh - var(--rodape) - 12px); }
 /* A mesa ocupa a tela inteira (a partir de 64 px); o rodapé fica logo abaixo e aparece ao rolar até o fim */
-#mesa { height: calc(100% + var(--rodape) + 120px); position: relative; }
-#mesa .rodape-site { bottom: 120px; }
+#mesa { position: relative; }
 .objeto {
   position: absolute;
   display: flex; align-items: center; justify-content: center;
@@ -575,13 +580,13 @@ body.menu-visivel .menu-botao { opacity: 1; pointer-events: auto; }
 /* Botão voltar ao topo: só a seta, sem círculo. Aparece quando o mouse chega perto da borda de baixo
    (área de revelação maior que a de clique); sobre a seta, o texto aparece no lugar da seta */
 .voltar-topo {
-  position: absolute; bottom: 35px; left: 50%; transform: translateX(-50%);
+  position: fixed; bottom: 24px; right: 24px;
   width: 46px; height: 46px; padding: 0; border: 0; background: none;
   display: flex; align-items: center; justify-content: center;
   cursor: pointer; opacity: 0; pointer-events: none;
   transition: opacity 400ms ease;
 }
-#mesa.rolada.revelar .voltar-topo, #mesa.rolada .voltar-topo:hover, #mesa.rolada .voltar-topo:focus-visible { opacity: 1; pointer-events: auto; }
+#mesa.revelar .voltar-topo, #mesa .voltar-topo:hover, #mesa .voltar-topo:focus-visible { opacity: 1; pointer-events: auto; }
 .voltar-topo .svgIcon { width: 13px; height: 16px; fill: #e1e1e1; flex: none; transition: transform 300ms ease, opacity 250ms ease; }
 .voltar-topo .texto { position: absolute; color: #e1e1e1; font-size: 13px; letter-spacing: 0.04em; white-space: nowrap; opacity: 0; transition: opacity 250ms ease; }
 .voltar-topo:hover .svgIcon, .voltar-topo:focus-visible .svgIcon { transform: translateY(-200%); opacity: 0; }
@@ -591,8 +596,6 @@ body.menu-visivel .menu-botao { opacity: 1; pointer-events: auto; }
 /* Voltar de um projeto ao menu de cartas e abrir um projeto: a lista da esquerda fica parada */
 #cartas.sob-projeto .nomes, #cartas.sob-projeto .voltar { opacity: 1; transform: none; transition: none; }
 
-/* Faixa abaixo do rodapé na mesa: preta, como o rodapé, onde fica o botão voltar ao topo */
-#mesa::after { content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 120px; background: #000; pointer-events: none; z-index: 0; }
 
 /* Virada rígida do binder: a folha gira em torno da lombada, como uma tampa de pasta */
 .virada { position: absolute; z-index: 5; perspective: 3200px; pointer-events: none; }

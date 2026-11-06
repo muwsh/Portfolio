@@ -766,10 +766,10 @@ document.querySelector('[data-voltar-topo]').addEventListener('click', () => {
 inicio.addEventListener('scroll', () => {
   document.getElementById('mesa').classList.toggle('rolada', inicio.scrollTop > 40);
 });
-// Revela a seta quando o mouse chega perto da borda de baixo, no centro (a área de clique continua só a seta)
+// Revela a seta quando o mouse chega perto do canto inferior direito (a área de clique continua só a seta)
 const mesaEl = document.getElementById('mesa');
 document.addEventListener('pointermove', e => {
-  const perto = e.clientY > window.innerHeight - 200 && Math.abs(e.clientX - window.innerWidth / 2) < 220;
+  const perto = e.clientY > window.innerHeight - 200 && e.clientX > window.innerWidth - 260;
   mesaEl.classList.toggle('revelar', perto);
 });
 document.documentElement.addEventListener('pointerleave', () => mesaEl.classList.remove('revelar'));
