@@ -426,7 +426,7 @@ function criarSeta(classe, rotulo, caminho) {
 function montarLivro(container, nomeTela) {
   const folhas = [...container.children];
   let atual = 0;
-  const DURACAO_MIN = 260, DURACAO_MAX = 620;
+  const DURACAO_MIN = 200, DURACAO_MAX = 460;
 
   const contadorNav = document.createElement('nav');
   contadorNav.className = 'controles';
