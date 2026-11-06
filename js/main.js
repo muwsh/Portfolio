@@ -504,6 +504,7 @@ function montarLivro(container, nomeTela) {
     const folha = document.createElement('div');
     folha.className = 'folha-virada';
     folha.style.cssText = `left:${dir === 1 ? w : 0}px;width:${w}px;height:${h}px;transform-origin:${dir === 1 ? 'left' : 'right'} center`;
+    folha.classList.add(dir === 1 ? 'folha-dir' : 'folha-esq');
     const frente = document.createElement('div');
     frente.className = 'face frente';
     frente.append(metade(dir === 1 ? pd : pe), reflexo());
@@ -511,7 +512,10 @@ function montarLivro(container, nomeTela) {
     verso.className = 'face verso';
     verso.append(metade(dir === 1 ? de : dd), reflexo());
     folha.append(frente, verso);
-    overlay.append(esq, dirc, folha);
+    // A divisória do meio continua visível por cima das metades e por baixo da folha
+    const lombada = document.createElement('div');
+    lombada.className = 'virada-lombada';
+    overlay.append(esq, dirc, lombada, folha);
     container.appendChild(overlay);
 
     const v = { alvo: novo, dir, theta: 0, frame: 0, overlay, concluido: false };
