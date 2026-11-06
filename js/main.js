@@ -747,11 +747,20 @@ function fecharGaveta() {
 // O botão do menu abre e fecha a barra; enquanto ela está aberta, ele vira um X e acompanha a barra
 botaoMenu.addEventListener('click', () => (gaveta.classList.contains('aberta') ? fecharGaveta() : abrirGaveta()));
 
-// Botão "Voltar ao topo" (abaixo do rodapé, aparece só no fim da mesa)
-document.querySelector('[data-voltar-topo]').addEventListener('click', () => mostrarTela('lousa'));
+// Botão "Voltar ao topo": fica disponível assim que a mesa rola, e sobe a mesa rapidamente até o início
+const DURACAO_TOPO = 450;
+document.querySelector('[data-voltar-topo]').addEventListener('click', () => {
+  const origem = inicio.scrollTop;
+  const t0 = performance.now();
+  const passo = agora => {
+    const k = Math.min(1, (agora - t0) / DURACAO_TOPO);
+    inicio.scrollTop = origem * (1 - (1 - Math.pow(1 - k, 3)));
+    if (k < 1) requestAnimationFrame(passo);
+  };
+  requestAnimationFrame(passo);
+});
 inicio.addEventListener('scroll', () => {
-  const fim = inicio.scrollHeight - inicio.clientHeight - 4;
-  document.getElementById('mesa').classList.toggle('fim', inicio.scrollTop >= fim);
+  document.getElementById('mesa').classList.toggle('rolada', inicio.scrollTop > 40);
 });
 // Revela a seta quando o mouse chega perto da borda de baixo, no centro (a área de clique continua só a seta)
 const mesaEl = document.getElementById('mesa');

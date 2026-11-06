@@ -581,7 +581,7 @@ body.menu-visivel .menu-botao { opacity: 1; pointer-events: auto; }
   cursor: pointer; opacity: 0; pointer-events: none;
   transition: opacity 400ms ease;
 }
-#mesa.fim.revelar .voltar-topo, #mesa.fim .voltar-topo:hover, #mesa.fim .voltar-topo:focus-visible { opacity: 1; pointer-events: auto; }
+#mesa.rolada.revelar .voltar-topo, #mesa.rolada .voltar-topo:hover, #mesa.rolada .voltar-topo:focus-visible { opacity: 1; pointer-events: auto; }
 .voltar-topo .svgIcon { width: 13px; height: 16px; fill: #e1e1e1; flex: none; transition: transform 300ms ease, opacity 250ms ease; }
 .voltar-topo .texto { position: absolute; color: #e1e1e1; font-size: 13px; letter-spacing: 0.04em; white-space: nowrap; opacity: 0; transition: opacity 250ms ease; }
 .voltar-topo:hover .svgIcon, .voltar-topo:focus-visible .svgIcon { transform: translateY(-200%); opacity: 0; }
