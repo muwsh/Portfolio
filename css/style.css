@@ -600,8 +600,8 @@ body.menu-visivel .menu-botao { opacity: 1; pointer-events: auto; }
 .virada-caixa.esq { border-radius: 10px 0 0 10px; }
 /* Mesma silhueta do álbum durante a virada: sombra, divisória do meio e cantos da folha no lado livre */
 .virada-lombada { position: absolute; top: 0; bottom: 0; left: 50%; width: 14px; transform: translateX(-50%); background: linear-gradient(90deg, rgba(0,0,0,0.12), rgba(0,0,0,0.02), rgba(0,0,0,0.12)); pointer-events: none; }
-.folha-virada.folha-dir .face { border-radius: 0 10px 10px 0; clip-path: inset(0 round 0 10px 10px 0); }
-.folha-virada.folha-esq .face { border-radius: 10px 0 0 10px; clip-path: inset(0 round 10px 0 0 10px); }
+.folha-virada.folha-dir .face { border-radius: 10px 0 0 10px; clip-path: inset(0 round 10px 0 0 10px); }
+.folha-virada.folha-esq .face { border-radius: 0 10px 10px 0; clip-path: inset(0 round 0 10px 10px 0); }
 .virada-caixa.dir { border-radius: 0 10px 10px 0; }
 .folha-virada { position: absolute; top: 0; transform-style: preserve-3d; }
 .folha-virada .face { position: absolute; inset: 0; overflow: hidden; background: var(--bolso); backface-visibility: hidden; -webkit-backface-visibility: hidden; }
