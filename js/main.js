@@ -812,8 +812,8 @@ document.addEventListener('pointercancel', colarAdesivos);
 })();
 
 // Sobre mim: o formulário abre o aplicativo de email da pessoa com a mensagem pronta (sem servidor)
-// Troque o endereço abaixo pelo seu email de contato
-const EMAIL_CONTATO = 'SEU_EMAIL@exemplo.com';
+// Email de contato do site
+const EMAIL_CONTATO = 'contato.tktaka@gmail.com';
 const formularioContato = document.getElementById('formulario-contato');
 if (formularioContato) {
   formularioContato.addEventListener('submit', (e) => {
