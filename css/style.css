@@ -130,13 +130,13 @@ body {
 .sobre-trabalhos li { break-inside: avoid; }
 /* Página esquerda de Sobre mim: topo (texto + QR), faixa de apps e contato embaixo */
 .sobre-apresentacao { position: relative; padding: 0; }
-.sobre-apresentacao::before { content: ""; position: absolute; left: 4%; top: 4%; width: 92%; height: 38%; background: #fff; transform: rotate(-1.5deg); box-shadow: 0 6px 10px rgba(0,0,0,0.15); }
-.sobre-apresentacao > p { position: absolute; left: 8%; top: 9%; width: 52%; transform: rotate(-1.5deg); font-size: clamp(10px, 1vw, 14px); }
+.sobre-apresentacao::before { content: ""; position: absolute; left: 3%; top: 3%; width: 94%; height: 37%; background: #fff; transform: rotate(-1.5deg); box-shadow: 0 6px 10px rgba(0,0,0,0.15); }
+.sobre-apresentacao > p { position: absolute; left: 6%; top: 8%; width: 56%; transform: rotate(-1.5deg); font-size: clamp(10px, 1vw, 14px); }
 .sobre-redes { position: absolute; inset: 0; }
-.sobre-redes .sobre-qr { right: 9%; top: 9%; bottom: auto; width: 24%; transform: rotate(-1.5deg); }
-.sobre-redes .apps { position: absolute; left: 4%; top: 46%; width: 92%; height: 11%; display: flex; justify-content: space-around; align-items: center; background: #fff; transform: rotate(1deg); box-shadow: 0 4px 8px rgba(0,0,0,0.12); }
+.sobre-redes .sobre-qr { right: 7%; top: 7%; bottom: auto; width: 20%; transform: rotate(-1.5deg); }
+.sobre-redes .apps { position: absolute; left: 3%; top: 44%; width: 94%; height: 12%; display: flex; justify-content: space-around; align-items: center; background: #fff; transform: rotate(1deg); box-shadow: 0 4px 8px rgba(0,0,0,0.12); }
 .sobre-redes .apps span { width: 8%; aspect-ratio: 1; border: 0; border-radius: 50%; background: #000; }
-.sobre-contato { position: absolute; left: 4%; top: 62%; width: 92%; height: 34%; box-sizing: border-box; padding: 3%; background: #fff; transform: rotate(-0.8deg); box-shadow: 0 6px 10px rgba(0,0,0,0.15); display: grid; grid-template-columns: 1fr 1.6fr; grid-template-rows: auto 1fr 1fr auto; gap: 3% 4%; }
+.sobre-contato { position: absolute; left: 3%; top: 59%; width: 94%; height: 38%; box-sizing: border-box; padding: 3%; background: #fff; transform: rotate(-0.8deg); box-shadow: 0 6px 10px rgba(0,0,0,0.15); display: grid; grid-template-columns: 1fr 1.6fr; grid-template-rows: auto 1fr 1fr auto; gap: 3% 4%; }
 .sobre-chamado-contato { grid-column: 1 / -1; margin: 0 !important; font-size: clamp(12px, 1.3vw, 18px) !important; font-weight: 700; }
 .sobre-contato label { display: flex; flex-direction: column; font-size: clamp(9px, 0.9vw, 12px); min-width: 0; }
 .sobre-contato label:nth-of-type(1) { grid-column: 1; grid-row: 2; }
