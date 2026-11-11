@@ -777,21 +777,8 @@ document.addEventListener('keydown', e => {
 });
 
 
-// Sobre mim: o quadrado de foto (placeholder) troca de cor sozinho a cada 3 s e também ao clicar
-const cores = ['#1c2fd1', '#d7312b', '#f2b632', '#2e9e5b', '#7a3fb0'];
-const botaoFoto = document.querySelector('[data-trocar-cor]');
-let corAtual = 0, temporizadorFoto;
-function trocarCor() {
-  corAtual = (corAtual + 1) % cores.length;
-  botaoFoto.style.setProperty('--cor', cores[corAtual]);
-}
-function iniciarTrocaAutomatica() {
-  clearInterval(temporizadorFoto);
-  temporizadorFoto = setInterval(trocarCor, 3000);
-}
-botaoFoto.style.setProperty('--cor', cores[corAtual]);
-iniciarTrocaAutomatica();
-botaoFoto.addEventListener('click', () => { trocarCor(); iniciarTrocaAutomatica(); });
+// Sobre mim: o quadrado de foto (placeholder) fica com uma cor fixa, sem troca automática ou ao clicar
+document.querySelector('[data-trocar-cor]').style.setProperty('--cor', '#1c2fd1');
 
 // Adesivos da lousa (exceto o QR code): ao pressionar, o adesivo se levanta do fundo; ao soltar, volta
 const pecasDescolaveis = [...document.querySelectorAll('[data-peca]')].filter(el => !el.querySelector('.qr-peca'));
