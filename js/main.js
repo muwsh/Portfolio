@@ -810,3 +810,18 @@ document.addEventListener('pointercancel', colarAdesivos);
   window.addEventListener('resize', atualizar);
   atualizar();
 })();
+
+// Sobre mim: o formulário abre o aplicativo de email da pessoa com a mensagem pronta (sem servidor)
+// Troque o endereço abaixo pelo seu email de contato
+const EMAIL_CONTATO = 'SEU_EMAIL@exemplo.com';
+const formularioContato = document.getElementById('formulario-contato');
+if (formularioContato) {
+  formularioContato.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const dados = new FormData(formularioContato);
+    const assunto = 'Contato pelo portfólio: ' + (dados.get('assunto') || '');
+    const corpo = 'Nome: ' + (dados.get('nome') || '') + '\n\n' + (dados.get('mensagem') || '');
+    window.location.href = 'mailto:' + EMAIL_CONTATO +
+      '?subject=' + encodeURIComponent(assunto) + '&body=' + encodeURIComponent(corpo);
+  });
+}
