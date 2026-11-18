@@ -642,3 +642,22 @@ body.menu-visivel .menu-botao { opacity: 1; pointer-events: auto; }
 .seta-ant:hover svg { transform: translateX(-4px); }
 .seta-prox:hover svg { transform: translateX(4px); }
 .seta.fim { opacity: 0 !important; pointer-events: none; }
+
+/* Base visual: cada tela usa a imagem final como fundo; os elementos HTML ficam sem preenchimento, só com borda */
+#lousa, #destaques, #mesa, #sobre, #cartas, #carimbo, #polaroids, #postais {
+  background-size: cover; background-position: center; background-repeat: no-repeat; background-color: transparent;
+}
+#lousa { background-image: url(img/telas/lousa.png); }
+#destaques { background-image: url(img/telas/destaques.png); }
+#mesa { background-image: url(img/telas/mesa.png); }
+#sobre { background-image: url(img/telas/sobre.png); }
+#cartas { background-image: url(img/telas/cartas.png); }
+#carimbo { background-image: url(img/telas/carimbo.png); }
+#polaroids { background-image: url(img/telas/polaroids.png); }
+#postais { background-image: url(img/telas/postais.png); }
+#lousa *, #destaques *, #mesa *, #sobre *, #cartas *, #carimbo *, #polaroids *, #postais * {
+  background: transparent !important; box-shadow: none !important;
+}
+#lousa :is(a, button, span, div, p, li, figure, form, label, svg), #destaques :is(a, button, span, div, p, li, figure, form, label, svg), #mesa :is(a, button, span, div, p, li, figure, form, label, svg), #sobre :is(a, button, span, div, p, li, figure, form, label, svg), #cartas :is(a, button, span, div, p, li, figure, form, label, svg), #carimbo :is(a, button, span, div, p, li, figure, form, label, svg), #polaroids :is(a, button, span, div, p, li, figure, form, label, svg), #postais :is(a, button, span, div, p, li, figure, form, label, svg) {
+  outline: 1px dashed rgba(220, 40, 40, 0.75); outline-offset: -1px;
+}
