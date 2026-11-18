@@ -199,9 +199,9 @@ window.addEventListener('popstate', () => mostrarTela(location.hash.slice(1) || 
 
 // Lista de projetos (placeholders até os textos e imagens existirem)
 const projetos = [
-  'Super Mulheres ONG', 'Revista tlgd_',
-  'Identidade DSG LAB', 'Premiações ESPM', 'Reglette Typeface',
-  'KitKat Sublime', 'Mimoz', 'Radar'
+  'Revista tlgd_', 'Super Mulheres ONG',
+  'KitKat Sublime', 'Reglette Typeface', 'Premiações ESPM',
+  'Identidade DSG LAB', 'Radar SP', 'Mimoz'
 ];
 
 // Cada projeto tem endereço próprio: #projeto/<slug>
@@ -239,8 +239,8 @@ function ativarCarta(indice) {
   cartasEl.forEach((c, k) => {
     const off = k - cartaAtual, dist = Math.abs(off);
     c.classList.toggle('ativa', off === 0);
-    const giro = off === 0 ? -1.5 : (k % 2 ? 2.5 : -2.5); // cada carta inclina um pouco
-    c.style.transform = `translateY(${off * 38}px) rotate(${giro}deg) scale(${1 - dist * 0.07})`;
+    const giro = off === 0 ? 1.1 : (k % 2 ? 2.5 : -2.5); // cada carta inclina um pouco
+    c.style.transform = `translateY(calc(${off * 38} * var(--k))) rotate(${giro}deg) scale(${1 - dist * 0.07})`;
     c.style.zIndex = 100 - dist;
     c.style.opacity = dist > 2 ? '0' : '1';
     c.style.pointerEvents = dist > 2 ? 'none' : '';
@@ -402,9 +402,9 @@ const binder = document.querySelector('[data-binder]');
 for (let i = 0; i < postais.length; i += 2) {
   const espelho = document.createElement('div');
   espelho.className = 'espelho-postal';
-  postais.slice(i, i + 2).forEach(p => {
+  postais.slice(i, i + 2).forEach((p, lado) => {
     const div = document.createElement('div');
-    div.className = `postal ${p.orientacao}`;
+    div.className = `postal ${p.orientacao} ${lado === 0 ? 'esq' : 'dir'}`;
     div.dataset.src = p.src;
     div.innerHTML = `<div class="moldura"><img src="${p.src}" alt=""></div>`;
     espelho.appendChild(div);
