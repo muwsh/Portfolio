@@ -645,7 +645,7 @@ body.menu-visivel .menu-botao { opacity: 1; pointer-events: auto; }
 
 /* Base visual: cada tela usa a imagem final como fundo; os elementos HTML ficam sem preenchimento, só com borda */
 #lousa, #destaques, #mesa, #sobre, #cartas, #carimbo, #polaroids, #postais {
-  background-size: cover; background-position: center; background-repeat: no-repeat; background-color: transparent;
+  background-size: contain; background-position: center; background-repeat: no-repeat;
 }
 #lousa { background-image: url(../img/telas/lousa.png); }
 #destaques { background-image: url(../img/telas/destaques.png); }
@@ -667,7 +667,7 @@ body.menu-visivel .menu-botao { opacity: 1; pointer-events: auto; }
    da imagem original; --k converte para a tela atual. Texto do HTML fica invisível (já está desenhado no fundo). */
 #lousa, #destaques, #mesa, #sobre, #cartas, #carimbo, #polaroids, #postais {
   container-type: size; padding: 0;
-  --k: max(calc(100cqw / 1920), calc(100cqh / 1080));
+  --k: min(calc(100cqw / 1920), calc(100cqh / 1080));
 }
 :is(#cartas, #carimbo, #polaroids, #postais) .voltar { position: absolute; top: 14px; left: 16px; z-index: 5; }
 :is(#lousa, #destaques, #mesa, #sobre, #cartas) :is(h1, h2, p, span, em, li, label, button, time, b):not(.voltar *):not(.voltar-topo *):not(.ver-todos) { color: transparent !important; text-shadow: none !important; }
@@ -802,3 +802,13 @@ body.menu-visivel .menu-botao { opacity: 1; pointer-events: auto; }
 .trilho-rolagem { position: absolute; top: 0; bottom: 0; right: 4px; width: 14px; cursor: pointer; }
 .puxador-rolagem { position: absolute; left: 4px; right: 4px; top: 0; height: 40px; background: rgba(43, 38, 32, 0.35); border-radius: 6px; cursor: grab; touch-action: none; }
 .puxador-rolagem.arrastando { cursor: grabbing; background: rgba(43, 38, 32, 0.5); }
+
+/* Cor das faixas laterais quando a tela não tem 16:9 (a imagem inteira aparece, sem cortes) */
+#lousa { background-color: #7e7f9b; }
+#destaques { background-color: #e29a93; }
+#mesa { background-color: #e2b793; }
+#sobre { background-color: #5c809b; }
+#cartas { background-color: #be8d5e; }
+#carimbo { background-color: #efdfcf; }
+#polaroids { background-color: #5a5c6e; }
+#postais { background-color: #486b4c; }
