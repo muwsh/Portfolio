@@ -825,3 +825,48 @@ if (formularioContato) {
       '?subject=' + encodeURIComponent(assunto) + '&body=' + encodeURIComponent(corpo);
   });
 }
+
+// Barra de rolagem visual da sequência inicial (lousa, destaques e mesa)
+(() => {
+  const conteudo = document.getElementById('inicio');
+  const barra = document.querySelector('[data-barra-rolagem]');
+  const trilho = document.querySelector('[data-trilho]');
+  const puxador = document.querySelector('[data-puxador]');
+  const folga = () => trilho.clientHeight - puxador.offsetHeight;
+  const maxScroll = () => conteudo.scrollHeight - conteudo.clientHeight;
+  function atualizar() {
+    const max = maxScroll();
+    barra.classList.toggle('sem-rolagem', max <= 0);
+    if (max <= 0) return;
+    const altura = Math.max(40, trilho.clientHeight * conteudo.clientHeight / conteudo.scrollHeight);
+    puxador.style.height = altura + 'px';
+    puxador.style.top = (conteudo.scrollTop / max) * (trilho.clientHeight - altura) + 'px';
+  }
+  conteudo.addEventListener('scroll', atualizar, { passive: true });
+  window.addEventListener('resize', atualizar);
+  // Arrastar o puxador
+  let arrasto = null;
+  puxador.addEventListener('pointerdown', e => {
+    if (e.button !== 0) return;
+    e.preventDefault();
+    arrasto = { y: e.clientY, inicio: conteudo.scrollTop };
+    puxador.setPointerCapture(e.pointerId);
+    puxador.classList.add('arrastando');
+  });
+  puxador.addEventListener('pointermove', e => {
+    if (!arrasto) return;
+    const passo = maxScroll() / Math.max(1, folga());
+    conteudo.scrollTop = arrasto.inicio + (e.clientY - arrasto.y) * passo;
+  });
+  const soltar = () => { arrasto = null; puxador.classList.remove('arrastando'); };
+  puxador.addEventListener('pointerup', soltar);
+  puxador.addEventListener('pointercancel', soltar);
+  // Clicar no trilho pula até o ponto clicado (centro do puxador vai para lá)
+  trilho.addEventListener('pointerdown', e => {
+    if (e.target === puxador || e.button !== 0) return;
+    const r = trilho.getBoundingClientRect();
+    const prop = Math.min(1, Math.max(0, (e.clientY - r.top - puxador.offsetHeight / 2) / Math.max(1, folga())));
+    conteudo.scrollTop = prop * maxScroll();
+  });
+  atualizar();
+})();

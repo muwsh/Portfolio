@@ -792,3 +792,13 @@ body.menu-visivel .menu-botao { opacity: 1; pointer-events: auto; }
 #sobre .grade-aparencia{position:absolute;left:calc(50% + (1180 - 960) * var(--k));top:calc(50% + (590 - 540) * var(--k));width:calc(420 * var(--k));height:calc(110 * var(--k));aspect-ratio:auto;margin:0;--r:1.9deg;transform:rotate(1.9deg);}
 #sobre .digitais{position:absolute;left:calc(50% + (1030 - 960) * var(--k));top:calc(50% + (790 - 540) * var(--k));width:calc(572 * var(--k));height:calc(160 * var(--k));aspect-ratio:auto;margin:0;--r:1.9deg;transform:rotate(1.9deg);}
 #sobre .lista-info .tarja { width: 46%; top: 4%; bottom: 6%; }
+
+/* Barra de rolagem visual da sequência inicial (lousa até a mesa). A nativa fica escondida; a roda, o toque e o teclado continuam rolando */
+#inicio { scrollbar-width: none; }
+#inicio::-webkit-scrollbar { display: none; }
+.barra-rolagem { position: fixed; top: 0; bottom: 0; right: 0; width: 22px; z-index: 4; opacity: 1; transition: opacity 300ms ease; }
+#inicio:not(.ativa) ~ .barra-rolagem { opacity: 0; pointer-events: none; }
+.barra-rolagem.sem-rolagem { display: none; }
+.trilho-rolagem { position: absolute; top: 0; bottom: 0; right: 4px; width: 14px; cursor: pointer; }
+.puxador-rolagem { position: absolute; left: 4px; right: 4px; top: 0; height: 40px; background: rgba(43, 38, 32, 0.35); border-radius: 6px; cursor: grab; touch-action: none; }
+.puxador-rolagem.arrastando { cursor: grabbing; background: rgba(43, 38, 32, 0.5); }
