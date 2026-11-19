@@ -110,7 +110,7 @@ body {
 .adesivo-3 { left: 18.9%; top: 69.5%; }
 
 /* QR code preso ao post-it inferior: move junto; único link da lousa */
-.qr-peca { position: absolute; left: 14%; top: 14%; width: 72%; height: 72%; background: #fff; padding: 6px; }
+.qr-peca { position: absolute; left: 14%; top: 14%; width: 72%; height: 72%; background: none; padding: 0; }
 .qr-peca a { display: block; width: 100%; height: 100%; cursor: pointer; }
 .qr-peca img { width: 100%; height: 100%; display: block; }
 
@@ -663,12 +663,13 @@ body.menu-visivel .menu-botao { opacity: 1; pointer-events: auto; }
 }
 
 
+
 /* ===== Palco 1920×1080 =====
    Cada tela é um palco de 1920×1080 que escala como o fundo (cover). As medidas abaixo estão em pixels
    da imagem original; --k converte para a tela atual. Texto do HTML fica invisível (já está desenhado no fundo). */
 #lousa, #destaques, #mesa, #sobre, #cartas, #carimbo, #polaroids, #postais {
   container-type: size; padding: 0;
-  --k: max(calc(100cqw / 1920), calc(100cqh / 1080));
+  --k: min(calc(100cqw / 1920), calc(100cqh / 1080));
 }
 :is(#cartas, #carimbo, #polaroids, #postais) .voltar { position: absolute; top: 14px; left: 16px; z-index: 5; }
 :is(#lousa, #destaques, #mesa, #sobre, #cartas) :is(h1, h2, p, span, em, li, label, button, time, b):not(.voltar *):not(.voltar-topo *):not(.ver-todos) { color: transparent !important; text-shadow: none !important; }
@@ -770,7 +771,7 @@ body.menu-visivel .menu-botao { opacity: 1; pointer-events: auto; }
 #sobre .sobre-pasta{position:absolute;left:calc(50% + (345 - 960) * var(--k));top:calc(50% + (130 - 540) * var(--k));width:calc(1230 * var(--k));height:calc(800 * var(--k));aspect-ratio:auto;margin:0;--r:0.5deg;transform:rotate(0.5deg);}
 #sobre .sobre-aba{position:absolute;left:calc(50% + (1572 - 960) * var(--k));top:calc(50% + (210 - 540) * var(--k));width:calc(50 * var(--k));height:calc(170 * var(--k));aspect-ratio:auto;margin:0;--r:0deg;transform:rotate(0deg);clip-path:none;}
 #sobre .sobre-apresentacao > p{position:absolute;left:calc(50% + (425 - 960) * var(--k));top:calc(50% + (220 - 540) * var(--k));width:calc(350 * var(--k));height:calc(200 * var(--k));aspect-ratio:auto;margin:0;--r:1.9deg;transform:rotate(1.9deg);padding:0;}
-#sobre .sobre-qr{position:absolute;left:calc(50% + (810 - 960) * var(--k));top:calc(50% + (245 - 540) * var(--k));width:calc(150 * var(--k));height:calc(150 * var(--k));aspect-ratio:auto;margin:0;--r:0deg;transform:rotate(0deg);padding:0;right:auto;bottom:auto;}
+#sobre .sobre-qr{position:absolute;left:calc(50% + (810 - 960) * var(--k));top:calc(50% + (245 - 540) * var(--k));width:calc(150 * var(--k));height:calc(150 * var(--k));aspect-ratio:auto;margin:0;--r:0deg;transform:rotate(0deg);padding:0;right:auto;bottom:auto;background:transparent;box-shadow:none;}
 #sobre .apps span:nth-child(1){position:absolute;left:calc(50% + (427 - 960) * var(--k));top:calc(50% + (505 - 540) * var(--k));width:calc(50 * var(--k));height:calc(50 * var(--k));aspect-ratio:auto;margin:0;--r:0deg;transform:rotate(0deg);border-radius:14%;}
 #sobre .apps span:nth-child(2){position:absolute;left:calc(50% + (502 - 960) * var(--k));top:calc(50% + (505 - 540) * var(--k));width:calc(50 * var(--k));height:calc(50 * var(--k));aspect-ratio:auto;margin:0;--r:0deg;transform:rotate(0deg);border-radius:14%;}
 #sobre .apps span:nth-child(3){position:absolute;left:calc(50% + (577 - 960) * var(--k));top:calc(50% + (505 - 540) * var(--k));width:calc(50 * var(--k));height:calc(50 * var(--k));aspect-ratio:auto;margin:0;--r:0deg;transform:rotate(0deg);border-radius:14%;}
@@ -787,11 +788,8 @@ body.menu-visivel .menu-botao { opacity: 1; pointer-events: auto; }
 #sobre .sobre-contato button{position:absolute;left:calc(50% + (877 - 960) * var(--k));top:calc(50% + (853 - 540) * var(--k));width:calc(50 * var(--k));height:calc(22 * var(--k));aspect-ratio:auto;margin:0;--r:0deg;transform:rotate(0deg);padding:0;}
 #sobre .faixa-info{position:absolute;left:calc(50% + (1033.5 - 960) * var(--k));top:calc(50% + (181 - 540) * var(--k));width:calc(495 * var(--k));height:calc(62 * var(--k));aspect-ratio:auto;margin:0;--r:1.5deg;transform:rotate(1.5deg);}
 #sobre .faixa-aparencia{position:absolute;left:calc(50% + (1022.5 - 960) * var(--k));top:calc(50% + (504 - 540) * var(--k));width:calc(495 * var(--k));height:calc(66 * var(--k));aspect-ratio:auto;margin:0;--r:1.5deg;transform:rotate(1.5deg);}
-#sobre .faixa-digitais{position:absolute;left:calc(50% + (1010 - 960) * var(--k));top:calc(50% + (695 - 540) * var(--k));width:calc(520 * var(--k));height:calc(50 * var(--k));aspect-ratio:auto;margin:0;--r:0deg;transform:rotate(0deg);}
 #sobre .lista-info{position:absolute;left:calc(50% + (1025.5 - 960) * var(--k));top:calc(50% + (270 - 540) * var(--k));width:calc(305 * var(--k));height:calc(190 * var(--k));aspect-ratio:auto;margin:0;--r:1.5deg;transform:rotate(1.5deg);}
 #sobre .foto-campo{position:absolute;left:calc(50% + (1337 - 960) * var(--k));top:calc(50% + (265 - 540) * var(--k));width:calc(190 * var(--k));height:calc(230 * var(--k));aspect-ratio:auto;margin:0;--r:2deg;transform:rotate(2deg);}
-#sobre .grade-aparencia{position:absolute;left:calc(50% + (1020 - 960) * var(--k));top:calc(50% + (584.5 - 540) * var(--k));width:calc(500 * var(--k));height:calc(105 * var(--k));aspect-ratio:auto;margin:0;--r:0deg;transform:rotate(0deg);}
-#sobre .digitais{position:absolute;left:calc(50% + (1010 - 960) * var(--k));top:calc(50% + (745 - 540) * var(--k));width:calc(520 * var(--k));height:calc(150 * var(--k));aspect-ratio:auto;margin:0;--r:0deg;transform:rotate(0deg);}
 #sobre .lista-info .tarja { width: 46%; top: 4%; bottom: 6%; }
 
 /* Barra de rolagem visual da sequência inicial (lousa até a mesa). A nativa fica escondida; a roda, o toque e o teclado continuam rolando */
@@ -813,3 +811,6 @@ body.menu-visivel .menu-botao { opacity: 1; pointer-events: auto; }
 #carimbo { background-color: #efdfcf; }
 #polaroids { background-color: #5a5c6e; }
 #postais { background-color: #486b4c; }
+
+/* Botão "Meus projetos" da lousa: rola até os destaques */
+#lousa button.post-it { appearance: none; border: 0; padding: 0; font: inherit; cursor: pointer; }

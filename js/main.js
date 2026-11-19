@@ -870,3 +870,11 @@ if (formularioContato) {
   });
   atualizar();
 })();
+
+// Post-it "Meus projetos" na lousa: rola a sequência inicial até os destaques
+document.querySelectorAll('[data-rolar-para]').forEach(botao => {
+  botao.addEventListener('click', () => {
+    const alvo = document.getElementById(botao.dataset.rolarPara);
+    if (alvo) alvo.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  });
+});
