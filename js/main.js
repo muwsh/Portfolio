@@ -753,16 +753,18 @@ botaoMenu.addEventListener('click', () => (gaveta.classList.contains('aberta') ?
 
 // Botão "Voltar ao topo": fica disponível assim que a mesa rola, e sobe a mesa rapidamente até o início
 const DURACAO_TOPO = 450;
-document.querySelector('[data-voltar-topo]').addEventListener('click', () => {
+// Rola a sequência inicial até uma posição, com a mesma curva e duração do "Voltar ao topo"
+function rolarInicioATe(destino) {
   const origem = inicio.scrollTop;
   const t0 = performance.now();
   const passo = agora => {
     const k = Math.min(1, (agora - t0) / DURACAO_TOPO);
-    inicio.scrollTop = origem * (1 - (1 - Math.pow(1 - k, 3)));
+    inicio.scrollTop = origem + (destino - origem) * (1 - Math.pow(1 - k, 3));
     if (k < 1) requestAnimationFrame(passo);
   };
   requestAnimationFrame(passo);
-});
+}
+document.querySelector('[data-voltar-topo]').addEventListener('click', () => rolarInicioATe(0));
 inicio.addEventListener('scroll', () => {
   document.getElementById('mesa').classList.toggle('rolada', inicio.scrollTop > 40);
 });
@@ -871,10 +873,10 @@ if (formularioContato) {
   atualizar();
 })();
 
-// Post-it "Meus projetos" na lousa: rola a sequência inicial até os destaques
+// Post-it "Meus projetos" na lousa: rola a sequência inicial até os destaques, com a mesma animação do topo
 document.querySelectorAll('[data-rolar-para]').forEach(botao => {
   botao.addEventListener('click', () => {
     const alvo = document.getElementById(botao.dataset.rolarPara);
-    if (alvo) alvo.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    if (alvo) rolarInicioATe(alvo.offsetTop);
   });
 });
