@@ -759,8 +759,10 @@ body.menu-visivel .menu-botao { opacity: 1; pointer-events: auto; }
 #mesa .objeto { background: none; box-shadow: none; padding: 0; display: block; --r: 0deg; transform: none; }
 #mesa .objeto:hover, #mesa .objeto:focus-visible { transform: translateY(calc(-5 * var(--k))); }
 /* Hover com a mesma transição de antes (250 ms) */
-#destaques .carta-destaque, #mesa .objeto { transition: transform 250ms ease, rotate 700ms ease; }
-#destaques .carta-destaque:hover, #destaques .carta-destaque:focus-visible, #mesa .objeto:hover, #mesa .objeto:focus-visible { rotate: 360deg; }
+#destaques .carta-destaque, #mesa .objeto { transition: transform 250ms ease, rotate 250ms ease; }
+#destaques .carta-destaque:nth-child(odd):hover, #destaques .carta-destaque:nth-child(odd):focus-visible { rotate: -2deg; }
+#destaques .carta-destaque:nth-child(even):hover, #destaques .carta-destaque:nth-child(even):focus-visible { rotate: 2deg; }
+#mesa .objeto:hover, #mesa .objeto:focus-visible { rotate: 3deg; }
 
 #mesa .objeto-sobre{position:absolute;left:calc(50% + (217 - 961) * var(--k));top:calc(50% + (131 - 540) * var(--k));width:calc(381 * var(--k));height:calc(468 * var(--k));aspect-ratio:auto;margin:0;}
 #mesa .objeto-projetos{position:absolute;left:calc(50% + (756 - 961) * var(--k));top:calc(50% + (308 - 540) * var(--k));width:calc(468 * var(--k));height:calc(516 * var(--k));aspect-ratio:auto;margin:0;}
