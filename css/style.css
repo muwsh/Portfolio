@@ -594,21 +594,6 @@ body.menu-visivel .menu-botao { opacity: 1; pointer-events: auto; }
 }
 .sobre-cartao .apps span:hover::after { opacity: 1; top: -40px; }
 
-/* Botão voltar ao topo: só a seta, sem círculo. Aparece quando o mouse chega perto da borda de baixo
-   (área de revelação maior que a de clique); sobre a seta, o texto aparece no lugar da seta */
-.voltar-topo {
-  position: fixed; bottom: 24px; right: 24px;
-  width: 46px; height: 46px; padding: 0; border: 0; background: none;
-  display: flex; align-items: center; justify-content: center;
-  cursor: pointer; opacity: 0; pointer-events: none;
-  transition: opacity 400ms ease;
-}
-#mesa.revelar .voltar-topo, #mesa .voltar-topo:hover, #mesa .voltar-topo:focus-visible { opacity: 1; pointer-events: auto; }
-.voltar-topo .svgIcon { width: 13px; height: 16px; fill: #e1e1e1; flex: none; transition: transform 300ms ease, opacity 250ms ease; }
-.voltar-topo .texto { position: absolute; color: #e1e1e1; font-size: 13px; letter-spacing: 0.04em; white-space: nowrap; opacity: 0; transition: opacity 250ms ease; }
-.voltar-topo:hover .svgIcon, .voltar-topo:focus-visible .svgIcon { transform: translateY(-200%); opacity: 0; }
-.voltar-topo:hover .texto, .voltar-topo:focus-visible .texto { opacity: 1; }
-#mesa .voltar-topo { z-index: 2; }
 
 /* Voltar de um projeto ao menu de cartas e abrir um projeto: a lista da esquerda fica parada */
 #cartas.sob-projeto .nomes, #cartas.sob-projeto .voltar { opacity: 1; transform: none; transition: none; }
@@ -676,7 +661,7 @@ body.menu-visivel .menu-botao { opacity: 1; pointer-events: auto; }
   --k: calc(100cqw / 1920);
 }
 :is(#cartas, #carimbo, #polaroids, #postais) .voltar { position: absolute; top: 14px; left: 16px; z-index: 5; }
-:is(#lousa, #destaques, #mesa, #sobre) :is(h1, h2, p, span, em, li, label, button, time, b):not(.voltar *):not(.voltar-topo *):not(.ver-todos) { color: transparent !important; text-shadow: none !important; }
+:is(#lousa, #destaques, #mesa, #sobre) :is(h1, h2, p, span, em, li, label, button, time, b):not(.voltar *):not(.ver-todos) { color: transparent !important; text-shadow: none !important; }
 #sobre :is(input, textarea) { color: var(--tinta); }
 /* Lousa */
 #lousa .cortica-peca{position:absolute;left:calc(50% + (290 - 961) * var(--k));top:calc(50% + (135 - 540) * var(--k));width:calc(1330 * var(--k));height:calc(810 * var(--k));aspect-ratio:auto;margin:0;--r:-1.2deg;transform:rotate(-1.2deg);}

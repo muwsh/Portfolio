@@ -784,9 +784,8 @@ function fecharGaveta() {
 // O botão do menu abre e fecha a barra; enquanto ela está aberta, ele vira um X e acompanha a barra
 botaoMenu.addEventListener('click', () => (gaveta.classList.contains('aberta') ? fecharGaveta() : abrirGaveta()));
 
-// Botão "Voltar ao topo": fica disponível assim que a mesa rola, e sobe a mesa rapidamente até o início
 const DURACAO_TOPO = 450;
-// Rola a sequência inicial até uma posição, com a mesma curva e duração do "Voltar ao topo"
+// Rola a sequência inicial até uma posição (usado pelo post-it "Meus projetos")
 function rolarInicioATe(destino) {
   const origem = inicio.scrollTop;
   const t0 = performance.now();
@@ -797,7 +796,6 @@ function rolarInicioATe(destino) {
   };
   requestAnimationFrame(passo);
 }
-document.querySelector('[data-voltar-topo]').addEventListener('click', () => rolarInicioATe(0));
 inicio.addEventListener('scroll', () => {
   document.getElementById('mesa').classList.toggle('rolada', inicio.scrollTop > 40);
 });
