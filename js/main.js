@@ -479,9 +479,13 @@ function montarLivro(container, nomeTela) {
   }
   // Metade da página: o postal copiado, centralizado no papel
   function metade(postal) {
+    // Cópia limpa: só a moldura e a posição do lado, sem as margens do postal original
     const papel = document.createElement('div');
     papel.className = 'pagina-virada';
-    papel.appendChild(postal.cloneNode(true));
+    const copia = document.createElement('div');
+    copia.className = `postal-copia ${postal.classList.contains('dir') ? 'dir' : 'esq'}`;
+    copia.innerHTML = postal.querySelector('.moldura').outerHTML;
+    papel.appendChild(copia);
     return papel;
   }
   const reflexo = () => {
