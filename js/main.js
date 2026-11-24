@@ -199,7 +199,7 @@ window.addEventListener('popstate', () => mostrarTela(location.hash.slice(1) || 
 
 // Lista de projetos (placeholders até os textos e imagens existirem)
 const projetos = [
-  'Revista tlgd_', 'Super Mulheres ONG',
+  'Revista tlgd', 'Super Mulheres ONG',
   'KitKat Sublime', 'Reglette Typeface', 'Premiações ESPM',
   'Identidade DSG LAB', 'Radar SP', 'Mimoz'
 ];
@@ -210,6 +210,8 @@ function slugify(t) {
 }
 const PROJETOS = projetos.map(nome => ({ nome, slug: slugify(nome) }));
 
+// Arte de cada carta do menu, na mesma ordem da lista de projetos
+const ARTE_CARTAS = ['1tlgd_carta', '2sm_carta', '3kitkat_carta', '4reglette_carta', '5premio_carta', '6dsglab_carta', '7radar_carta', '8mimoz_carta'];
 const nomesEl = document.querySelector('.nomes ul');
 const pilhaEl = document.querySelector('.pilha');
 const CORES = ['#3142ff', '#e0692b', '#8dc640', '#1f1f1f', '#d9bf8c', '#5a2b2b', '#2e8b57', '#c2185b'];
@@ -226,7 +228,7 @@ PROJETOS.forEach((p, i) => {
   carta.dataset.indice = i;
   carta.style.setProperty('--capa', CORES[i % CORES.length]);
   carta.setAttribute('aria-label', p.nome);
-  carta.innerHTML = `<span class="selos" aria-hidden="true"><i></i><i></i></span><span class="capa" aria-hidden="true"></span>`;
+  carta.innerHTML = `<img class="arte" src="img/telas/elementos/cartas_menu/${ARTE_CARTAS[i]}.webp" alt="" draggable="false">`;
   pilhaEl.appendChild(carta);
 });
 
@@ -239,8 +241,8 @@ function ativarCarta(indice) {
   cartasEl.forEach((c, k) => {
     const off = k - cartaAtual, dist = Math.abs(off);
     c.classList.toggle('ativa', off === 0);
-    const giro = off === 0 ? 1.1 : (k % 2 ? 2.5 : -2.5); // cada carta inclina um pouco
-    c.style.transform = `translateY(calc(${off * 38} * var(--k))) rotate(${giro}deg) scale(${1 - dist * 0.07})`;
+    const desloc = off < 0 ? off * 84 : off * 60; // quanto cada carta aparece acima / abaixo da da frente (medido na tela completa)
+    c.style.transform = `translateY(calc(${desloc} * var(--k))) scale(${1 - dist * 0.07})`; // a inclinação de cada carta já está na imagem
     c.style.zIndex = 100 - dist;
     c.style.opacity = dist > 2 ? '0' : '1';
     c.style.pointerEvents = dist > 2 ? 'none' : '';
@@ -266,12 +268,12 @@ nomesEl.addEventListener('focusin', e => {
   if (nome) ativarCarta(nome.dataset.indice);
 });
 
-// Polaroids: 17 fotos em tira horizontal
+// Polaroids: 25 fotos em tira horizontal
 // Postais: 24 cartões, sempre exibidos na vertical (horizontais giram dentro da moldura)
-const polaroids = Array.from({ length: 17 }, (_, i) => `img/polaroid-${String(i + 1).padStart(2, '0')}.webp`);
+const polaroids = Array.from({ length: 25 }, (_, i) => `img/telas/elementos/polaroids/polaroid-${String(i + 1).padStart(2, '0')}.webp`);
 const postais = Array.from({ length: 24 }, (_, i) => ({
-  src: `img/postal-${String(i + 1).padStart(2, '0')}.webp`,
-  orientacao: [3, 8, 19, 21].includes(i + 1) ? 'horizontal' : 'vertical' // fotos 3, 8, 19 e 21 são horizontais
+  src: `img/telas/elementos/postais/postal-${String(i + 1).padStart(2, '0')}.webp`,
+  orientacao: 'vertical' // as imagens novas já vêm todas na vertical
 }));
 
 const tira = document.querySelector('[data-tira]');
