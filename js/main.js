@@ -274,7 +274,7 @@ const polaroids = Array.from({ length: 25 }, (_, i) => `img/telas/elementos/pola
 const postais = Array.from({ length: 24 }, (_, i) => ({
   src: `img/telas/elementos/postais/postal-${String(i + 1).padStart(2, '0')}.webp`,
   orientacao: 'vertical', // as imagens novas já vêm todas na vertical
-  girar: [12, 18].includes(i + 1) // estes estão deitados no arquivo: giram na moldura ao clicar, em vez de ampliar
+  girar: [12, 18, 19, 20].includes(i + 1) // fotos dos prints: giram para a horizontal ao clicar, em vez de ampliar
 }));
 
 const tira = document.querySelector('[data-tira]');
