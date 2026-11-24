@@ -821,8 +821,8 @@ document.addEventListener('keydown', e => {
 // Sobre mim: o quadrado de foto (placeholder) fica com uma cor fixa, sem troca automática ou ao clicar
 document.querySelector('[data-trocar-cor]').style.setProperty('--cor', '#1c2fd1');
 
-// Adesivos da lousa (exceto o QR code): ao pressionar, o adesivo se levanta do fundo; ao soltar, volta
-const pecasDescolaveis = [...document.querySelectorAll('[data-peca]')].filter(el => !el.querySelector('.qr-peca'));
+// Adesivos da lousa: ao pressionar, o adesivo se levanta do fundo; ao soltar, volta
+const pecasDescolaveis = [...document.querySelectorAll('[data-peca]')];
 pecasDescolaveis.forEach(el => {
   el.addEventListener('pointerdown', e => { if (e.button === 0) el.classList.add('descolado'); });
 });
