@@ -273,7 +273,8 @@ nomesEl.addEventListener('focusin', e => {
 const polaroids = Array.from({ length: 25 }, (_, i) => `img/telas/elementos/polaroids/polaroid-${String(i + 1).padStart(2, '0')}.webp`);
 const postais = Array.from({ length: 24 }, (_, i) => ({
   src: `img/telas/elementos/postais/postal-${String(i + 1).padStart(2, '0')}.webp`,
-  orientacao: 'vertical' // as imagens novas já vêm todas na vertical
+  orientacao: 'vertical', // as imagens novas já vêm todas na vertical
+  girar: [11, 17, 19, 20].includes(i + 1) // estes giram na moldura ao clicar, em vez de ampliar
 }));
 
 const tira = document.querySelector('[data-tira]');
@@ -406,7 +407,7 @@ for (let i = 0; i < postais.length; i += 2) {
   espelho.className = 'espelho-postal';
   postais.slice(i, i + 2).forEach((p, lado) => {
     const div = document.createElement('div');
-    div.className = `postal ${p.orientacao} ${lado === 0 ? 'esq' : 'dir'}`;
+    div.className = `postal ${p.orientacao}${p.girar ? ' girar' : ''} ${lado === 0 ? 'esq' : 'dir'}`;
     div.dataset.src = p.src;
     div.innerHTML = `<div class="moldura"><img src="${p.src}" alt=""></div>`;
     espelho.appendChild(div);
@@ -666,7 +667,9 @@ tira.addEventListener('click', e => {
 
 binder.addEventListener('click', e => {
   const p = e.target.closest('.postal');
-  if (p) abrir(p.dataset.src);
+  if (!p) return;
+  if (p.classList.contains('girar')) { p.classList.toggle('girado'); return; }
+  abrir(p.dataset.src);
 });
 
 function fechar() { ampliada.hidden = true; }
@@ -687,7 +690,19 @@ document.getElementById('lousa').addEventListener('selectstart', e => e.preventD
 document.getElementById('lousa').addEventListener('dragstart', e => e.preventDefault());
 
 // Peças da lousa: arrastar move; ao soltar fora da cortiça, a peça cai e sai da tela
-document.querySelectorAll('[data-peca]').forEach(el => {
+// Tachinhas: uma tachinha solta sobre um objeto o prende (o objeto não se move) até a tachinha sair de cima dele
+const todasPecas = [...document.querySelectorAll('[data-peca]')];
+const ehTachinha = el => el.classList.contains('tachinha');
+const dentroDe = (el, x, y) => { const r = el.getBoundingClientRect(); return x >= r.left && x <= r.right && y >= r.top && y <= r.bottom; };
+const centro = el => { const r = el.getBoundingClientRect(); return [r.left + r.width / 2, r.top + r.height / 2]; };
+function soltarPreso(tach, obj) {
+  tach._cobre.delete(obj);
+  obj._tach.delete(tach);
+  if (obj._tach.size === 0) delete obj.dataset.preso;
+}
+todasPecas.forEach(el => { el._tach = new Set(); el._cobre = new Set(); });
+
+todasPecas.forEach(el => {
   let ptr = null, x0 = 0, y0 = 0, dx = 0, dy = 0, arrastou = false;
   el._ox = 0; el._oy = 0;
 
@@ -701,6 +716,11 @@ document.querySelectorAll('[data-peca]').forEach(el => {
       el.style.zIndex = ++zPeca;
     }
     if (arrastou) el.style.translate = `${el._ox + dx}px ${el._oy + dy}px`;
+    // Tachinha saindo de cima de um objeto solta esse objeto
+    if (arrastou && ehTachinha(el)) {
+      const [cx, cy] = centro(el);
+      [...el._cobre].filter(obj => !dentroDe(obj, cx, cy)).forEach(obj => soltarPreso(el, obj));
+    }
   };
   const soltar = e => {
     if (ptr !== e.pointerId) return;
@@ -708,6 +728,14 @@ document.querySelectorAll('[data-peca]').forEach(el => {
     document.removeEventListener('pointerup', soltar);
     document.removeEventListener('pointercancel', soltar);
     if (arrastou) { el._ox += dx; el._oy += dy; el.dataset.arrastou = '1'; }
+    if (ehTachinha(el)) {
+      // Solta sobre um objeto: prende. Caindo fora da cortiça: solta tudo o que prendia.
+      const [cx, cy] = centro(el);
+      if (estaFora(el)) [...el._cobre].forEach(obj => soltarPreso(el, obj));
+      else todasPecas.filter(p => p !== el && !ehTachinha(p) && dentroDe(p, cx, cy)).forEach(obj => {
+        el._cobre.add(obj); obj._tach.add(el); obj.dataset.preso = '1';
+      });
+    }
     // Qualquer objeto solto fora da cortiça continua caindo (inclusive um que foi pego no ar)
     if (estaFora(el)) cair(el);
     el.classList.remove('arrastando');
@@ -715,6 +743,7 @@ document.querySelectorAll('[data-peca]').forEach(el => {
   };
 
   el.addEventListener('pointerdown', e => {
+    if (el.dataset.preso === '1' && !ehTachinha(el)) return; // preso por uma tachinha
     if (el.classList.contains('caindo')) congelar(el);
     ptr = e.pointerId; x0 = e.clientX; y0 = e.clientY; dx = dy = 0; arrastou = false;
     document.addEventListener('pointermove', mover);
