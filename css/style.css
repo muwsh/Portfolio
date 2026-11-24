@@ -171,7 +171,6 @@ body {
 .lista-info li em { font-style: normal; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .grade-aparencia li { flex-direction: column; align-items: flex-start; justify-content: flex-end; gap: 0; }
 .grade-aparencia li em { font-style: normal; white-space: nowrap; }
-.lista-info .tarja { position: absolute; right: 0; top: 8%; bottom: 14%; width: 42%; background: #000; }
 
 .foto-campo { position: absolute; left: 58.9%; top: 13.8%; width: 32.3%; height: 32.2%; margin: 0; padding: 0; border: 0; background: var(--cor, #1c2fd1); cursor: pointer; display: block; }
 .foto-campo:focus-visible { outline: 2px dashed #000; outline-offset: 4px; }
@@ -760,7 +759,8 @@ body.menu-visivel .menu-botao { opacity: 1; pointer-events: auto; }
 #mesa .objeto { background: none; box-shadow: none; padding: 0; display: block; --r: 0deg; transform: none; }
 #mesa .objeto:hover, #mesa .objeto:focus-visible { transform: translateY(calc(-5 * var(--k))); }
 /* Hover com a mesma transição de antes (250 ms) */
-#destaques .carta-destaque, #mesa .objeto { transition: transform 250ms ease; }
+#destaques .carta-destaque, #mesa .objeto { transition: transform 250ms ease, rotate 700ms ease; }
+#destaques .carta-destaque:hover, #destaques .carta-destaque:focus-visible, #mesa .objeto:hover, #mesa .objeto:focus-visible { rotate: 360deg; }
 
 #mesa .objeto-sobre{position:absolute;left:calc(50% + (217 - 961) * var(--k));top:calc(50% + (131 - 540) * var(--k));width:calc(381 * var(--k));height:calc(468 * var(--k));aspect-ratio:auto;margin:0;}
 #mesa .objeto-projetos{position:absolute;left:calc(50% + (756 - 961) * var(--k));top:calc(50% + (308 - 540) * var(--k));width:calc(468 * var(--k));height:calc(516 * var(--k));aspect-ratio:auto;margin:0;}
@@ -810,7 +810,6 @@ body.menu-visivel .menu-botao { opacity: 1; pointer-events: auto; }
 #sobre .faixa-aparencia{position:absolute;left:calc(50% + (1022.5 - 961) * var(--k));top:calc(50% + (504 - 540) * var(--k));width:calc(495 * var(--k));height:calc(66 * var(--k));aspect-ratio:auto;margin:0;--r:1.5deg;transform:rotate(1.5deg);}
 #sobre .lista-info{position:absolute;left:calc(50% + (1025.5 - 961) * var(--k));top:calc(50% + (270 - 540) * var(--k));width:calc(305 * var(--k));height:calc(190 * var(--k));aspect-ratio:auto;margin:0;--r:1.5deg;transform:rotate(1.5deg);}
 #sobre .foto-campo{position:absolute;left:calc(50% + (1337 - 961) * var(--k));top:calc(50% + (265 - 540) * var(--k));width:calc(190 * var(--k));height:calc(230 * var(--k));aspect-ratio:auto;margin:0;--r:2deg;transform:rotate(2deg);}
-#sobre .lista-info .tarja { width: 46%; top: 4%; bottom: 6%; }
 
 /* Barra de rolagem visual da sequência inicial (lousa até a mesa). A nativa fica escondida; a roda, o toque e o teclado continuam rolando */
 #inicio { scrollbar-width: none; }
