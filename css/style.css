@@ -658,8 +658,9 @@ body.menu-visivel .menu-botao { opacity: 1; pointer-events: auto; }
 #lousa *, #destaques *, #mesa *, #sobre *, #cartas *, #carimbo *, #polaroids *, #postais * {
   background: transparent !important; box-shadow: none !important;
 }
-#lousa :is(a, button, span, div, p, li, figure, form, label, svg), #destaques :is(a, button, span, div, p, li, figure, form, label, svg), #mesa :is(a, button, span, div, p, li, figure, form, label, svg), #sobre :is(a, button, span, div, p, li, figure, form, label, svg), #cartas :is(a, button, span, div, p, li, figure, form, label, svg), #carimbo :is(a, button, span, div, p, li, figure, form, label, svg), #polaroids :is(a, button, span, div, p, li, figure, form, label, svg), #postais :is(a, button, span, div, p, li, figure, form, label, svg) {
-  outline: 1px dashed rgba(220, 40, 40, 0.75); outline-offset: -1px;
+/* Texto transparente nas telas: a seleção também fica invisível */
+#lousa ::selection, #destaques ::selection, #mesa ::selection, #sobre ::selection, #cartas ::selection, #carimbo ::selection, #polaroids ::selection, #postais ::selection {
+  background: transparent;
 }
 
 
@@ -720,8 +721,8 @@ body.menu-visivel .menu-botao { opacity: 1; pointer-events: auto; }
 /* Postais */
 #postais .binder { position: absolute; inset: 0; display: block; padding: 0; overflow: visible; }
 #postais .espelho-postal{position:absolute;left:calc(50% + (418 - 961) * var(--k));top:calc(50% + (232 - 540) * var(--k));width:calc(1044 * var(--k));height:calc(616 * var(--k));aspect-ratio:auto;margin:0;padding:0;border-radius:0;width:calc(1044 * var(--k));justify-items:start;align-items:start;}
-#postais .espelho-postal::after{display:none;}
-#postais .virada-lombada{display:none;}
+/* Postais: sem cantos arredondados e com a linha do meio visível */
+#postais .espelho-postal, #postais .virada-caixa, #postais .folha-virada .face { border-radius: 0 !important; clip-path: none !important; }
 #postais .postal.esq{margin-left:calc(54 * var(--k)) !important;}
 #postais .postal.dir{margin-left:calc(83 * var(--k)) !important;}
 #postais .virada-caixa, #postais .face, #postais .pagina-virada { background: #f7efe5 !important; }
@@ -756,6 +757,9 @@ body.menu-visivel .menu-botao { opacity: 1; pointer-events: auto; }
 /* Mesa */
 #mesa .objeto { background: none; box-shadow: none; padding: 0; display: block; --r: 0deg; transform: none; }
 #mesa .objeto:hover, #mesa .objeto:focus-visible { transform: translateY(calc(-5 * var(--k))); }
+/* Hover com a mesma transição de antes (250 ms) */
+#destaques .carta-destaque, #mesa .objeto { transition: transform 250ms ease; }
+
 #mesa .objeto-sobre{position:absolute;left:calc(50% + (217 - 961) * var(--k));top:calc(50% + (131 - 540) * var(--k));width:calc(381 * var(--k));height:calc(468 * var(--k));aspect-ratio:auto;margin:0;}
 #mesa .objeto-projetos{position:absolute;left:calc(50% + (756 - 961) * var(--k));top:calc(50% + (308 - 540) * var(--k));width:calc(468 * var(--k));height:calc(516 * var(--k));aspect-ratio:auto;margin:0;}
 #mesa .objeto-carimbo{position:absolute;left:calc(50% + (402 - 961) * var(--k));top:calc(50% + (605 - 540) * var(--k));width:calc(267 * var(--k));height:calc(338 * var(--k));aspect-ratio:auto;margin:0;}
