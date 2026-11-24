@@ -700,7 +700,6 @@ body.menu-visivel .menu-botao { opacity: 1; pointer-events: auto; }
 /* Carimbo */
 #carimbo .composicao-carimbo { position: absolute; inset: 0; left: 0; top: 0; width: auto; transform: none; }
 #carimbo .composicao-carimbo svg { position: absolute; left: 0; top: 50%; width: 100%; height: auto; aspect-ratio: 16 / 9; transform: translateY(-50%); }
-#carimbo svg rect { fill: none; stroke: rgba(220, 40, 40, 0.75); stroke-width: 1; stroke-dasharray: 4 3; vector-effect: non-scaling-stroke; }
 
 /* Polaroids */
 #polaroids .tira-polaroids{position:absolute;inset:0;height:auto;display:grid;grid-template-rows:calc(353 * var(--k)) calc(353 * var(--k));grid-auto-columns:calc(224 * var(--k));gap:calc(34 * var(--k)) calc(61 * var(--k));align-content:start;padding:calc(50cqh + (170 - 540) * var(--k)) 0 0 calc(50cqw + (96 - 961) * var(--k));}
