@@ -721,9 +721,8 @@ body.menu-visivel .menu-botao { opacity: 1; pointer-events: auto; }
 /* Postais */
 #postais .binder { position: absolute; inset: 0; display: block; padding: 0; overflow: visible; }
 #postais .espelho-postal{position:absolute;left:calc(50% + (418 - 961) * var(--k));top:calc(50% + (232 - 540) * var(--k));width:calc(1044 * var(--k));height:calc(616 * var(--k));aspect-ratio:auto;margin:0;padding:0;border-radius:0;width:calc(1044 * var(--k));justify-items:start;align-items:start;}
-/* Postais que giram ao clicar (ficam na horizontal, cabendo na mesma moldura) */
-#postais .postal.girar { cursor: pointer; transition: transform 450ms ease; }
-#postais .postal.girar.girado { transform: rotate(90deg) scale(0.711); }
+/* Foto ampliada na horizontal (postais 12, 18, 19 e 20): cabe na tela girada */
+.ampliada img.girada { max-width: 88vh; max-height: 92vw; }
 /* Postais: sem cantos arredondados e com a linha do meio visível */
 #postais .espelho-postal, #postais .virada-caixa, #postais .folha-virada .face { border-radius: 0 !important; clip-path: none !important; }
 #postais .postal.esq{margin-left:calc(54 * var(--k)) !important;}

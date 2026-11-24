@@ -650,12 +650,16 @@ const INCLINACAO = 5;
 ampliadaImg.addEventListener('pointermove', e => {
   const nx = Math.max(-1, Math.min(1, (e.clientX - window.innerWidth / 2) / (ampliadaImg.offsetWidth / 2)));
   const ny = Math.max(-1, Math.min(1, (e.clientY - window.innerHeight / 2) / (ampliadaImg.offsetHeight / 2)));
-  ampliadaImg.style.transform = `perspective(1100px) rotateX(${-ny * INCLINACAO}deg) rotateY(${nx * INCLINACAO}deg) scale(1.01)`;
+  const base = ampliadaImg.classList.contains('girada') ? 'rotate(90deg) ' : '';
+  ampliadaImg.style.transform = `${base}perspective(1100px) rotateX(${-ny * INCLINACAO}deg) rotateY(${nx * INCLINACAO}deg) scale(1.01)`;
 });
-ampliadaImg.addEventListener('pointerleave', () => { ampliadaImg.style.transform = ''; });
+ampliadaImg.addEventListener('pointerleave', () => { ampliadaImg.style.transform = ampliadaImg.classList.contains('girada') ? 'rotate(90deg)' : ''; });
 
-function abrir(src) {
+// girada: foto que aparece na horizontal dentro da ampliação (postais 12, 18, 19 e 20)
+function abrir(src, girada = false) {
   ampliadaImg.src = src;
+  ampliadaImg.classList.toggle('girada', girada);
+  ampliadaImg.style.transform = girada ? 'rotate(90deg)' : '';
   ampliada.hidden = false;
 }
 
@@ -667,9 +671,7 @@ tira.addEventListener('click', e => {
 
 binder.addEventListener('click', e => {
   const p = e.target.closest('.postal');
-  if (!p) return;
-  if (p.classList.contains('girar')) { p.classList.toggle('girado'); return; }
-  abrir(p.dataset.src);
+  if (p) abrir(p.dataset.src, p.classList.contains('girar'));
 });
 
 function fechar() { ampliada.hidden = true; }
