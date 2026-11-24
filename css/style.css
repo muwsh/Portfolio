@@ -663,6 +663,9 @@ body.menu-visivel .menu-botao { opacity: 1; pointer-events: auto; }
 :is(#cartas, #carimbo, #polaroids, #postais) .voltar { position: absolute; top: 14px; left: 16px; z-index: 5; }
 :is(#lousa, #destaques, #mesa, #sobre) :is(h1, h2, p, span, em, li, label, button, time, b):not(.voltar *):not(.ver-todos) { color: transparent !important; text-shadow: none !important; }
 #sobre :is(input, textarea) { color: var(--tinta); }
+/* Campos ocupam exatamente as caixas cinzas do fundo (1920×1080) */
+#sobre .sobre-contato label :is(input, textarea) { position: absolute; left: 0; top: 0; width: 100% !important; height: 100% !important; margin: 0 !important; padding: 0 calc(6 * var(--k)) !important; font-size: calc(14 * var(--k)); line-height: 1.2; }
+#sobre .sobre-contato label:nth-of-type(3) textarea { padding-top: calc(6 * var(--k)) !important; }
 /* Lousa */
 #lousa .cortica-peca{position:absolute;left:calc(50% + (290 - 961) * var(--k));top:calc(50% + (135 - 540) * var(--k));width:calc(1330 * var(--k));height:calc(810 * var(--k));aspect-ratio:auto;margin:0;--r:-1.2deg;transform:rotate(-1.2deg);}
 #lousa .papel-central{position:absolute;left:calc(50% + (568 - 961) * var(--k));top:calc(50% + (338 - 540) * var(--k));width:calc(800 * var(--k));height:calc(420 * var(--k));aspect-ratio:auto;margin:0;--r:-1.1deg;transform:rotate(-1.1deg);display:block;}
@@ -791,9 +794,9 @@ body.menu-visivel .menu-botao { opacity: 1; pointer-events: auto; }
 #sobre .apps span:nth-child(5){position:absolute;left:calc(50% + (772 - 961) * var(--k));top:calc(50% + (508 - 540) * var(--k));width:calc(50 * var(--k));height:calc(50 * var(--k));aspect-ratio:auto;margin:0;--r:0deg;transform:rotate(0deg);border-radius:14%;}
 #sobre .apps span:nth-child(6){position:absolute;left:calc(50% + (893 - 961) * var(--k));top:calc(50% + (508 - 540) * var(--k));width:calc(50 * var(--k));height:calc(50 * var(--k));aspect-ratio:auto;margin:0;--r:0deg;transform:rotate(0deg);border-radius:14%;}
 #sobre .sobre-chamado-contato{position:absolute;left:calc(50% + (415 - 961) * var(--k));top:calc(50% + (590 - 540) * var(--k));width:calc(250 * var(--k));height:calc(70 * var(--k));aspect-ratio:auto;margin:0;--r:0deg;transform:rotate(0deg);}
-#sobre .sobre-contato label:nth-of-type(1){position:absolute;left:calc(50% + (694 - 961) * var(--k));top:calc(50% + (600 - 540) * var(--k));width:calc(236 * var(--k));height:calc(44 * var(--k));aspect-ratio:auto;margin:0;--r:0deg;transform:rotate(0deg);font-size:calc(14 * var(--k));}
-#sobre .sobre-contato label:nth-of-type(2){position:absolute;left:calc(50% + (694 - 961) * var(--k));top:calc(50% + (638 - 540) * var(--k));width:calc(236 * var(--k));height:calc(44 * var(--k));aspect-ratio:auto;margin:0;--r:0deg;transform:rotate(0deg);font-size:calc(14 * var(--k));}
-#sobre .sobre-contato label:nth-of-type(3){position:absolute;left:calc(50% + (420 - 961) * var(--k));top:calc(50% + (670 - 540) * var(--k));width:calc(510 * var(--k));height:calc(190 * var(--k));aspect-ratio:auto;margin:0;--r:0deg;transform:rotate(0deg);font-size:calc(14 * var(--k));}
+#sobre .sobre-contato label:nth-of-type(1){position:absolute;left:calc(50% + (692 - 961) * var(--k));top:calc(50% + (613 - 540) * var(--k));width:calc(237 * var(--k));height:calc(18 * var(--k));aspect-ratio:auto;margin:0;--r:0deg;transform:rotate(0deg);font-size:calc(14 * var(--k));}
+#sobre .sobre-contato label:nth-of-type(2){position:absolute;left:calc(50% + (692 - 961) * var(--k));top:calc(50% + (659 - 540) * var(--k));width:calc(237 * var(--k));height:calc(19 * var(--k));aspect-ratio:auto;margin:0;--r:0deg;transform:rotate(0deg);font-size:calc(14 * var(--k));}
+#sobre .sobre-contato label:nth-of-type(3){position:absolute;left:calc(50% + (418 - 961) * var(--k));top:calc(50% + (694 - 540) * var(--k));width:calc(508 * var(--k));height:calc(158 * var(--k));aspect-ratio:auto;margin:0;--r:0deg;transform:rotate(0deg);font-size:calc(14 * var(--k));}
 #sobre .sobre-contato label:nth-of-type(-n+2) :is(input) { flex: none; height: calc(22 * var(--k)); margin-top: auto; }
 #sobre .sobre-contato label { justify-content: flex-start; }
 #sobre .sobre-contato textarea { margin-top: 2px; }
