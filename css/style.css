@@ -797,6 +797,9 @@ body.menu-visivel .menu-botao { opacity: 1; pointer-events: auto; }
 #sobre .sobre-contato label:nth-of-type(-n+2) :is(input) { flex: none; height: calc(22 * var(--k)); margin-top: auto; }
 #sobre .sobre-contato label { justify-content: flex-start; }
 #sobre .sobre-contato textarea { margin-top: 2px; }
+/* Campos transparentes: só a marcação do fundo aparece, sem contorno nem caixa cinza */
+#sobre .sobre-contato :is(input, textarea) { background: transparent !important; border: 0 !important; outline: none; box-shadow: none; padding: 0 !important; margin: 0 !important; height: auto; }
+#sobre .sobre-contato :is(input, textarea):focus-visible { outline: none; }
 #sobre .sobre-contato button{position:absolute;left:calc(50% + (877 - 961) * var(--k));top:calc(50% + (853 - 540) * var(--k));width:calc(50 * var(--k));height:calc(22 * var(--k));aspect-ratio:auto;margin:0;--r:0deg;transform:rotate(0deg);padding:0;}
 #sobre .faixa-info{position:absolute;left:calc(50% + (1033.5 - 961) * var(--k));top:calc(50% + (181 - 540) * var(--k));width:calc(495 * var(--k));height:calc(62 * var(--k));aspect-ratio:auto;margin:0;--r:1.5deg;transform:rotate(1.5deg);}
 #sobre .faixa-aparencia{position:absolute;left:calc(50% + (1022.5 - 961) * var(--k));top:calc(50% + (504 - 540) * var(--k));width:calc(495 * var(--k));height:calc(66 * var(--k));aspect-ratio:auto;margin:0;--r:1.5deg;transform:rotate(1.5deg);}
