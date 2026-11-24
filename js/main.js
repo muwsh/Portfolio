@@ -23,6 +23,10 @@ function resetarPecas() {
     el.dataset.arrastou = '';
     el._ox = 0; el._oy = 0;
     el.classList.remove('descolado');
+    // Soltar as tachinhas e os objetos presos por elas (senão o objeto continua travado)
+    [...el._cobre].forEach(obj => soltarPreso(el, obj));
+    [...el._tach].forEach(tach => soltarPreso(tach, el));
+    delete el.dataset.preso;
   });
 }
 
