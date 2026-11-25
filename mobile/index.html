@@ -1,0 +1,175 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#2b2620">
+  <title>Tomás — Portfólio</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- INÍCIO: cabeçalho da lousa, destaques e mesa em grade -->
+  <main id="inicio" class="tela ativa" data-tela>
+    <header class="cabecalho" id="lousa">
+      <div class="papel">
+        <span class="fita fita-1" aria-hidden="true"></span>
+        <span class="fita fita-2" aria-hidden="true"></span>
+        <p class="assinatura">muwsh's</p>
+        <h1 class="titulo">portfólio</h1>
+      </div>
+      <a class="link-redes" href="https://linktr.ee/tk.takabayashi" target="_blank" rel="noopener">
+        <img src="../img/telas/elementos/lousa/postit_meuslinks.webp" alt="">
+        <span>Meus links</span>
+      </a>
+    </header>
+
+    <section id="destaques" class="secao" aria-labelledby="titulo-destaques">
+      <div class="cabecalho-secao">
+        <h2 id="titulo-destaques">Destaques</h2>
+        <a href="#projetos">Ver todos</a>
+      </div>
+      <div class="grade-destaques">
+        <a class="carta-destaque" href="#projeto/super-mulheres-ong"><img src="../img/telas/elementos/destaques/carta_sm_destaques.webp" alt=""><span class="nome">Super Mulheres ONG</span></a>
+        <a class="carta-destaque" href="#projeto/revista-tlgd"><img src="../img/telas/elementos/destaques/carta_tlgd_destaques.webp" alt=""><span class="nome">Revista tlgd</span></a>
+        <a class="carta-destaque" href="#projeto/reglette-typeface"><img src="../img/telas/elementos/destaques/carta_reglette_destaques.webp" alt=""><span class="nome">Reglette Typeface</span></a>
+        <a class="carta-destaque" href="#projeto/kitkat-sublime"><img src="../img/telas/elementos/destaques/carta_kitkat_destaques.webp" alt=""><span class="nome">KitKat Sublime</span></a>
+      </div>
+    </section>
+
+    <section id="mesa" class="secao" aria-labelledby="titulo-mesa">
+      <div class="cabecalho-secao">
+        <h2 id="titulo-mesa">Mesa</h2>
+      </div>
+      <ul class="mesa-grade">
+        <li><a class="peca" href="#sobre"><img src="../img/telas/elementos/mesa/sobremim_mesa.webp" alt=""><span>Sobre mim</span></a></li>
+        <li><a class="peca" href="#projetos"><img src="../img/telas/elementos/mesa/projetos_mesa.webp" alt=""><span>Projetos</span></a></li>
+        <li><a class="peca" href="#identidade"><img src="../img/telas/elementos/mesa/identidade_mesa.webp" alt=""><span>Identidade</span></a></li>
+        <li><a class="peca" href="#polaroids"><img src="../img/telas/elementos/mesa/polaroids_mesa.webp" alt=""><span>Polaroids</span></a></li>
+        <li><a class="peca" href="#postais"><img src="../img/telas/elementos/mesa/postais_mesa.webp" alt=""><span>Postais</span></a></li>
+      </ul>
+    </section>
+  </main>
+
+  <!-- SOBRE MIM -->
+  <main id="sobre" class="tela tela-cheia" data-tela aria-label="Sobre mim">
+    <header class="barra-tela">
+      <button type="button" class="voltar" data-voltar aria-label="Voltar ao início">✕</button>
+      <h2>Sobre mim</h2>
+    </header>
+    <div class="conteudo">
+      <article class="bloco">
+        <p>Olá, sou o Tomás, estudante de Design na ESPM, no 6º semestre. Gosto de trabalhar com fotografia, direção de arte, UX/UI e design gráfico. Também tenho interesse por modelagem 3D, cinema, motion e design de produtos e embalagens.</p>
+      </article>
+
+      <section class="bloco">
+        <h3>Ferramentas</h3>
+        <ul class="apps" aria-label="Aplicativos que sei usar">
+          <li>Illustrator</li><li>InDesign</li><li>Photoshop</li><li>After Effects</li><li>Figma</li><li>Blender</li>
+        </ul>
+      </section>
+
+      <section class="bloco">
+        <h3>Informações</h3>
+        <dl class="lista-info">
+          <div><dt>Nome</dt><dd>Tomás K. Takabayashi</dd></div>
+          <div><dt>Nacionalidade</dt><dd>Brasileiro</dd></div>
+          <div><dt>Áreas</dt><dd>Design e Fotografia</dd></div>
+          <div><dt>Contato</dt><dd><a href="mailto:contato.tktaka@gmail.com">contato.tktaka@gmail.com</a></dd></div>
+        </dl>
+        <a class="botao-link" href="https://linktr.ee/tk.takabayashi" target="_blank" rel="noopener">Minhas redes sociais</a>
+      </section>
+
+      <form class="bloco formulario" id="formulario-contato">
+        <h3>Entre em contato</h3>
+        <label>Nome <input type="text" name="nome" required autocomplete="name"></label>
+        <label>Assunto <input type="text" name="assunto" required></label>
+        <label>Mensagem <textarea name="mensagem" rows="4" required></textarea></label>
+        <button type="submit" class="botao">Enviar</button>
+      </form>
+    </div>
+  </main>
+
+  <!-- PROJETOS: lista de cartas -->
+  <main id="projetos" class="tela tela-cheia" data-tela aria-label="Projetos">
+    <header class="barra-tela">
+      <button type="button" class="voltar" data-voltar aria-label="Voltar ao início">✕</button>
+      <h2>Projetos</h2>
+    </header>
+    <div class="conteudo" data-lista-projetos></div>
+  </main>
+
+  <!-- PROJETO: uma carta aberta -->
+  <main id="projeto" class="tela tela-cheia" data-tela aria-label="Projeto">
+    <header class="barra-tela">
+      <button type="button" class="voltar" data-voltar aria-label="Voltar à lista de projetos">✕</button>
+    </header>
+    <div class="conteudo">
+      <article class="folha-projeto">
+        <h1 data-projeto-titulo></h1>
+        <p class="ficha" data-projeto-cliente></p>
+        <p class="ficha" data-projeto-integrantes></p>
+        <time class="ficha" data-projeto-ano></time>
+        <div class="capa-projeto" data-projeto-capa aria-hidden="true"></div>
+        <h2>Resultados e variações</h2>
+        <p>[Resultados e variações: placeholder]</p>
+        <h2>Mockups e aplicações</h2>
+        <p>[Mockups: placeholder]</p>
+        <h2>Parte técnica</h2>
+        <p>[Fonte e cores: placeholder]</p>
+        <h2>Sobre o projeto</h2>
+        <div data-projeto-texto></div>
+      </article>
+    </div>
+  </main>
+
+  <!-- IDENTIDADE VISUAL (ainda não feita) -->
+  <main id="identidade" class="tela tela-cheia" data-tela aria-label="Identidade visual">
+    <header class="barra-tela">
+      <button type="button" class="voltar" data-voltar aria-label="Voltar ao início">✕</button>
+      <h2>Identidade visual</h2>
+    </header>
+    <div class="conteudo">
+      <p class="vazio">[Identidade visual: em construção]</p>
+    </div>
+  </main>
+
+  <!-- POLAROIDS: grade de fotos -->
+  <main id="polaroids" class="tela tela-cheia" data-tela aria-label="Polaroids">
+    <header class="barra-tela">
+      <button type="button" class="voltar" data-voltar aria-label="Voltar ao início">✕</button>
+      <h2>Polaroids</h2>
+    </header>
+    <div class="conteudo">
+      <div class="grade-polaroids" data-grade-polaroids></div>
+    </div>
+  </main>
+
+  <!-- POSTAIS: cartões na vertical -->
+  <main id="postais" class="tela tela-cheia" data-tela aria-label="Postais">
+    <header class="barra-tela">
+      <button type="button" class="voltar" data-voltar aria-label="Voltar ao início">✕</button>
+      <h2>Postais</h2>
+    </header>
+    <div class="conteudo">
+      <div class="coluna-postais" data-coluna-postais></div>
+    </div>
+  </main>
+
+  <!-- Foto ampliada (polaroids e postais) -->
+  <div class="ampliada" data-ampliada hidden>
+    <button type="button" class="fechar" data-fechar aria-label="Fechar">×</button>
+    <img alt="" data-ampliada-img>
+  </div>
+
+  <!-- Navegação fixa na parte de baixo, presente em todas as telas -->
+  <nav class="barra-inferior" aria-label="Navegação principal">
+    <a href="#inicio" data-nav="inicio"><span class="icone">⌂</span><span>Início</span></a>
+    <a href="#projetos" data-nav="projetos"><span class="icone">✉</span><span>Projetos</span></a>
+    <a href="#polaroids" data-nav="polaroids"><span class="icone">▣</span><span>Fotos</span></a>
+    <a href="#sobre" data-nav="sobre"><span class="icone">☺</span><span>Sobre</span></a>
+  </nav>
+
+  <script src="js/main.js"></script>
+</body>
+</html>
