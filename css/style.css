@@ -799,7 +799,7 @@ html body #sobre .sobre-dossie h2.faixa { color: #fff !important; text-transform
 #sobre .sobre-chamado-contato{position:absolute;left:calc(50% + (415 - 961) * var(--k));top:calc(50% + (590 - 540) * var(--k));width:calc(250 * var(--k));height:calc(70 * var(--k));aspect-ratio:auto;margin:0;--r:0deg;transform:rotate(0deg);}
 #sobre .sobre-contato label:nth-of-type(1){position:absolute;left:calc(50% + (693 - 961) * var(--k));top:calc(50% + (614 - 540) * var(--k));width:calc(235 * var(--k));height:calc(17 * var(--k));aspect-ratio:auto;margin:0;--r:0deg;transform:rotate(0deg);font-size:calc(14 * var(--k));}
 #sobre .sobre-contato label:nth-of-type(2){position:absolute;left:calc(50% + (693 - 961) * var(--k));top:calc(50% + (660 - 540) * var(--k));width:calc(234 * var(--k));height:calc(17 * var(--k));aspect-ratio:auto;margin:0;--r:0deg;transform:rotate(0deg);font-size:calc(14 * var(--k));}
-#sobre .sobre-contato label:nth-of-type(3){position:absolute;left:calc(50% + (417 - 961) * var(--k));top:calc(50% + (694 - 540) * var(--k));width:calc(507 * var(--k));height:calc(158 * var(--k));aspect-ratio:auto;margin:0;--r:0deg;transform:rotate(0deg);font-size:calc(14 * var(--k));}
+#sobre .sobre-contato label:nth-of-type(3){position:absolute;left:calc(50% + (417 - 961) * var(--k));top:calc(50% + (689 - 540) * var(--k));width:calc(508 * var(--k));height:calc(158 * var(--k));aspect-ratio:auto;margin:0;--r:0deg;transform:rotate(0deg);font-size:calc(14 * var(--k));}
 #sobre .sobre-contato label:nth-of-type(-n+2) :is(input) { flex: none; height: calc(22 * var(--k)); margin-top: auto; }
 #sobre .sobre-contato label { justify-content: flex-start; }
 #sobre .sobre-contato textarea { margin-top: 2px; }
@@ -834,7 +834,7 @@ html body #sobre .sobre-dossie h2.faixa { color: #fff !important; text-transform
 
 
 /* Sobre mim: só o fundo, o texto, os campos e os títulos; o resto da cena e as linhas saem */
-#sobre .sobre-pasta, #sobre .sobre-aba, #sobre .sobre-redes, #sobre .adesivo-sobre, #sobre .foto-campo { display: none !important; }
+#sobre .sobre-pasta, #sobre .sobre-aba, #sobre .adesivo-sobre, #sobre .foto-campo, #sobre .apps { display: none !important; }
 html body #sobre .sobre-dossie .lista-info li { border-bottom: 0 !important; }
 /* Textos do Sobre mim podem ser selecionados */
 html body #sobre, html body #sobre * { user-select: text; -webkit-user-select: text; }
@@ -842,3 +842,8 @@ html body #sobre ::selection { background: rgba(0, 0, 0, 0.22); color: inherit; 
 
 /* Formas de apoio do carimbo: invisíveis (o desenho vem do fundo) */
 #carimbo .composicao-carimbo svg rect { fill: none; stroke: none; }
+
+/* QR code do Sobre mim: área clicável sobre o QR da imagem de fundo, abre o Linktree */
+#sobre .sobre-redes { display: block !important; }
+html body #sobre .sobre-metade .sobre-redes .sobre-qr { display: block !important; position: absolute; left: calc(50% + (825 - 961) * var(--k)); top: calc(50% + (352 - 540) * var(--k)); width: calc(113 * var(--k)); height: calc(113 * var(--k)); right: auto; bottom: auto; background: transparent; box-shadow: none; padding: 0; transform: none; border-radius: 0; }
+html body #sobre .sobre-metade .sobre-redes .sobre-qr:focus-visible { outline: 2px solid #000; }
