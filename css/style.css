@@ -857,3 +857,7 @@ html body #sobre .sobre-metade .sobre-redes .sobre-qr:focus-visible { outline: 2
 
 /* Símbolos do canto superior direito das telas: removidos */
 .simbolo-tela { display: none !important; }
+
+/* Menu da mesa: sem os símbolos ao lado dos itens; textos na mesma fonte máquina de escrever das fichas */
+#gaveta .icone-item { display: none !important; }
+#gaveta, #gaveta .gaveta-topo, #gaveta li button { font-family: "Courier New", monospace; }
