@@ -849,6 +849,6 @@ html body #sobre .sobre-metade .sobre-redes .sobre-qr { display: block !importan
 html body #sobre .sobre-metade .sobre-redes .sobre-qr:focus-visible { outline: 2px solid #000; }
 
 
-/* Lombada do álbum de postais: recorte do fundo, sempre por cima das páginas e da virada */
-#postais::after { content: ""; position: absolute; left: calc(50% + (930 - 961) * var(--k)); top: calc(50% + (233 - 540) * var(--k)); width: calc(19 * var(--k)); height: calc(614 * var(--k)); background: url(../img/telas/elementos/postais_extra/lombada.webp) center / 100% 100% no-repeat; z-index: 20; pointer-events: none; }
+/* Lombada do álbum de postais: recorte do fundo, por cima das páginas, mas por baixo da folha que vira */
+#postais::after { content: ""; position: absolute; left: calc(50% + (930 - 961) * var(--k)); top: calc(50% + (233 - 540) * var(--k)); width: calc(19 * var(--k)); height: calc(614 * var(--k)); background: url(../img/telas/elementos/postais_extra/lombada.webp) center / 100% 100% no-repeat; z-index: 4; pointer-events: none; }
 #postais .espelho-postal::after, #postais .virada-lombada { display: none !important; }
