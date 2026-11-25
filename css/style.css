@@ -847,3 +847,6 @@ html body #sobre ::selection { background: rgba(0, 0, 0, 0.22); color: inherit; 
 #sobre .sobre-redes { display: block !important; }
 html body #sobre .sobre-metade .sobre-redes .sobre-qr { display: block !important; position: absolute; left: calc(50% + (825 - 961) * var(--k)); top: calc(50% + (352 - 540) * var(--k)); width: calc(113 * var(--k)); height: calc(113 * var(--k)); right: auto; bottom: auto; background: transparent; box-shadow: none; padding: 0; transform: none; border-radius: 0; }
 html body #sobre .sobre-metade .sobre-redes .sobre-qr:focus-visible { outline: 2px solid #000; }
+
+/* Campos do contato seguem a inclinação de ~1° dos quadrados cinzas do fundo */
+#sobre .sobre-contato label { transform: rotate(1deg); transform-origin: center; }
