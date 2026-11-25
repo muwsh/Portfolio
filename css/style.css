@@ -787,7 +787,7 @@ body.menu-visivel .menu-botao { opacity: 1; pointer-events: auto; }
 #sobre .sobre-apresentacao > p{position:absolute;left:calc(50% + (425 - 961) * var(--k));top:calc(50% + (190 - 540) * var(--k));width:calc(352 * var(--k));height:calc(270 * var(--k));aspect-ratio:auto;margin:0;--r:1.5deg;transform:rotate(1.5deg);padding:0;background:none;box-shadow:none;overflow:visible;font-size:calc(17 * var(--k));line-height:1.35;}
 #sobre #sobre-apresentacao-texto { color: #222 !important; text-shadow: none !important; font-family: "Poppins", system-ui, sans-serif; font-weight: 400; font-size: calc(14.7 * var(--k)) !important; line-height: 1.35; }
 /* Ficha: textos visíveis sobre o fundo, em máquina de escrever; faixas com texto branco em caixa alta */
-html body #sobre .sobre-dossie .lista-info li :is(span, em) { color: #000 !important; text-shadow: none !important; }
+/* Rótulos e valores da ficha já estão na imagem de fundo: o site não escreve nada ali */
 html body #sobre .sobre-dossie h2.faixa { color: #fff !important; text-transform: uppercase; font-family: "Courier New", monospace; }
 #sobre .sobre-qr{position:absolute;left:calc(50% + (810 - 961) * var(--k));top:calc(50% + (245 - 540) * var(--k));width:calc(150 * var(--k));height:calc(150 * var(--k));aspect-ratio:auto;margin:0;--r:0deg;transform:rotate(0deg);padding:0;right:auto;bottom:auto;background:transparent;box-shadow:none;}
 #sobre .apps span:nth-child(1){position:absolute;left:calc(50% + (427 - 961) * var(--k));top:calc(50% + (505 - 540) * var(--k));width:calc(50 * var(--k));height:calc(50 * var(--k));aspect-ratio:auto;margin:0;--r:0deg;transform:rotate(0deg);border-radius:14%;}
