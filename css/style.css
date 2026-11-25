@@ -839,3 +839,6 @@ html body #sobre .sobre-dossie .lista-info li { border-bottom: 0 !important; }
 /* Textos do Sobre mim podem ser selecionados */
 html body #sobre, html body #sobre * { user-select: text; -webkit-user-select: text; }
 html body #sobre ::selection { background: rgba(0, 0, 0, 0.22); color: inherit; }
+
+/* Formas de apoio do carimbo: invisíveis (o desenho vem do fundo) */
+#carimbo .composicao-carimbo svg rect { fill: none; stroke: none; }
