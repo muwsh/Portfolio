@@ -394,8 +394,8 @@ body.menu-visivel .menu-botao { opacity: 1; pointer-events: auto; }
 .ver-todos { position: absolute; bottom: 18px; left: 50%; transform: translateX(-50%); background: none; border: 0; font: inherit; font-size: 18px; cursor: pointer; padding: 8px 16px; }
 .gaveta {
   position: fixed; top: 0; left: 0; bottom: 0;
-  width: min(320px, 85vw);
-  background: #fbf7ee;
+  width: min(calc(100vh * 672 / 2256), 85vw);
+  background: url(../img/telas/menu-aba.webp) left top / auto 100% no-repeat;
   box-shadow: var(--sombra);
   padding: 24px;
   overflow-y: auto;
