@@ -643,7 +643,7 @@ body.menu-visivel .menu-botao { opacity: 1; pointer-events: auto; }
   background: transparent !important; box-shadow: none !important;
 }
 /* Texto transparente nas telas: a seleção também fica invisível */
-#lousa ::selection, #destaques ::selection, #mesa ::selection, #sobre ::selection, #cartas ::selection, #carimbo ::selection, #polaroids ::selection, #postais ::selection {
+#lousa ::selection, #destaques ::selection, #mesa ::selection, #cartas ::selection, #carimbo ::selection, #polaroids ::selection, #postais ::selection {
   background: transparent;
 }
 
@@ -832,3 +832,10 @@ html body #sobre .sobre-dossie h2.faixa { color: #fff !important; text-transform
 #polaroids { background-color: #5a5c6e; }
 #postais { background-color: #486b4c; }
 
+
+/* Sobre mim: só o fundo, o texto, os campos e os títulos; o resto da cena e as linhas saem */
+#sobre .sobre-pasta, #sobre .sobre-aba, #sobre .sobre-redes, #sobre .adesivo-sobre, #sobre .foto-campo { display: none !important; }
+html body #sobre .sobre-dossie .lista-info li { border-bottom: 0 !important; }
+/* Textos do Sobre mim podem ser selecionados */
+html body #sobre, html body #sobre * { user-select: text; -webkit-user-select: text; }
+html body #sobre ::selection { background: rgba(0, 0, 0, 0.22); color: inherit; }
