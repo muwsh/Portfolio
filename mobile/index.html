@@ -9,48 +9,44 @@
 </head>
 <body>
 
-  <!-- INÍCIO: lousa, destaques e mesa, em coluna -->
+  <!-- INÍCIO: cabeçalho da lousa, destaques e mesa em grade -->
   <main id="inicio" class="tela ativa" data-tela>
-
-    <section id="lousa" class="secao-lousa" aria-label="Lousa de cortiça">
+    <header class="cabecalho" id="lousa">
       <div class="papel">
         <span class="fita fita-1" aria-hidden="true"></span>
         <span class="fita fita-2" aria-hidden="true"></span>
         <p class="assinatura">muwsh's</p>
         <h1 class="titulo">portfólio</h1>
       </div>
+      <a class="link-redes" href="https://linktr.ee/tk.takabayashi" target="_blank" rel="noopener">
+        <img src="../img/telas/elementos/lousa/postit_meuslinks.webp" alt="">
+        <span>Meus links</span>
+      </a>
+    </header>
 
-      <div class="lousa-pecas">
-        <a class="post-it" href="#destaques" aria-label="Meus projetos (ir aos destaques)">
-          <img src="../img/telas/elementos/lousa/postit_meusprojetos.webp" alt="">
-        </a>
-        <a class="post-it" href="https://linktr.ee/tk.takabayashi" target="_blank" rel="noopener" aria-label="Meus links (abre em nova aba)">
-          <img src="../img/telas/elementos/lousa/postit_meuslinks.webp" alt="">
-        </a>
-        <img class="adesivo" src="../img/telas/elementos/lousa/adesivo_hops.webp" alt="" aria-hidden="true">
-        <img class="polaroid-lousa" src="../img/telas/elementos/lousa/polaroid_oiaeu.webp" alt="" aria-hidden="true">
+    <section id="destaques" class="secao" aria-labelledby="titulo-destaques">
+      <div class="cabecalho-secao">
+        <h2 id="titulo-destaques">Destaques</h2>
+        <a href="#projetos">Ver todos</a>
       </div>
-    </section>
-
-    <section id="destaques" class="secao-destaques" aria-labelledby="titulo-destaques">
-      <h2 id="titulo-destaques" class="titulo-secao">Destaques</h2>
-      <div class="lista-destaques">
+      <div class="grade-destaques">
         <a class="carta-destaque" href="#projeto/super-mulheres-ong"><img src="../img/telas/elementos/destaques/carta_sm_destaques.webp" alt=""><span class="nome">Super Mulheres ONG</span></a>
         <a class="carta-destaque" href="#projeto/revista-tlgd"><img src="../img/telas/elementos/destaques/carta_tlgd_destaques.webp" alt=""><span class="nome">Revista tlgd</span></a>
         <a class="carta-destaque" href="#projeto/reglette-typeface"><img src="../img/telas/elementos/destaques/carta_reglette_destaques.webp" alt=""><span class="nome">Reglette Typeface</span></a>
         <a class="carta-destaque" href="#projeto/kitkat-sublime"><img src="../img/telas/elementos/destaques/carta_kitkat_destaques.webp" alt=""><span class="nome">KitKat Sublime</span></a>
       </div>
-      <a class="ver-todos" href="#projetos">Ver todos os projetos</a>
     </section>
 
-    <section id="mesa" class="secao-mesa" aria-labelledby="titulo-mesa">
-      <h2 id="titulo-mesa" class="titulo-secao claro">Mesa</h2>
-      <ul class="objetos">
-        <li><a class="objeto objeto-sobre" href="#sobre"><img src="../img/telas/elementos/mesa/sobremim_mesa.webp" alt=""><span>Sobre mim</span></a></li>
-        <li><a class="objeto objeto-projetos" href="#projetos"><img src="../img/telas/elementos/mesa/projetos_mesa.webp" alt=""><span>Projetos</span></a></li>
-        <li><a class="objeto objeto-carimbo" href="#identidade"><img src="../img/telas/elementos/mesa/identidade_mesa.webp" alt=""><span>Identidade visual</span></a></li>
-        <li><a class="objeto objeto-polaroids" href="#polaroids"><img src="../img/telas/elementos/mesa/polaroids_mesa.webp" alt=""><span>Polaroids</span></a></li>
-        <li><a class="objeto objeto-postais" href="#postais"><img src="../img/telas/elementos/mesa/postais_mesa.webp" alt=""><span>Postais</span></a></li>
+    <section id="mesa" class="secao" aria-labelledby="titulo-mesa">
+      <div class="cabecalho-secao">
+        <h2 id="titulo-mesa">Mesa</h2>
+      </div>
+      <ul class="mesa-grade">
+        <li><a class="peca" href="#sobre"><img src="../img/telas/elementos/mesa/sobremim_mesa.webp" alt=""><span>Sobre mim</span></a></li>
+        <li><a class="peca" href="#projetos"><img src="../img/telas/elementos/mesa/projetos_mesa.webp" alt=""><span>Projetos</span></a></li>
+        <li><a class="peca" href="#identidade"><img src="../img/telas/elementos/mesa/identidade_mesa.webp" alt=""><span>Identidade</span></a></li>
+        <li><a class="peca" href="#polaroids"><img src="../img/telas/elementos/mesa/polaroids_mesa.webp" alt=""><span>Polaroids</span></a></li>
+        <li><a class="peca" href="#postais"><img src="../img/telas/elementos/mesa/postais_mesa.webp" alt=""><span>Postais</span></a></li>
       </ul>
     </section>
   </main>
@@ -58,7 +54,7 @@
   <!-- SOBRE MIM -->
   <main id="sobre" class="tela tela-cheia" data-tela aria-label="Sobre mim">
     <header class="barra-tela">
-      <button type="button" class="voltar" data-voltar aria-label="Voltar">✕</button>
+      <button type="button" class="voltar" data-voltar aria-label="Voltar ao início">✕</button>
       <h2>Sobre mim</h2>
     </header>
     <div class="conteudo">
@@ -97,7 +93,7 @@
   <!-- PROJETOS: lista de cartas -->
   <main id="projetos" class="tela tela-cheia" data-tela aria-label="Projetos">
     <header class="barra-tela">
-      <button type="button" class="voltar" data-voltar aria-label="Voltar">✕</button>
+      <button type="button" class="voltar" data-voltar aria-label="Voltar ao início">✕</button>
       <h2>Projetos</h2>
     </header>
     <div class="conteudo" data-lista-projetos></div>
@@ -106,7 +102,7 @@
   <!-- PROJETO: uma carta aberta -->
   <main id="projeto" class="tela tela-cheia" data-tela aria-label="Projeto">
     <header class="barra-tela">
-      <button type="button" class="voltar" data-voltar aria-label="Voltar">✕</button>
+      <button type="button" class="voltar" data-voltar aria-label="Voltar à lista de projetos">✕</button>
     </header>
     <div class="conteudo">
       <article class="folha-projeto">
@@ -130,7 +126,7 @@
   <!-- IDENTIDADE VISUAL (ainda não feita) -->
   <main id="identidade" class="tela tela-cheia" data-tela aria-label="Identidade visual">
     <header class="barra-tela">
-      <button type="button" class="voltar" data-voltar aria-label="Voltar">✕</button>
+      <button type="button" class="voltar" data-voltar aria-label="Voltar ao início">✕</button>
       <h2>Identidade visual</h2>
     </header>
     <div class="conteudo">
@@ -141,7 +137,7 @@
   <!-- POLAROIDS: grade de fotos -->
   <main id="polaroids" class="tela tela-cheia" data-tela aria-label="Polaroids">
     <header class="barra-tela">
-      <button type="button" class="voltar" data-voltar aria-label="Voltar">✕</button>
+      <button type="button" class="voltar" data-voltar aria-label="Voltar ao início">✕</button>
       <h2>Polaroids</h2>
     </header>
     <div class="conteudo">
@@ -152,7 +148,7 @@
   <!-- POSTAIS: cartões na vertical -->
   <main id="postais" class="tela tela-cheia" data-tela aria-label="Postais">
     <header class="barra-tela">
-      <button type="button" class="voltar" data-voltar aria-label="Voltar">✕</button>
+      <button type="button" class="voltar" data-voltar aria-label="Voltar ao início">✕</button>
       <h2>Postais</h2>
     </header>
     <div class="conteudo">
@@ -165,6 +161,14 @@
     <button type="button" class="fechar" data-fechar aria-label="Fechar">×</button>
     <img alt="" data-ampliada-img>
   </div>
+
+  <!-- Navegação fixa na parte de baixo, presente em todas as telas -->
+  <nav class="barra-inferior" aria-label="Navegação principal">
+    <a href="#inicio" data-nav="inicio"><span class="icone">⌂</span><span>Início</span></a>
+    <a href="#projetos" data-nav="projetos"><span class="icone">✉</span><span>Projetos</span></a>
+    <a href="#polaroids" data-nav="polaroids"><span class="icone">▣</span><span>Fotos</span></a>
+    <a href="#sobre" data-nav="sobre"><span class="icone">☺</span><span>Sobre</span></a>
+  </nav>
 
   <script src="js/main.js"></script>
 </body>

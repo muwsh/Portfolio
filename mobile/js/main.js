@@ -143,7 +143,19 @@ document.querySelectorAll('[data-voltar]').forEach(b => {
     location.hash = location.hash.startsWith('#projeto/') ? '#projetos' : '';
   });
 });
-window.addEventListener('hashchange', mostrar);
+// Destaca na barra inferior a seção em que a pessoa está
+const ITEM_NAV = { inicio: 'inicio', identidade: 'inicio', projetos: 'projetos', projeto: 'projetos', polaroids: 'polaroids', postais: 'polaroids', sobre: 'sobre' };
+function marcarNav() {
+  const chave = decodeURIComponent(location.hash.slice(1)).split('/')[0] || 'inicio';
+  const ativo = ITEM_NAV[chave] || (SECOES_INICIO.includes(chave) ? 'inicio' : 'inicio');
+  document.querySelectorAll('[data-nav]').forEach(a => {
+    const on = a.dataset.nav === ativo;
+    a.classList.toggle('ativo', on);
+    if (on) a.setAttribute('aria-current', 'page'); else a.removeAttribute('aria-current');
+  });
+}
+window.addEventListener('hashchange', () => { mostrar(); marcarNav(); });
+marcarNav();
 window.addEventListener('keydown', e => {
   if (e.key !== 'Escape') return;
   if (!ampliada.hidden) return fecharAmpliada();
