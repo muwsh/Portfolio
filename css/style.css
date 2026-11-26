@@ -869,3 +869,6 @@ html body #postais { overflow: hidden; }
 
 /* Polaroid clicada: aumenta levemente para ficar separada */
 #polaroids .polaroid.selecionada { transform: rotate(0deg) scale(1.15); z-index: 2; box-shadow: 0 8px 18px rgba(0, 0, 0, 0.35); }
+
+/* Frase do chamado: invisível, mas copiável, sobre a frase já desenhada no fundo */
+html body #sobre .sobre-chamado-contato { font-family: "Poppins", system-ui, sans-serif !important; font-weight: 400 !important; font-size: calc(15.5 * var(--k)) !important; line-height: calc(17 * var(--k)) !important; white-space: nowrap; margin: calc(10.5 * var(--k)) 0 0 calc(6.5 * var(--k)) !important; }
