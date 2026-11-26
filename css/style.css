@@ -845,7 +845,8 @@ html body #sobre ::selection { background: rgba(0, 0, 0, 0.22); color: inherit; 
 #carimbo .composicao-carimbo svg rect { fill: none; stroke: none; }
 
 /* QR code do Sobre mim: área clicável sobre o QR da imagem de fundo, abre o Linktree */
-#sobre .sobre-redes { display: block !important; }
+#sobre .sobre-redes { display: block !important; pointer-events: none; }
+#sobre .sobre-redes .sobre-qr, #sobre .sobre-redes .sobre-qr * { pointer-events: auto; }
 html body #sobre .sobre-metade .sobre-redes .sobre-qr { display: block !important; position: absolute; left: calc(50% + (825 - 961) * var(--k)); top: calc(50% + (352 - 540) * var(--k)); width: calc(113 * var(--k)); height: calc(113 * var(--k)); right: auto; bottom: auto; background: transparent; box-shadow: none; padding: 0; transform: none; border-radius: 0; }
 html body #sobre .sobre-metade .sobre-redes .sobre-qr:focus-visible { outline: 2px solid #000; }
 
