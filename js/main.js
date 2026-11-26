@@ -674,7 +674,11 @@ function abrir(src, girada = false) {
 tira.addEventListener('click', e => {
   if (arrastou) return;
   const p = e.target.closest('.polaroid');
-  if (p) abrir(p.querySelector('img').src);
+  if (!p) return;
+  // A polaroid clicada cresce levemente, para ficar "separada" das outras
+  tira.querySelectorAll('.polaroid.selecionada').forEach(el => el.classList.remove('selecionada'));
+  p.classList.add('selecionada');
+  abrir(p.querySelector('img').src);
 });
 
 binder.addEventListener('click', e => {
