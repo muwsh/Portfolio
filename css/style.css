@@ -866,4 +866,4 @@ html body #sobre .sobre-metade .sobre-redes .sobre-qr:focus-visible { outline: 2
 html body #postais { overflow: hidden; }
 
 /* Polaroid clicada: aumenta levemente para ficar separada */
-#polaroids .polaroid.selecionada { transform: rotate(0deg) scale(1.12); z-index: 2; box-shadow: 0 8px 18px rgba(0, 0, 0, 0.35); }
+#polaroids .polaroid.selecionada { transform: rotate(0deg) scale(1.15); z-index: 2; box-shadow: 0 8px 18px rgba(0, 0, 0, 0.35); }
