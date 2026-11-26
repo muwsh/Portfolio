@@ -23,6 +23,10 @@ function resetarPecas() {
     el.dataset.arrastou = '';
     el._ox = 0; el._oy = 0;
     el.classList.remove('descolado');
+    // Soltar as tachinhas e os objetos presos por elas (senão o objeto continua travado)
+    [...el._cobre].forEach(obj => soltarPreso(el, obj));
+    [...el._tach].forEach(tach => soltarPreso(tach, el));
+    delete el.dataset.preso;
   });
 }
 
@@ -475,9 +479,13 @@ function montarLivro(container, nomeTela) {
   }
   // Metade da página: o postal copiado, centralizado no papel
   function metade(postal) {
+    // Cópia limpa: só a moldura e a posição do lado, sem as margens do postal original
     const papel = document.createElement('div');
     papel.className = 'pagina-virada';
-    papel.appendChild(postal.cloneNode(true));
+    const copia = document.createElement('div');
+    copia.className = `postal-copia ${postal.classList.contains('dir') ? 'dir' : 'esq'}`;
+    copia.innerHTML = postal.querySelector('.moldura').outerHTML;
+    papel.appendChild(copia);
     return papel;
   }
   const reflexo = () => {
@@ -666,7 +674,11 @@ function abrir(src, girada = false) {
 tira.addEventListener('click', e => {
   if (arrastou) return;
   const p = e.target.closest('.polaroid');
-  if (p) abrir(p.querySelector('img').src);
+  if (!p) return;
+  // A polaroid clicada cresce levemente, para ficar "separada" das outras
+  tira.querySelectorAll('.polaroid.selecionada').forEach(el => el.classList.remove('selecionada'));
+  p.classList.add('selecionada');
+  abrir(p.querySelector('img').src);
 });
 
 binder.addEventListener('click', e => {
@@ -784,9 +796,8 @@ function fecharGaveta() {
 // O botão do menu abre e fecha a barra; enquanto ela está aberta, ele vira um X e acompanha a barra
 botaoMenu.addEventListener('click', () => (gaveta.classList.contains('aberta') ? fecharGaveta() : abrirGaveta()));
 
-// Botão "Voltar ao topo": fica disponível assim que a mesa rola, e sobe a mesa rapidamente até o início
 const DURACAO_TOPO = 450;
-// Rola a sequência inicial até uma posição, com a mesma curva e duração do "Voltar ao topo"
+// Rola a sequência inicial até uma posição (usado pelo post-it "Meus projetos")
 function rolarInicioATe(destino) {
   const origem = inicio.scrollTop;
   const t0 = performance.now();
@@ -797,7 +808,6 @@ function rolarInicioATe(destino) {
   };
   requestAnimationFrame(passo);
 }
-document.querySelector('[data-voltar-topo]').addEventListener('click', () => rolarInicioATe(0));
 inicio.addEventListener('scroll', () => {
   document.getElementById('mesa').classList.toggle('rolada', inicio.scrollTop > 40);
 });
@@ -815,8 +825,8 @@ document.addEventListener('keydown', e => {
 // Sobre mim: o quadrado de foto (placeholder) fica com uma cor fixa, sem troca automática ou ao clicar
 document.querySelector('[data-trocar-cor]').style.setProperty('--cor', '#1c2fd1');
 
-// Adesivos da lousa (exceto o QR code): ao pressionar, o adesivo se levanta do fundo; ao soltar, volta
-const pecasDescolaveis = [...document.querySelectorAll('[data-peca]')].filter(el => !el.querySelector('.qr-peca'));
+// Adesivos da lousa: ao pressionar, o adesivo se levanta do fundo; ao soltar, volta
+const pecasDescolaveis = [...document.querySelectorAll('[data-peca]')];
 pecasDescolaveis.forEach(el => {
   el.addEventListener('pointerdown', e => { if (e.button === 0) el.classList.add('descolado'); });
 });
