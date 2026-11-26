@@ -1,5 +1,6 @@
 /* Tokens: ajuste cores e tamanhos aqui, em um lugar só */
 :root {
+  --fonte-menu: "Courier New", monospace; /* fonte do menu da mesa e do "Ver todos": altere aqui para mudar os dois */
   --rodape: 120px;
   --papel: #f4efe6;
   --tinta: #2b2620;
@@ -561,7 +562,7 @@ body.menu-visivel .menu-botao { opacity: 1; pointer-events: auto; }
 #cartas.sem-entrada { transform: none; transition: none; }
 
 /* Ver todos e rodapé: mesma fonte e posição de antes; a linha sob o texto cresce no hover */
-.ver-todos { text-decoration: underline; transition: color 400ms cubic-bezier(0.25, 0.8, 0.25, 1); }
+.ver-todos { font-family: var(--fonte-menu); text-decoration: underline; transition: color 400ms cubic-bezier(0.25, 0.8, 0.25, 1); }
 .ver-todos:hover, .ver-todos:focus-visible { color: #000; }
 .rodape-nav button { position: relative; transition: color 400ms cubic-bezier(0.25, 0.8, 0.25, 1); }
 .rodape-nav button:hover, .rodape-nav button:focus-visible { color: #fff; }
@@ -860,7 +861,7 @@ html body #sobre .sobre-metade .sobre-redes .sobre-qr:focus-visible { outline: 2
 
 /* Menu da mesa: sem os símbolos ao lado dos itens; textos na mesma fonte máquina de escrever das fichas */
 #gaveta .icone-item { display: none !important; }
-#gaveta, #gaveta .gaveta-topo, #gaveta li button { font-family: "Courier New", monospace; }
+#gaveta, #gaveta .gaveta-topo, #gaveta li button { font-family: var(--fonte-menu); }
 
 /* Álbum de postais: a folha que vira não pode criar barra de rolagem */
 html body #postais { overflow: hidden; }
